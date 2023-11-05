@@ -4,7 +4,7 @@ import { FormComponentSpecification } from "../../../Models/Form"
 const TextInput = (props: FormComponentSpecification) => {
     const [value, setValue] = useState(props.value)
 
-    const hnadleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setValue(event.target.value)
         props.updateValue(event.target.value)
     }
@@ -16,7 +16,7 @@ const TextInput = (props: FormComponentSpecification) => {
             placeholder={props.placeholder}
             className={props.styleClass}
             value={value}
-            onChange={hnadleChange}
+            onChange={handleChange}
         />
     )
 }
