@@ -1,3 +1,4 @@
+import { Navbar } from "./components"
 import { Form } from "./components/Form"
 import { FormComponentSpecification, FormTypes } from "./Models/Form"
 import { useState } from "react"
@@ -21,7 +22,7 @@ function App() {
 
     return (
         <div className="static">
-            <h1 className="text-3xl font-bold underline">Hello world!</h1>
+            <Navbar />
             <Form props={formConfigurations} styleClass={""} />
             <p>{name}</p>
             <div className="absolute bottom-0 bg-gray-400 w-full">
