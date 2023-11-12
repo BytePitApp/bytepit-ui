@@ -1,5 +1,7 @@
 import { DefaultUserImage, HamburgerMenuSvg, CloseMenuSvg } from '../assets'
 import { useState } from 'react'
+import { Button } from '../components'
+
 
 const Navbar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -32,10 +34,12 @@ const Navbar = () => {
                         Log In
                     </li>
                 }
-                <li className="cursor-pointer text-white text-center font-bol text-xl w-fit rounded-xl 
-                        py-2 px-4 bg-blue-700 transition-color ease-in-out duration-300"
-                    onClick={() => setIsLoggedIn(!isLoggedIn)}>
-                        {isLoggedIn ? "Logout" : "Register"}
+                <li>
+                    <Button
+                        label={isLoggedIn ? 'Logout' : 'Register'}
+                        styleClass="cursor-pointer text-white text-center font-bold text-xl w-fit rounded-xl py-2 px-4 bg-blue-700 transition-color ease-in-out duration-300"
+                        onClick={() => setIsLoggedIn(!isLoggedIn)}
+                    />
                 </li>
             </ul>
         </nav>
