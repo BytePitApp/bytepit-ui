@@ -1,4 +1,4 @@
-import { ButtonComponentSpecification } from "../Models/Button/ButtonComponentSpecification";
+import { ButtonComponentSpecification } from "../Models/Button";
 
 const Button = ({ label, styleClass, onClick }: ButtonComponentSpecification) => {
   return (
