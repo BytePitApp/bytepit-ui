@@ -1,6 +1,7 @@
 import { DefaultUserImage } from '../assets'
 import { useState } from 'react'
-import { Button } from 'primereact/button'
+import { Button } from "primereact/button"
+
 
 const Navbar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -36,6 +37,7 @@ const Navbar = () => {
                 <li>
                     <Button
                         label={isLoggedIn ? 'Logout' : 'Register'}
+                        className="cursor-pointer text-white text-center font-bold text-xl w-fit rounded-xl py-2 px-4 bg-blue-700 transition-color ease-in-out duration-300"
                         onClick={() => setIsLoggedIn(!isLoggedIn)}
                     />
                 </li>
