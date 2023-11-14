@@ -1,40 +1,41 @@
 import { useState } from "react"
 import { Button } from "primereact/button"
-import { ProgressSpinner } from "primereact/progressspinner";
+import { ProgressSpinner } from "primereact/progressspinner"
 import { useNavigate } from "react-router-dom"
-import axios from "axios"
 import { InputText } from "primereact/inputtext"
 import { Password } from "primereact/password"
 import { FormDataLogin } from "../Models"
+import { login } from "../services/login.service"
 
 const LoginPage = () => {
     const [formData, setFormData] = useState<FormDataLogin>({
         username: "",
-        password: ""
+        password: "",
     })
     const [error, setError] = useState<string>("")
     const [loading, setLoading] = useState(false)
 
     const navigate = useNavigate()
 
-    const login = async () => {
+    const handleValueChange = (e: any) => {
+        console.log(e.target.name, e.target.value)
+        const { name, value } = e.target
+        setFormData({
+            ...formData,
+            [name]: value,
+        })
+    }
+
+    const submitForm = async () => {
         setLoading(true)
         setError("")
         try {
-            const response = await axios.post("http://localhost:8000/auth/login",
-                new URLSearchParams({ username: formData.username, password: formData.password }),
-                {
-                    headers: { 
-                        ContentType: "application/x-www-form-urlencoded"
-                    },
-                    withCredentials: true,
-                }
-            )
+            await login(formData.username, formData.password)
             navigate("/contestant/home")
         } catch (err: any) {
-            setLoading(false)
-            setError(err.response.data.detail)
+            setError(err.response?.data?.detail ?? "Something went wrong")
         }
+        setLoading(false)
     }
 
     return (
@@ -43,34 +44,28 @@ const LoginPage = () => {
                 <span className="text-4xl">Login</span>
                 <span className="p-float-label">
                     <InputText
-                        value={formData.username} 
-                        onChange={(e) => setFormData({
-                            username: e.target.value,
-                            password: formData.password,
-                        })} 
+                        name="username"
+                        value={formData.username}
+                        onChange={handleValueChange}
                         className="w-full"
                     />
                     <label htmlFor="in">Username</label>
                 </span>
                 <span className="p-float-label flex items-center">
-                    <Password 
+                    <Password
+                        name="password"
                         toggleMask={true}
                         value={formData.password}
-                        onChange={(e) => setFormData({
-                            username: formData.username,
-                            password: e.target.value,
-                        })} 
-                        feedback={false} 
-                        className='w-full' 
+                        onChange={handleValueChange}
+                        feedback={false}
+                        className="w-full"
                         inputClassName="w-full"
                     />
                     <label htmlFor="in">Password</label>
                 </span>
-                <Button label="Submit" onClick={login} />
+                <Button label="Submit" onClick={submitForm} />
                 {loading && <ProgressSpinner />}
-                {error !== "" &&
-                    <span className="text-red-700 font-semibold text-clip">{error}</span>
-                }
+                {error !== "" && <span className="text-red-700 font-semibold text-clip">{error}</span>}
             </div>
         </div>
     )
