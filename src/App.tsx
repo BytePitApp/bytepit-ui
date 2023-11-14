@@ -3,7 +3,9 @@ import { Form } from "./components/Form"
 import { FormComponentSpecification, FormTypes } from "./Models/Form"
 import { useState } from "react"
 import { Footer } from "./components"
-import { Button } from "primereact/button"
+import { Routes, Route, Link, Outlet, useParams } from "react-router-dom"
+import { AdminHomePage, ContestantHomePage, LoginPage, OrganiserHomePage, RegisterPage } from "./pages"
+import ProtectedRoute from "./components/ProtectedRoute"
 
 import "./global.css"
 
@@ -12,33 +14,25 @@ import "primereact/resources/themes/lara-light-indigo/theme.css"
 import "primeicons/primeicons.css"
 import "primereact/resources/primereact.css"
 import "./App.css"
+import { Role } from "./Models"
 
 function App() {
-    const [name, setName] = useState("")
-
-    const formConfigurations: FormComponentSpecification[] = [
-        {
-            label: "Name",
-            type: FormTypes.TEXT,
-            key: "name",
-            value: "",
-            styleClass: "bg-gray-500 p-2 rounded-md",
-            updateValue: setName,
-            required: true,
-            placeholder: "Enter your name",
-        },
-    ]
-
     return (
-        <div className="static">
-            <Navbar />
-            <Form props={formConfigurations} styleClass={""} />
-            <p>{name}</p>
-            <Button label="Click" className="mt-4"/>
-            <div className="absolute bottom-0 bg-gray-400 w-full">
-                <Footer />
-            </div>
-        </div>
+        <Routes>
+            <Route index path="/" element={<div>Landing page</div>} />
+            <Route element={<ProtectedRoute allowedRoles={[Role.ADMIN]}></ProtectedRoute>}>
+                <Route path="admin/home" element={<AdminHomePage></AdminHomePage>} />
+            </Route>
+            <Route element={<ProtectedRoute allowedRoles={[Role.CONTESTANT]}></ProtectedRoute>}>
+                <Route path="contestant/home" element={<ContestantHomePage></ContestantHomePage>} />
+            </Route>
+            <Route element={<ProtectedRoute allowedRoles={[Role.ORGANISER]}></ProtectedRoute>}>
+                <Route path="organiser/home" element={<OrganiserHomePage></OrganiserHomePage>} />
+            </Route>
+            <Route path="login" element={<LoginPage></LoginPage>} />
+            <Route path="register" element={<RegisterPage></RegisterPage>} />
+            <Route path="*" element={<div>404</div>} />
+        </Routes>
     )
 }
 
