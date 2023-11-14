@@ -1,108 +1,39 @@
-import React, { useState } from "react"
+import { Navbar } from "./components"
+import { Form } from "./components/Form"
+import { FormComponentSpecification, FormTypes } from "./Models/Form"
+import { useState } from "react"
+import { Footer } from "./components"
 import { Routes, Route, Link, Outlet, useParams } from "react-router-dom"
 import { AdminHomePage, ContestantHomePage, LoginPage, OrganiserHomePage, RegisterPage } from "./pages"
 import ProtectedRoute from "./components/ProtectedRoute"
 
-const App = () => {
-    // TODO
-    const [auth, setAuth] = useState(false)
+import "./global.css"
 
+// primereact has to be added last, otherwise it won't work
+import "primereact/resources/themes/lara-light-indigo/theme.css"
+import "primeicons/primeicons.css"
+import "primereact/resources/primereact.css"
+import "./App.css"
+import { Role } from "./Models"
+
+function App() {
     return (
-        <>
-            <Navigation />
-            {auth ? (
-                <div className="bg-blue-500 cursor-pointer p-2 w-fit" onClick={() => setAuth(!auth)}>
-                    Logout
-                </div>
-            ) : (
-                <div className="bg-blue-500 cursor-pointer p-2 w-fit" onClick={() => setAuth(!auth)}>
-                    Login
-                </div>
-            )}
-            <Routes>
-                <Route index path="/" element={<div>Landing page</div>} />
-                <Route
-                    path="admin/home"
-                    element={
-                        <ProtectedRoute auth={auth}>
-                            <AdminHomePage></AdminHomePage>
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="organiser/home"
-                    element={
-                        <ProtectedRoute auth={auth}>
-                            <OrganiserHomePage></OrganiserHomePage>
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="contestant/home"
-                    element={
-                        <ProtectedRoute auth={auth}>
-                            <ContestantHomePage></ContestantHomePage>
-                        </ProtectedRoute>
-                    }
-                />
-                <Route path="login" element={<LoginPage></LoginPage>} />
-                <Route path="register" element={<RegisterPage></RegisterPage>} />
-                {/* This is just an example */}
-                <Route
-                    path="profiles"
-                    element={
-                        <ProtectedRoute auth={auth}>
-                            <div>
-                                <div>Profiles</div>
-                                <div>
-                                    <Outlet />
-                                </div>
-                            </div>
-                        </ProtectedRoute>
-                    }>
-                    <Route path="contestant/:id" element={<Profile />} />
-                </Route>
-                <Route path="*" element={<div>404</div>} />
-            </Routes>
-        </>
+        <Routes>
+            <Route index path="/" element={<div>Landing page</div>} />
+            <Route element={<ProtectedRoute allowedRoles={[Role.ADMIN]}></ProtectedRoute>}>
+                <Route path="admin/home" element={<AdminHomePage></AdminHomePage>} />
+            </Route>
+            <Route element={<ProtectedRoute allowedRoles={[Role.CONTESTANT]}></ProtectedRoute>}>
+                <Route path="contestant/home" element={<ContestantHomePage></ContestantHomePage>} />
+            </Route>
+            <Route element={<ProtectedRoute allowedRoles={[Role.ORGANISER]}></ProtectedRoute>}>
+                <Route path="organiser/home" element={<OrganiserHomePage></OrganiserHomePage>} />
+            </Route>
+            <Route path="login" element={<LoginPage></LoginPage>} />
+            <Route path="register" element={<RegisterPage></RegisterPage>} />
+            <Route path="*" element={<div>404</div>} />
+        </Routes>
     )
-}
-
-const Navigation = () => {
-    return (
-        <nav>
-            <div className="p-2 bg-red-400 m-2">
-                <Link to="/">Home</Link>
-            </div>
-            <div className="p-2 bg-red-400 m-2">
-                <Link to="/admin/home">Admin Home</Link>
-            </div>
-            <div className="p-2 bg-red-400 m-2">
-                <Link to="/organiser/home">Organiser Home</Link>
-            </div>
-            <div className="p-2 bg-red-400 m-2">
-                <Link to="/contestant/home">Contestant Home</Link>
-            </div>
-            <div className="p-2 bg-red-400 m-2">
-                <Link to="/login">Login</Link>
-            </div>
-            <div className="p-2 bg-red-400 m-2">
-                <Link to="/profiles">Profile</Link>
-            </div>
-            <div className="p-2 bg-red-400 m-2">
-                <Link to="/profiles/contestant/1">Profile 1</Link>
-            </div>
-            <div className="p-2 bg-red-400 m-2">
-                <Link to="/register">Register</Link>
-            </div>
-        </nav>
-    )
-}
-
-const Profile = () => {
-    let params = useParams()
-
-    return <div>Profile {params.id}</div>
 }
 
 export default App
