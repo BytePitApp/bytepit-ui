@@ -1,3 +1,7 @@
 import Role from "./Role"
+import FormDataLogin from "./FormDataLogin"
 
-export { Role }
+export { 
+    Role,
+    type FormDataLogin,
+}
