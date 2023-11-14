@@ -4,7 +4,6 @@ import ContestantHomePage from './ContestantHomePage';
 import LoginPage from './LoginPage';
 import RegisterPage from './RegisterPage';
 
-
 export {
     AdminHomePage,
     OrganiserHomePage,
