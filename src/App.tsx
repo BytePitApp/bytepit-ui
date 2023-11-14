@@ -1,9 +1,4 @@
-import { Navbar } from "./components"
-import { Form } from "./components/Form"
-import { FormComponentSpecification, FormTypes } from "./Models/Form"
-import { useState } from "react"
-import { Footer } from "./components"
-import { Routes, Route, Link, Outlet, useParams } from "react-router-dom"
+import { Routes, Route } from "react-router-dom"
 import { AdminHomePage, ContestantHomePage, LoginPage, OrganiserHomePage, RegisterPage } from "./pages"
 import ProtectedRoute from "./components/ProtectedRoute"
 
@@ -15,11 +10,12 @@ import "primeicons/primeicons.css"
 import "primereact/resources/primereact.css"
 import "./App.css"
 import { Role } from "./Models"
+import { Navbar } from "./components"
 
-function App() {
+const App = () => {
     return (
         <Routes>
-            <Route index path="/" element={<div>Landing page</div>} />
+            <Route index path="/" element={<Navbar />} />
             <Route element={<ProtectedRoute allowedRoles={[Role.ADMIN]}></ProtectedRoute>}>
                 <Route path="admin/home" element={<AdminHomePage></AdminHomePage>} />
             </Route>
