@@ -1,4 +1,5 @@
-export default {
+// @ts-ignore
+module.exports = {
     plugins: {
         tailwindcss: {},
         autoprefixer: {},
