@@ -1,6 +1,6 @@
 import { DefaultUserImage, HamburgerMenuSvg, CloseMenuSvg } from '../assets'
 import { useState } from 'react'
-import { Button } from '../components'
+import { Button } from "primereact/button"
 
 
 const Navbar = () => {
@@ -37,7 +37,7 @@ const Navbar = () => {
                 <li>
                     <Button
                         label={isLoggedIn ? 'Logout' : 'Register'}
-                        styleClass="cursor-pointer text-white text-center font-bold text-xl w-fit rounded-xl py-2 px-4 bg-blue-700 transition-color ease-in-out duration-300"
+                        className="cursor-pointer text-white text-center font-bold text-xl w-fit rounded-xl py-2 px-4 bg-blue-700 transition-color ease-in-out duration-300"
                         onClick={() => setIsLoggedIn(!isLoggedIn)}
                     />
                 </li>
