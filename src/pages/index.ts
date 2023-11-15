@@ -1,8 +1,9 @@
-import AdminHomePage from './AdminHomePage';
-import OrganiserHomePage from './OrganiserHomePage';
-import ContestantHomePage from './ContestantHomePage';
-import LoginPage from './LoginPage';
-import RegisterPage from './RegisterPage';
+import AdminHomePage from "./AdminHomePage"
+import OrganiserHomePage from "./OrganiserHomePage"
+import ContestantHomePage from "./ContestantHomePage"
+import LoginPage from "./LoginPage"
+import RegisterPage from "./RegisterPage"
+import LandingPage from "./LandingPage"
 
 export {
     AdminHomePage,
@@ -10,4 +11,5 @@ export {
     ContestantHomePage,
     LoginPage,
     RegisterPage,
+    LandingPage,
 }
