@@ -6,8 +6,9 @@ import { Button } from "primereact/button"
 import { FilterMatchMode } from "primereact/api"
 import { TriStateCheckbox } from "primereact/tristatecheckbox"
 import { classNames } from "primereact/utils"
+import { Dropdown } from "primereact/dropdown"
 import "./AdminHomePage.css"
-import { getAllUsers, confirmOrganiser } from "../services/admin.service"
+import { getAllUsers, confirmOrganiser, changeUserRole } from "../services/admin.service"
 
 const AdminHomePage = () => {
     const [error, setError] = useState("")
@@ -39,22 +40,22 @@ const AdminHomePage = () => {
         fetchUsers()
     }, [])
 
-    const verifiedFilterTemplate = (options: any) => {
+    const changeUserRoleHandler = useCallback(async (username: string, newRole: string) => {
+        try {
+            await changeUserRole(username, newRole)
+            fetchUsers()
+        } catch (err: any) {
+            setError(err.response?.data?.detail ?? "Something went wrong")
+        }
+    }, [])
+
+    const approvedFilterTemplate = (options: any) => {
         return (
             <div className="flex align-items-center gap-2">
-                <label htmlFor="verified-filter" className="font-bold">
-                    Verified
+                <label htmlFor="approved-filter" className="font-bold">
+                    Approved
                 </label>
-                <TriStateCheckbox
-                    id="verified-filter"
-                    value={options.value}
-                    onChange={(e) => options.filterCallback(e.value)}
-                />
-                <TriStateCheckbox
-                    id="verified-filter"
-                    value={options.value}
-                    onChange={(e) => options.filterCallback(e.value)}
-                />
+                <TriStateCheckbox id="approved-filter" value={options.value} onChange={(e) => options.filterCallback(e.value)} />
             </div>
         )
     }
@@ -64,8 +65,7 @@ const AdminHomePage = () => {
                 className={classNames("pi", {
                     "true-icon pi-check-circle text-green-500": rowData.approved_by_admin,
                     "false-icon pi-times-circle text-red-400": !rowData.approved_by_admin,
-                })}
-            ></i>
+                })}></i>
         )
     }
 
@@ -75,21 +75,13 @@ const AdminHomePage = () => {
                 className={classNames("pi", {
                     "true-icon pi-check-circle text-green-500": rowData.is_verified,
                     "false-icon pi-times-circle text-red-400": !rowData.is_verified,
-                })}
-            ></i>
+                })}></i>
         )
     }
 
     const approveButtonBodyTemplate = (rowData: any): React.ReactNode => {
         if (rowData.approved_by_admin) {
-            return (
-                <Button
-                    type="button"
-                    icon="pi pi-check"
-                    className="p-button-success p-0.5 bg-green-200 border-green-200"
-                    disabled
-                />
-            )
+            return <Button type="button" icon="pi pi-check" className="p-button-success p-0.5 bg-green-200 border-green-200" disabled />
         } else {
             return (
                 <Button
@@ -102,6 +94,22 @@ const AdminHomePage = () => {
                 />
             )
         }
+    }
+
+    const roleBodyTemplate = (rowData: any): React.ReactNode => {
+        const roles = [
+            { label: "Organiser", value: "organiser" },
+            { label: "Admin", value: "admin" },
+            { label: "Contestant", value: "contestant" },
+        ]
+
+        return (
+            <Dropdown
+                className="h-11 text-xs w-40"
+                value={rowData.role}
+                options={roles}
+                onChange={(e) => changeUserRoleHandler(rowData.username, e.value)}></Dropdown>
+        )
     }
 
     const renderHeader = () => {
@@ -139,8 +147,7 @@ const AdminHomePage = () => {
                     sortField="name"
                     sortOrder={1}
                     emptyMessage="No users found."
-                    header={header}
-                >
+                    header={header}>
                     <Column field="username" sortable header="Username"></Column>
                     <Column field="name" sortable header="Name"></Column>
                     <Column field="surname" sortable header="Surname"></Column>
@@ -150,26 +157,23 @@ const AdminHomePage = () => {
                         header="Verified Email"
                         body={verifiedBodyTemplate}
                         style={{ maxWidth: "8rem", textAlign: "center" }}
-                        headerClassName="centered-column-header"
-                    ></Column>
-                    <Column field="role" header="Role" dataType="boolean"></Column>
+                        headerClassName="centered-column-header"></Column>
+                    <Column field="role" header="Role" dataType="boolean" body={roleBodyTemplate}></Column>
                     <Column
                         field="approved_by_admin"
                         header="Approved By Admin"
                         filter
                         body={approvedBodyTemplate}
-                        filterElement={verifiedFilterTemplate}
+                        filterElement={approvedFilterTemplate}
                         style={{ maxWidth: "8rem", textAlign: "center" }}
                         showFilterMatchModes={false}
-                        headerClassName="centered-column-header"
-                    ></Column>
+                        headerClassName="centered-column-header"></Column>
                     <Column
                         field="approve"
                         header="Approve"
                         body={approveButtonBodyTemplate}
                         style={{ textAlign: "center" }}
-                        headerClassName="centered-column-header"
-                    ></Column>
+                        headerClassName="centered-column-header"></Column>
                 </DataTable>
             </div>
         </div>
