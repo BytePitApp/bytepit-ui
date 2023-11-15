@@ -1,5 +1,7 @@
 @layer tailwind-base, primereact, tailwind-utilities;
 
+@import url("https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap");
+
 @layer tailwind-base {
     @tailwind base;
 }
@@ -11,4 +13,8 @@
 
 body {
     @apply bg-blue-50;
+}
+
+#root {
+    height: 100dvh;
 }
