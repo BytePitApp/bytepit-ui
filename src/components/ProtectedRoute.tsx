@@ -1,55 +1,28 @@
 import { Navigate, Outlet } from "react-router-dom"
 import { Role } from "../Models"
-import { useEffect, useState } from "react"
-import axios from "axios"
 import { ProgressSpinner } from "primereact/progressspinner"
+import useAuth from "../hooks/useAuth"
 
 type ProtectedRouteProps = {
     allowedRoles: Role[]
 }
 
 const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
-    const [user, setUser] = useState<any>(null)
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState("")
+    const { auth, loading } = useAuth()
 
-    useEffect(() => {
-        axios
-            .get("http://localhost:8000/user/current", {
-                headers: {
-                    accept: "application/json",
-                },
-                withCredentials: true,
-            })
-            .then((res) => {
-                setUser(res.data)
-                setLoading(false)
-            })
-            .catch((err) => {
-                setError(err)
-                setLoading(false)
-            })
-    }, [])
+    if (loading) {
+        return <ProgressSpinner />
+    }
 
-    return (
-        <>
-            {loading ? (
-                <div className="flex justify-center items-center">
-                    <ProgressSpinner />
-                </div>
-            ) : error ? (
-                <Navigate to="/login" />
-            ) : user ? (
-                allowedRoles.includes(user.role) ? (
-                    <Outlet />
-                ) : (
-                    <Navigate to={`/${user.role}/home`} />
-                )
-            ) : (
-                <Navigate to="/login" />
-            )}
-        </>
-    )
+    if (!auth) {
+        return <Navigate to="/login" />
+    }
+
+    if (!allowedRoles.includes(auth.role)) {
+        return <Navigate to={`${auth.role}/home`} />
+    }
+
+    return <Outlet />
 }
 
 export default ProtectedRoute
