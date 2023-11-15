@@ -50,6 +50,11 @@ const AdminHomePage = () => {
                     value={options.value}
                     onChange={(e) => options.filterCallback(e.value)}
                 />
+                <TriStateCheckbox
+                    id="verified-filter"
+                    value={options.value}
+                    onChange={(e) => options.filterCallback(e.value)}
+                />
             </div>
         )
     }
