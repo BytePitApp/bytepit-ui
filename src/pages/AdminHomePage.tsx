@@ -1,7 +1,6 @@
 import { Navbar } from "../components"
 import { DataTable } from "primereact/datatable"
 import { Column } from "primereact/column"
-import { ProgressSpinner } from "primereact/progressspinner"
 import { useCallback, useEffect, useState } from "react"
 import { Button } from "primereact/button"
 import { FilterMatchMode } from "primereact/api"
