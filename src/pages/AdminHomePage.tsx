@@ -43,10 +43,9 @@ const AdminHomePage = () => {
     const changeUserRoleHandler = useCallback(async (username: string, newRole: string) => {
         try {
             await changeUserRole(username, newRole)
+            fetchUsers()
         } catch (err: any) {
             setError(err.response?.data?.detail ?? "Something went wrong")
-        } finally {
-            fetchUsers()
         }
     }, [])
 
