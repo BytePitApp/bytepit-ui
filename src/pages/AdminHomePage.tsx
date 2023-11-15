@@ -11,7 +11,6 @@ import "./AdminHomePage.css"
 import { getAllUsers, confirmOrganiser } from "../services/admin.service"
 
 const AdminHomePage = () => {
-    const [loading, setLoading] = useState(true)
     const [error, setError] = useState("")
     const [users, setUsers] = useState<any>([])
     const filters = {
@@ -19,18 +18,15 @@ const AdminHomePage = () => {
     }
 
     const fetchUsers = useCallback(async () => {
-        setLoading(true)
         try {
             const response = await getAllUsers()
             setUsers(response.data)
         } catch (err: any) {
             setError(err.response?.data?.detail ?? "Something went wrong")
         }
-        setLoading(false)
     }, [])
 
     const updateOrganiser = useCallback(async (username: string) => {
-        setLoading(true)
         try {
             await confirmOrganiser(username)
             const response = await getAllUsers()
@@ -38,7 +34,6 @@ const AdminHomePage = () => {
         } catch (err: any) {
             setError(err.response?.data?.detail ?? "Something went wrong")
         }
-        setLoading(false)
     }, [])
 
     useEffect(() => {
@@ -121,61 +116,57 @@ const AdminHomePage = () => {
         <div>
             <Navbar />
             <div className="p-2">
-                {loading ? (
-                    <ProgressSpinner />
-                ) : (
-                    <DataTable
-                        value={users}
-                        paginator
-                        rows={10}
-                        size={"small"}
-                        paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-                        currentPageReportTemplate="{first} to {last} of {totalRecords}"
-                        paginatorLeft={paginatorLeft}
-                        paginatorRight={paginatorRight}
-                        rowsPerPageOptions={[5, 10, 25, 50]}
-                        tableStyle={{ minWidth: "50rem" }}
-                        filters={filters}
-                        filterDisplay="menu"
-                        showGridlines={true}
-                        className="my-10 mx-32"
-                        stripedRows
-                        sortField="name"
-                        sortOrder={1}
-                        emptyMessage="No users found."
-                        header={header}
-                    >
-                        <Column field="username" sortable header="Username"></Column>
-                        <Column field="name" sortable header="Name"></Column>
-                        <Column field="surname" sortable header="Surname"></Column>
-                        <Column field="email" sortable header="Email"></Column>
-                        <Column
-                            field="is_verified"
-                            header="Verified Email"
-                            body={verifiedBodyTemplate}
-                            style={{ maxWidth: "8rem", textAlign: "center" }}
-                            headerClassName="centered-column-header"
-                        ></Column>
-                        <Column field="role" header="Role" dataType="boolean"></Column>
-                        <Column
-                            field="approved_by_admin"
-                            header="Approved By Admin"
-                            filter
-                            body={approvedBodyTemplate}
-                            filterElement={verifiedFilterTemplate}
-                            style={{ maxWidth: "8rem", textAlign: "center" }}
-                            showFilterMatchModes={false}
-                            headerClassName="centered-column-header"
-                        ></Column>
-                        <Column
-                            field="approve"
-                            header="Approve"
-                            body={approveButtonBodyTemplate}
-                            style={{ textAlign: "center" }}
-                            headerClassName="centered-column-header"
-                        ></Column>
-                    </DataTable>
-                )}
+                <DataTable
+                    value={users}
+                    paginator
+                    rows={10}
+                    size={"small"}
+                    paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+                    currentPageReportTemplate="{first} to {last} of {totalRecords}"
+                    paginatorLeft={paginatorLeft}
+                    paginatorRight={paginatorRight}
+                    rowsPerPageOptions={[5, 10, 25, 50]}
+                    tableStyle={{ minWidth: "50rem" }}
+                    filters={filters}
+                    filterDisplay="menu"
+                    showGridlines={true}
+                    className="my-10 mx-32"
+                    stripedRows
+                    sortField="name"
+                    sortOrder={1}
+                    emptyMessage="No users found."
+                    header={header}
+                >
+                    <Column field="username" sortable header="Username"></Column>
+                    <Column field="name" sortable header="Name"></Column>
+                    <Column field="surname" sortable header="Surname"></Column>
+                    <Column field="email" sortable header="Email"></Column>
+                    <Column
+                        field="is_verified"
+                        header="Verified Email"
+                        body={verifiedBodyTemplate}
+                        style={{ maxWidth: "8rem", textAlign: "center" }}
+                        headerClassName="centered-column-header"
+                    ></Column>
+                    <Column field="role" header="Role" dataType="boolean"></Column>
+                    <Column
+                        field="approved_by_admin"
+                        header="Approved By Admin"
+                        filter
+                        body={approvedBodyTemplate}
+                        filterElement={verifiedFilterTemplate}
+                        style={{ maxWidth: "8rem", textAlign: "center" }}
+                        showFilterMatchModes={false}
+                        headerClassName="centered-column-header"
+                    ></Column>
+                    <Column
+                        field="approve"
+                        header="Approve"
+                        body={approveButtonBodyTemplate}
+                        style={{ textAlign: "center" }}
+                        headerClassName="centered-column-header"
+                    ></Column>
+                </DataTable>
             </div>
         </div>
     )
