@@ -5,10 +5,11 @@ import { ProgressSpinner } from "primereact/progressspinner"
 import requests from "../requests"
 import { useCallback, useEffect, useState } from "react"
 import { Button } from "primereact/button"
-import { FilterMatchMode, FilterOperator } from "primereact/api"
+import { FilterMatchMode } from "primereact/api"
 import { TriStateCheckbox } from "primereact/tristatecheckbox"
-import "./AdminHomePage.css"
 import { classNames } from "primereact/utils"
+import { Dropdown } from "primereact/dropdown"
+import "./AdminHomePage.css"
 
 const AdminHomePage = () => {
     const [loading, setLoading] = useState(true)
@@ -50,6 +51,19 @@ const AdminHomePage = () => {
             })
     }, [])
 
+    const changeUserRole = useCallback(async (username: string, role: string) => {
+        await requests
+            .post(`/admin/change-role/${username}/${role}`)
+            .then(() => {
+                fetchUsers()
+                setLoading(false)
+            })
+            .catch((err) => {
+                setError(err)
+                setLoading(false)
+            })
+    }, [])
+
     const verifiedFilterTemplate = (options: any) => {
         return (
             <div className="flex align-items-center gap-2">
@@ -80,8 +94,6 @@ const AdminHomePage = () => {
         )
     }
 
-    
-
     const approveButtonBodyTemplate = (rowData: any): React.ReactNode => {
         if (rowData.approved_by_admin) {
             return <Button type="button" icon="pi pi-check" className="p-button-success p-0.5 bg-green-200 border-green-200" disabled />
@@ -97,6 +109,22 @@ const AdminHomePage = () => {
                 />
             )
         }
+    }
+
+    const roleBodyTemplate = (rowData: any): React.ReactNode => {
+        const roles = [
+            { label: "Organiser", value: "organiser" },
+            { label: "Admin", value: "admin" },
+            { label: "Contestant", value: "contestant" },
+        ]
+
+        return (
+            <Dropdown
+                className="h-11 text-xs w-40"
+                value={rowData.role}
+                options={roles}
+                onChange={(e) => changeUserRole(rowData.username, e.value)}></Dropdown>
+        )
     }
 
     const renderHeader = () => {
@@ -148,7 +176,7 @@ const AdminHomePage = () => {
                             body={verifiedBodyTemplate}
                             style={{ maxWidth: "8rem", textAlign: "center" }}
                             headerClassName="centered-column-header"></Column>
-                        <Column field="role" header="Role" dataType="boolean"></Column>
+                        <Column field="role" header="Role" dataType="boolean" body={roleBodyTemplate}></Column>
                         <Column
                             field="approved_by_admin"
                             header="Approved By Admin"
