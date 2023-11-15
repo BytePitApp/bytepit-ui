@@ -50,14 +50,13 @@ const AdminHomePage = () => {
         }
     }, [])
 
-    const verifiedFilterTemplate = (options: any) => {
+    const approvedFilterTemplate = (options: any) => {
         return (
             <div className="flex align-items-center gap-2">
-                <label htmlFor="verified-filter" className="font-bold">
-                    Verified
+                <label htmlFor="approved-filter" className="font-bold">
+                    Approved
                 </label>
-                <TriStateCheckbox id="verified-filter" value={options.value} onChange={(e) => options.filterCallback(e.value)} />
-                <TriStateCheckbox id="verified-filter" value={options.value} onChange={(e) => options.filterCallback(e.value)} />
+                <TriStateCheckbox id="approved-filter" value={options.value} onChange={(e) => options.filterCallback(e.value)} />
             </div>
         )
     }
@@ -166,7 +165,7 @@ const AdminHomePage = () => {
                         header="Approved By Admin"
                         filter
                         body={approvedBodyTemplate}
-                        filterElement={verifiedFilterTemplate}
+                        filterElement={approvedFilterTemplate}
                         style={{ maxWidth: "8rem", textAlign: "center" }}
                         showFilterMatchModes={false}
                         headerClassName="centered-column-header"></Column>
