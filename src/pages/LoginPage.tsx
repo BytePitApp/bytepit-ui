@@ -5,9 +5,15 @@ import { useNavigate } from "react-router-dom"
 import { InputText } from "primereact/inputtext"
 import { Password } from "primereact/password"
 import { FormDataLogin } from "../Models"
+import useAuth from "../hooks/useAuth"
 import { login } from "../services/login.service"
 
 const LoginPage = () => {
+    const navigate = useNavigate()
+    const { auth, updateAuth } = useAuth()
+    if (auth) {
+        navigate(`/${auth.role}/home`)
+    }
     const [formData, setFormData] = useState<FormDataLogin>({
         username: "",
         password: "",
@@ -15,10 +21,7 @@ const LoginPage = () => {
     const [error, setError] = useState<string>("")
     const [loading, setLoading] = useState(false)
 
-    const navigate = useNavigate()
-
     const handleValueChange = (e: any) => {
-        console.log(e.target.name, e.target.value)
         const { name, value } = e.target
         setFormData({
             ...formData,
@@ -31,6 +34,7 @@ const LoginPage = () => {
         setError("")
         try {
             await login(formData.username, formData.password)
+            await updateAuth()
             navigate("/contestant/home")
         } catch (err: any) {
             setError(err.response?.data?.detail ?? "Something went wrong")
