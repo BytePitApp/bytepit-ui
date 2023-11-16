@@ -37,4 +37,9 @@ const register = async (email: string, username: string, password: string, name:
     return response
 }
 
-export { login, logout, register }
+const confirmEmail = async (token: string) => {
+    const response = await requests.post(`/auth/confirm-registration/${token}`) 
+    return response
+}
+
+export { login, logout, register, confirmEmail }
