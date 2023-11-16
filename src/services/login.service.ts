@@ -1,5 +1,5 @@
 import requests from "../requests"
-import { Role } from "../Models"
+import { RegisterRole, Role } from "../Models"
 
 const login = async (username: string, password: string) => {
     const response = await requests.post("/auth/login", new URLSearchParams({ username: username, password: password }), {
@@ -16,7 +16,7 @@ const logout = async () => {
     return response
 }
 
-const register = async (email: string, username: string, password: string, name: string, surname: string, role: Role) => {
+const register = async (email: string, username: string, password: string, name: string, surname: string, role: RegisterRole) => {
     const response = await requests.post(
         "/auth/register",
         new URLSearchParams({
