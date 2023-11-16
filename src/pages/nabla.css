@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Nabla:EDPT,EHLT@30..200,24&display=swap");
+
+h1 {
+    font-size: 12vw;
+    font-family: Nabla;
+}
+
+@font-palette-values --Nabla1 {
+    font-family: Nabla;
+    base-palette: 1;
+}
+
+h1 span {
+    animation: depth 1s ease-in-out alternate infinite;
+    position: relative;
+    display: inline-block;
+    font-palette: --Nabla1;
+    font-size: 12rem;
+}

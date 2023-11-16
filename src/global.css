@@ -1,6 +1,7 @@
 @layer tailwind-base, primereact, tailwind-utilities;
 
 @import url("https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nabla:EDPT,EHLT@30..200,24&display=swap");
 
 @layer tailwind-base {
     @tailwind base;

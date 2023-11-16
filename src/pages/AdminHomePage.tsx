@@ -87,7 +87,7 @@ const AdminHomePage = () => {
                 <Button
                     type="button"
                     icon="pi pi-check"
-                    className="p-button-success p-0.5"
+                    className="p-button-success p-0.5 hover:scale-[103%] transition-all ease-in-out duration-300"
                     onClick={() => {
                         updateOrganiser(rowData.username)
                     }}
@@ -115,7 +115,7 @@ const AdminHomePage = () => {
     const renderHeader = () => {
         return (
             <div className="flex justify-content-between">
-                <h1 className="text-2xl">Users List</h1>
+                <h1 className="text-2xl text-primary">Users List</h1>
             </div>
         )
     }
@@ -129,6 +129,7 @@ const AdminHomePage = () => {
             <Navbar />
             <div className="p-2">
                 <DataTable
+                    className="my-10 mx-32"
                     value={users}
                     paginator
                     rows={10}
@@ -142,12 +143,16 @@ const AdminHomePage = () => {
                     filters={filters}
                     filterDisplay="menu"
                     showGridlines={true}
-                    className="my-10 mx-32"
                     stripedRows
                     sortField="name"
                     sortOrder={1}
                     emptyMessage="No users found."
-                    header={header}>
+                    header={header}
+                    paginatorClassName="rounded-b-[0.6rem] border-graydark"
+                    pt={{
+                        root: { className: "border-graydark border-2 rounded-t-xl rounded-b-xl" },
+                        header: { className: "rounded-t-[0.6rem]" },
+                    }}>
                     <Column field="username" sortable header="Username"></Column>
                     <Column field="name" sortable header="Name"></Column>
                     <Column field="surname" sortable header="Surname"></Column>

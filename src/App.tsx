@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom"
-import { AdminHomePage, ContestantHomePage, LandingPage, LoginPage, OrganiserHomePage, RegisterPage } from "./pages"
+import { AdminHomePage, ContestantHomePage, LandingPage, EmailConfirmPage, LoginPage, OrganiserHomePage, RegisterPage } from "./pages"
 import ProtectedRoute from "./components/ProtectedRoute"
 
 import "./global.css"
@@ -29,6 +29,7 @@ const App = () => {
                 </Route>
                 <Route path="login" element={<LoginPage></LoginPage>} />
                 <Route path="register" element={<RegisterPage></RegisterPage>} />
+                <Route path="confirm-email/:id" element={<EmailConfirmPage></EmailConfirmPage>} />
                 <Route path="*" element={<div>404</div>} />
             </Routes>
         </AuthProvider>

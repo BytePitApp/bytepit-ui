@@ -1,28 +1,22 @@
 import requests from "../requests"
-import { Role } from "../Models"
+import { RegisterRole, Role } from "../Models"
 
 const login = async (username: string, password: string) => {
-    const response = await requests.post(
-        "/auth/login",
-        new URLSearchParams({ username: username, password: password }),
-        {
-            headers: {
-                ContentType: "application/x-www-form-urlencoded",
-            },
-            withCredentials: true,
-        }
-    )
+    const response = await requests.post("/auth/login", new URLSearchParams({ username: username, password: password }), {
+        headers: {
+            ContentType: "application/x-www-form-urlencoded",
+        },
+        withCredentials: true,
+    })
     return response
 }
 
-const register = async (
-    email: string,
-    username: string,
-    password: string,
-    name: string,
-    surname: string,
-    role: Role
-) => {
+const logout = async () => {
+    const response = await requests.post("/auth/logout", {}, { withCredentials: true })
+    return response
+}
+
+const register = async (email: string, username: string, password: string, name: string, surname: string, role: RegisterRole) => {
     const response = await requests.post(
         "/auth/register",
         new URLSearchParams({
@@ -43,4 +37,9 @@ const register = async (
     return response
 }
 
-export { login, register }
+const confirmEmail = async (token: string) => {
+    const response = await requests.post(`/auth/confirm-registration/${token}`) 
+    return response
+}
+
+export { login, logout, register, confirmEmail }

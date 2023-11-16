@@ -1,46 +1,78 @@
-import { DefaultUserImage } from '../assets'
-import { useState } from 'react'
+import { DefaultUserImage } from "../assets"
+import { useState } from "react"
 import { Button } from "primereact/button"
-
+import useAuth from "../hooks/useAuth"
+import { useNavigate } from "react-router-dom"
+import { Avatar } from "primereact/avatar"
+import { logout } from "../services/login.service"
 
 const Navbar = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const navigate = useNavigate()
+    const { auth, updateAuth } = useAuth()
     const [openState, setOpenState] = useState(false)
 
+    const handleLogOut = async () => {
+        await logout()
+        updateAuth()
+        navigate("/login")
+    }
+
+    const VerticalLine = () => {
+        return <div className="border-[0.1rem] border-graydark h-10 rounded-lg mx-1"></div>
+    }
+
     return (
-        <nav className="bg-gray-300 border-b-2 border-gray-400 w-full p-4
-            flex md:flex-row justify-between items-center h-20">
-            <div className="bg-gray-30 font-bold text-3xl max-md:flex max-md:items-center max-md:justify-between max-md:w-full">
+        <nav
+            className="bg-graymedium border-b-4 border-graydark w-full 
+            flex md:flex-row justify-between items-center h-16 rounded-b-lg px-32 drop-shadow-nav">
+            <div
+                className="bg-gray-30 text-primary font-major-mono text-4xl max-md:flex max-md:items-center max-md:justify-between max-md:w-full cursor-pointer hover:scale-[103%] transition-all ease-in-out duration-300"
+                onClick={() => (auth ? navigate(`/${auth["role"]}/home`) : navigate("/"))}>
                 BytePit
-                <span onClick={() => setOpenState(!openState)} className="md:hidden svg-icon w-7 h-7 text-xs">
-                    <i className={`pi ${openState ? "pi-times" : "pi-bars"}`} style={{ fontSize: '2rem' }}></i>
-                </span>
             </div>
-            <ul className={`bg-gray-300 w-full md:w-auto max-md:left-0 md:static absolute
-                flex flex-col md:flex-row items-end md:items-center gap-4 p-4 md:h-full
-                transition-all duration-500 ease-in-out ${openState ? "top-20" : "-top-full"}`}>
-                <li className="border-2 bg-cover rounded-full border-black w-10 h-10">
-                    <img alt="profile picture" src={DefaultUserImage} />
-                </li>
-                {isLoggedIn ?
-                    <li className="flex flex-col">
-                        <span className="text-lg">Name Surname</span>
-                        <span className="text-sm">Admin</span>
+            <ul
+                className="bg-graymedium w-full md:w-auto max-md:left-0 md:static absolute
+                flex flex-col md:flex-row items-end md:items-center gap-2 md:h-full
+                transition-all duration-500 ease-in-out">
+                {auth ? (
+                    <>
+                        <Avatar
+                            className="bg-secondary text-white p-5 transition-color ease-in-out duration-300 cursor-pointer"
+                            icon="pi pi-user"
+                            size="normal"
+                        />
+                        <li className="flex flex-col">
+                            <span className="text-lg">{auth["username"]}</span>
+                        </li>
+                        <VerticalLine />
+                        <Button
+                            label={auth ? "Logout" : "Register"}
+                            className="cursor-pointer text-white text-center font-bold text-l w-fit rounded-l py-2 px-4 hover:scale-[103%] bg-primary hover:bg-primarylight transition-all ease-in-out duration-300"
+                            onClick={handleLogOut}
+                        />
+                    </>
+                ) : (
+                    <li className="flex flex-row items-center gap-2">
+                        <Button
+                            label="Login"
+                            className="cursor-pointer text-white text-center font-bold text-l w-fit rounded-l py-2 px-4 hover:scale-[103%] bg-primary hover:bg-primarylight transition-all ease-in-out duration-300"
+                            onClick={() => navigate("/login")}
+                            pt={{
+                                root: { className: "h-10" },
+                            }}
+                        />
+                        <VerticalLine />
+                        <Button
+                            label="Register"
+                            className="cursor-pointer text-white text-center font-bold w-fit rounded-l bg-secondary hover:bg-secondarylight hover:scale-[103%] border-secondarylight transition-all ease-in-out duration-300"
+                            onClick={() => navigate("/register")}
+                            pt={{
+                                root: { className: "h-10" },
+                            }}
+                        />
                     </li>
-                : 
-                    <li onClick={() => setIsLoggedIn(true)} 
-                        className="w-fit cursor-pointer transition-color ease-in-out duration-300
-                            text-center text-black/70 hover:text-black font-bold text-lg">
-                        Log In
-                    </li>
-                }
-                <li>
-                    <Button
-                        label={isLoggedIn ? 'Logout' : 'Register'}
-                        className="cursor-pointer text-white text-center font-bold text-xl w-fit rounded-xl py-2 px-4 bg-blue-700 transition-color ease-in-out duration-300"
-                        onClick={() => setIsLoggedIn(!isLoggedIn)}
-                    />
-                </li>
+                )}
+                <li></li>
             </ul>
         </nav>
     )

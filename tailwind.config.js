@@ -15,12 +15,22 @@ module.exports = {
         extend: {
             fontFamily: {
                 "major-mono": ["Major Mono Display"],
+                nabla: ["Nabla"],
             },
             colors: {
                 primary: "#4338CA",
+                primarylight: "#554acf",
                 secondary: "#2196F3",
-                mediumgray: "#f8f9fa",
-                darkgray: "#dee2e6"
+                secondarylight: "#3da2f5",
+                secondarydark: "#1976D2",
+                graymedium: "#f8f9fa",
+                graydark: "#dee2e6",
+            },
+            dropShadow: {
+                nav: "0 20px 20px rgb(0, 0, 0, 0.05)",
+            },
+            backgroundImage: {
+                form: "url('/src/assets/images/1920x1080_forms.jpg')",
             },
         },
     },
