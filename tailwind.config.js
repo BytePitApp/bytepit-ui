@@ -26,6 +26,9 @@ module.exports = {
                 graymedium: "#f8f9fa",
                 graydark: "#dee2e6",
             },
+            dropShadow: {
+                nav: "0 20px 20px rgb(0, 0, 0, 0.05)",
+            },
             backgroundImage: {
                 form: "url('/src/assets/images/1920x1080_forms.jpg')",
             },
