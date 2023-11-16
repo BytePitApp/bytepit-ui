@@ -65,11 +65,11 @@ const LoginPage = () => {
 
     return (
         <div className="flex flex-col h-screen justify-center">
-            {loading ? (
-                <div className="z-30 h-full w-full bg-primarylight/10 absolute flex justify-start items-center p-6">
-                    <ProgressSpinner />
+            {loading && (
+                <div className="z-50 absolute top-1.5 left-[50%]">
+                    <ProgressSpinner style={{ width: "50px", height: "50px" }} fill="#dee2e6" strokeWidth="7" />
                 </div>
-            ) : null}
+            )}
             <Navbar />
             <div className="flex absolute right-0 py-10 px-6 z-30">
                 <Toast ref={toast} />
@@ -90,12 +90,18 @@ const LoginPage = () => {
                                         toggleMask
                                         value={formData.password}
                                         onChange={handleValueChange}
-                                        feedback
+                                        feedback={false}
                                         className="w-full"
                                         inputClassName="w-full"
                                         pt={{
-                                            showIcon: { className: "mb-2" },
-                                            hideIcon: { className: "mb-2" },
+                                            showIcon: {
+                                                className:
+                                                    "mb-2 hover:cursor-pointer hover:scale-[108%] transition-all ease-in-out duration-300",
+                                            },
+                                            hideIcon: {
+                                                className:
+                                                    "mb-2 hover:cursor-pointer hover:scale-[108%] transition-all ease-in-out duration-300",
+                                            },
                                         }}
                                     />
                                     <label htmlFor="in">Password</label>
@@ -109,8 +115,7 @@ const LoginPage = () => {
                             <div className="flex-grow flex flex-col justify-center items-center gap-4 bg- w-[32rem] h-[30rem] bg-primary rounded-r-xl border-primarylight border-b-4">
                                 <span className="text-2xl text-center font-semibold text-white">Welcome back!</span>
                                 <span className="text-lg text-center text-white px-6">
-                                    Welcome back! We hope you had a safe and enjoyable time away! <br /> Create your account and start
-                                    coding right now!
+                                    We hope you had a safe and enjoyable time away! <br /> Create your account and start coding right now!
                                 </span>
                                 <Button
                                     className="bg-graydark rounded-3xl text-primary mt-1 hover:bg-white hover:scale-[102%] transition-all ease-in-out duration-300"
