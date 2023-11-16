@@ -1,5 +1,6 @@
-/* stylelint-enable at-rule-no-unknown */
 @layer tailwind-base, primereact, tailwind-utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Major+Mono+Display&display=swap");
 
 @layer tailwind-base {
     @tailwind base;
@@ -9,4 +10,7 @@
     @tailwind components;
     @tailwind utilities;
 }
-/* stylelint-enable at-rule-no-unknown */
+
+body {
+    @apply bg-blue-50;
+}

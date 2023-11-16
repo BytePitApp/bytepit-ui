@@ -2,113 +2,96 @@ import { useState, useRef } from "react"
 import { Button } from "primereact/button"
 import { ProgressSpinner } from "primereact/progressspinner"
 import { useNavigate } from "react-router-dom"
-import axios from "axios"
 import { InputText } from "primereact/inputtext"
 import { Password } from "primereact/password"
 import { FormDataLogin } from "../Models"
-import { Messages } from "primereact/messages"
-import { useMountEffect } from "primereact/hooks"
-import uuid from "react-uuid"
+import useAuth from "../hooks/useAuth"
+import { login } from "../services/login.service"
+import { Toast } from "primereact/toast"
 
 const LoginPage = () => {
+    const navigate = useNavigate()
+    const { auth, updateAuth } = useAuth()
+    if (auth) {
+        navigate(`/${auth.role}/home`)
+    }
     const [formData, setFormData] = useState<FormDataLogin>({
         username: "",
         password: "",
     })
     const [loading, setLoading] = useState(false)
-    const [id, setId] = useState<string>(uuid())
-    const msgs = useRef<Messages>(null)
+    const toast = useRef<Toast>(null)
 
-    useMountEffect(() => {
-        msgs.current?.clear()
-    })
-
-    const navigate = useNavigate()
-
-    const login = async () => {
-        setLoading(true)
-        try {
-            if (formData.username === "" || formData.password === "") {
-                msgs.current?.show({
-                    id: id,
-                    severity: "error",
-                    summary: "Error!",
-                    detail: "Please fill in all fields!",
-                    closable: false,
-                })
-                setId(uuid())
-                setLoading(false)
-                return
-            }
-            const response = await axios.post(
-                "http://localhost:8000/auth/login",
-                new URLSearchParams({ username: formData.username, password: formData.password }),
-                {
-                    headers: {
-                        ContentType: "application/x-www-form-urlencoded",
-                    },
-                    withCredentials: true,
-                }
-            )
-            navigate("/contestant/home")
-        } catch (err: any) {
-            setLoading(false)
-            msgs.current?.show({
-                id: id,
-                severity: "error",
-                summary: "Error!",
-                detail: err.response.data.detail,
-                closable: false,
-            })
-            setId(uuid())
-        }
+    const handleValueChange = (e: any) => {
+        const { name, value } = e.target
+        setFormData({
+            ...formData,
+            [name]: value,
+        })
     }
 
+    const sendToast = (toastMessage: any) => {
+        toast.current?.show(toastMessage)
+    }
+
+    const submitForm = async () => {
+        setLoading(true)
+        try {
+            await login(formData.username, formData.password)
+            await updateAuth()
+            navigate("/contestant/home")
+        } catch (err: any) {
+            const errorMsg = err.response.status === 422 ? "Please fill in all fields!" : err.response.data.detail
+            sendToast({
+                severity: "error",
+                summary: "Error!",
+                detail: errorMsg,
+            })
+        }
+        setLoading(false)
+    }
+    
     return (
-        <div className="relative">
+        <>
+            {loading ? (
+                <div className="z-30 h-full w-full bg-primarylight/10 absolute flex justify-start items-center p-6">
+                    <ProgressSpinner />
+                </div>
+            ) : null}
             <div className="flex absolute right-0 py-10 px-6 z-30">
-                <Messages ref={msgs} />
+                <Toast ref={toast} />
             </div>
             <div className="flex flex-col justify-center items-center h-screen">
-                <div className="flex flex-col gap-10 w-1/3">
+                <div className="flex flex-col gap-10 w-1/3 relative">
                     <span className="text-4xl">Login</span>
                     <span className="p-float-label">
                         <InputText
-                            value={formData.username}
-                            onChange={(e) =>
-                                setFormData({
-                                    username: e.target.value,
-                                    password: formData.password,
-                                })
-                            }
-                            className="w-full"
+                            name="username" 
+                            value={formData.username} 
+                            onChange={handleValueChange} 
+                            className="w-full" 
                         />
                         <label htmlFor="in">Username</label>
                     </span>
                     <span className="p-float-label flex items-center">
                         <Password
+                            name="password"
                             toggleMask={true}
                             value={formData.password}
-                            onChange={(e) =>
-                                setFormData({
-                                    username: formData.username,
-                                    password: e.target.value,
-                                })
-                            }
+                            onChange={handleValueChange}
                             feedback={false}
                             className="w-full"
                             inputClassName="w-full"
                         />
                         <label htmlFor="in">Password</label>
                     </span>
-                    <Button label="SUBMIT" onClick={login} />
-                    {loading && <ProgressSpinner />}
+                    <Button label="SUBMIT" onClick={submitForm} />
                     <div className="flex justify-end">
                         <Button label="REGISTER" onClick={() => navigate("/register")} text raised />
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }
 
