@@ -1,7 +1,9 @@
 import Navbar from "./Navbar"
 import Footer from "./Footer"
+import HoverCard from "./HoverCard"
 
 export { 
-    Navbar, 
+    Navbar,
     Footer,
+    HoverCard,
 }
