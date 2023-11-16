@@ -24,7 +24,7 @@ const Navbar = () => {
     return (
         <nav
             className="bg-graymedium border-b-4 border-graydark w-full 
-            flex md:flex-row justify-between items-center h-16 rounded-lg px-32">
+            flex md:flex-row justify-between items-center h-16 rounded-b-lg px-32 drop-shadow-nav">
             <div
                 className="bg-gray-30 text-primary font-major-mono text-4xl max-md:flex max-md:items-center max-md:justify-between max-md:w-full cursor-pointer hover:scale-[103%] transition-all ease-in-out duration-300"
                 onClick={() => (auth ? navigate(`/${auth["role"]}/home`) : navigate("/"))}>
@@ -52,10 +52,10 @@ const Navbar = () => {
                         />
                     </>
                 ) : (
-                    <li className="flex flex-row items-center">
+                    <li className="flex flex-row items-center gap-2">
                         <Button
                             label="Login"
-                            className="cursor-pointer text-white text-center font-bold text-l w-fit rounded-l py-2 px-4 hover:scale-[103%] bg-primary hover:bg-primarylight transition-all ease-in-out duration-300 mr-2"
+                            className="cursor-pointer text-white text-center font-bold text-l w-fit rounded-l py-2 px-4 hover:scale-[103%] bg-primary hover:bg-primarylight transition-all ease-in-out duration-300"
                             onClick={() => navigate("/login")}
                             pt={{
                                 root: { className: "h-10" },
@@ -64,7 +64,7 @@ const Navbar = () => {
                         <VerticalLine />
                         <Button
                             label="Register"
-                            className="cursor-pointer text-white text-center font-bold w-fit rounded-l bg-secondary hover:bg-secondarylight hover:scale-[103%] border-secondarylight transition-all ease-in-out duration-300 ml-3"
+                            className="cursor-pointer text-white text-center font-bold w-fit rounded-l bg-secondary hover:bg-secondarylight hover:scale-[103%] border-secondarylight transition-all ease-in-out duration-300"
                             onClick={() => navigate("/register")}
                             pt={{
                                 root: { className: "h-10" },
