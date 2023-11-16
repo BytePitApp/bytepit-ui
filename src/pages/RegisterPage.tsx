@@ -93,17 +93,17 @@ const RegisterPage = () => {
 
     return (
         <div className="flex flex-col h-screen justify-center">
-            {loading ? (
-                <div className="z-30 h-full w-full bg-primarylight/10 absolute flex justify-start items-center p-6">
-                    <ProgressSpinner />
+            {loading && (
+                <div className="z-50 absolute top-1.5 left-[50%]">
+                    <ProgressSpinner style={{ width: "50px", height: "50px" }} fill="#dee2e6" strokeWidth="7" />
                 </div>
-            ) : null}
+            )}
             <Navbar />
             <div className="flex absolute right-0 py-10 px-6 z-30">
                 <Toast ref={toast} />
             </div>
             <div className="bg-form bg-cover grow flex flex-col justify-center items-center">
-                <div className="flex flex-col rounded-xl gap-5 w-[30rem] p-8 bg-graymedium drop-shadow-xl rounded-t-xl border-graydark border-b-4">
+                <div className="flex flex-col rounded-xl gap-6 w-[30rem] p-8 bg-graymedium drop-shadow-xl rounded-t-xl border-graydark border-b-4">
                     <span className="text-4xl text-center font-semibold text-primary my-3">Register</span>
                     <TextInput name="username" value={formData.username} label="Username" onUpdate={handleValueChange} />
                     <span className="p-float-label">
@@ -116,8 +116,12 @@ const RegisterPage = () => {
                             className="w-full"
                             inputClassName="w-full min-w-[15rem]"
                             pt={{
-                                showIcon: { className: "mb-2" },
-                                hideIcon: { className: "mb-2" },
+                                showIcon: {
+                                    className: "mb-2 hover:cursor-pointer hover:scale-[108%] transition-all ease-in-out duration-300",
+                                },
+                                hideIcon: {
+                                    className: "mb-2 hover:cursor-pointer hover:scale-[108%] transition-all ease-in-out duration-300",
+                                },
                             }}
                         />
                         <label htmlFor="in">Password</label>
