@@ -1,9 +1,11 @@
+import { Navbar } from "../components"
+
 const ContestantHomePage = () => {
     return (
         <div>
-            <h1>Home page for contestant</h1>
+            <Navbar />
         </div>
-    );
+    )
 }
 
-export default ContestantHomePage;
+export default ContestantHomePage
