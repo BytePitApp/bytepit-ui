@@ -115,7 +115,7 @@ const AdminHomePage = () => {
     const renderHeader = () => {
         return (
             <div className="flex justify-content-between">
-                <h1 className="text-2xl text-primary">Users List</h1>
+                <h2 className="text-2xl text-primary">Users List</h2>
             </div>
         )
     }
