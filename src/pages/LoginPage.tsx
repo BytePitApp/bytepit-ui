@@ -77,7 +77,7 @@ const LoginPage = () => {
             <div className="bg-form bg-cover grow flex flex-col justify-center items-center">
                 <div>
                     <div className="flex flex-col justify-center items-center">
-                        <div className="flex mb-6 2xl:mb-16 drop-shadow-xl rounded-xl">
+                        <div className="flex mb-16 drop-shadow-xl rounded-xl">
                             <div className="flex-grow flex flex-col gap-10 w-[32rem] h-[30rem] p-16 bg-graymedium rounded-l-xl border-graydark border-b-4">
                                 <span className="text-4xl text-center font-semibold text-primary">Login</span>
                                 <span className="p-float-label">
@@ -87,12 +87,16 @@ const LoginPage = () => {
                                 <span className="p-float-label flex items-center">
                                     <Password
                                         name="password"
-                                        toggleMask={true}
+                                        toggleMask
                                         value={formData.password}
                                         onChange={handleValueChange}
-                                        feedback={false}
+                                        feedback
                                         className="w-full"
                                         inputClassName="w-full"
+                                        pt={{
+                                            showIcon: { className: "mb-2" },
+                                            hideIcon: { className: "mb-2" },
+                                        }}
                                     />
                                     <label htmlFor="in">Password</label>
                                 </span>
