@@ -10,8 +10,7 @@ const LandingPage = () => {
 
     return (
         <div
-            className="flex h-full flex-col bg-cover bg-top bg-no-repeate"
-            style={{backgroundImage: `url(${LandingBackground})`}}>
+            className="flex h-full flex-col bg-cover bg-top bg-no-repeate bg-form">
             <Navbar />
             <div className="flex w-full flex-grow">
                 <div className="w-[40%] flex flex-col items-center justify-start">
