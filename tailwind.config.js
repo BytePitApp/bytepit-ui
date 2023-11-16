@@ -15,6 +15,7 @@ module.exports = {
         extend: {
             fontFamily: {
                 "major-mono": ["Major Mono Display"],
+                nabla: ["Nabla"],
             },
             colors: {
                 primary: "#4338CA",
@@ -24,6 +25,9 @@ module.exports = {
                 secondarydark: "#1976D2",
                 graymedium: "#f8f9fa",
                 graydark: "#dee2e6",
+            },
+            backgroundImage: {
+                form: "url('/src/assets/images/1920x1080_forms.jpg')",
             },
         },
     },
