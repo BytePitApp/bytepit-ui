@@ -1,9 +1,11 @@
+import { Navbar } from "../components"
+
 const OrganiserHomePage = () => {
     return (
         <div>
-            <h1>Home page for organiser</h1>
+            <Navbar />
         </div>
-    );
+    )
 }
 
-export default OrganiserHomePage;
+export default OrganiserHomePage

@@ -1,5 +1,3 @@
-import Role from "./Role"
-
 interface FormDataRegister {
     username: string,
     email: string,
