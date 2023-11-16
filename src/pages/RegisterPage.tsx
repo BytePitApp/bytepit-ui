@@ -9,6 +9,7 @@ import { Dropdown } from "primereact/dropdown"
 import useAuth from "../hooks/useAuth"
 import { Toast } from "primereact/toast"
 import { register } from "../services/login.service"
+import { Navbar } from "../components"
 
 const RegisterPage = () => {
     const navigate = useNavigate()
@@ -91,36 +92,42 @@ const RegisterPage = () => {
     }
 
     return (
-        <>
+        <div className="flex flex-col h-screen justify-center">
             {loading ? (
                 <div className="z-30 h-full w-full bg-primarylight/10 absolute flex justify-start items-center p-6">
                     <ProgressSpinner />
                 </div>
             ) : null}
+            <Navbar />
             <div className="flex absolute right-0 py-10 px-6 z-30">
                 <Toast ref={toast} />
             </div>
-            <div className="flex flex-col justify-center items-center h-screen">
-                <div className="flex flex-col gap-10 w-1/3">
-                    <span className="text-4xl">Register</span>
+            <div className="bg-form bg-cover grow flex flex-col justify-center items-center">
+                <div className="flex flex-col rounded-xl gap-5 w-[30rem] p-8 bg-graymedium drop-shadow-xl rounded-t-xl border-graydark border-b-4">
+                    <span className="text-4xl text-center font-semibold text-primary my-3">Register</span>
                     <TextInput name="username" value={formData.username} label="Username" onUpdate={handleValueChange} />
                     <span className="p-float-label">
                         <Password
                             name="password"
-                            toggleMask={true}
+                            toggleMask
                             value={formData.password}
                             onChange={handleValueChange}
-                            feedback={false}
+                            feedback
                             className="w-full"
                             inputClassName="w-full min-w-[15rem]"
+                            pt={{
+                                showIcon: { className: "mb-2" },
+                                hideIcon: { className: "mb-2" },
+                            }}
                         />
                         <label htmlFor="in">Password</label>
                     </span>
                     <TextInput name="name" value={formData.name} label="Name" onUpdate={handleValueChange} />
                     <TextInput name="surname" value={formData.surname} label="Surname" onUpdate={handleValueChange} />
                     <TextInput name="email" value={formData.email} label="Email" onUpdate={handleValueChange} />
-                    <div className="flex justify-center">
-                        <span className="p-float-label">
+                    <div className="flex flex-row justify-end">
+                        <span className="flex text-center items-center text-slate-700">Choose your role</span>
+                        <span className="p-float-label ml-6">
                             <Dropdown
                                 name="role"
                                 value={formData.role}
@@ -133,13 +140,24 @@ const RegisterPage = () => {
                             />
                         </span>
                     </div>
-                    <Button label="SUBMIT" onClick={submitForm} />
-                    <div className="flex justify-end">
-                        <Button label="SIGN IN" onClick={() => navigate("/login")} text raised />
+                    <div className="flex flex-row gap-4">
+                        <Button
+                            className="w-full hover:scale-[102%] transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
+                            label="Submit"
+                            onClick={submitForm}
+                        />
+                        <div>
+                            <Button
+                                className="w-full hover:scale-[104%] transition-all ease-in-out duration-300 bg-secondary hover:bg-secondarylight text-white"
+                                label="Login"
+                                onClick={() => navigate("/login")}
+                                text
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 
