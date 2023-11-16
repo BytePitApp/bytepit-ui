@@ -125,7 +125,7 @@ const AdminHomePage = () => {
     const paginatorRight = <Button type="button" className="hidden" />
 
     return (
-        <div>
+        <div className="bg-form bg-cover min-h-screen">
             <Navbar />
             <div className="p-2">
                 <DataTable
