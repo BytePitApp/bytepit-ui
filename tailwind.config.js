@@ -15,6 +15,7 @@ module.exports = {
         extend: {
             fontFamily: {
                 "major-mono": ["Major Mono Display"],
+                nabla: ["Nabla"],
             },
             colors: {
                 primary: "#4338CA",
@@ -29,7 +30,7 @@ module.exports = {
                 nav: "0 20px 20px rgb(0, 0, 0, 0.05)",
             },
             backgroundImage: {
-                "form": "url('/src/assets/images/1920x1080_forms.jpg')",
+                form: "url('/src/assets/images/1920x1080_forms.jpg')",
             },
         },
     },
