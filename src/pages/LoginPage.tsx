@@ -41,16 +41,17 @@ const LoginPage = () => {
             await updateAuth()
             navigate("/contestant/home")
         } catch (err: any) {
-            const errorMsg = err.response.status === 422 ? "Please fill in all fields!" : err.response.data.detail
-            sendToast({
-                severity: "error",
-                summary: "Error!",
-                detail: errorMsg,
-            })
+            for (const error of err.response.data.errors) {
+                sendToast({
+                    severity: "error",
+                    summary: "Error!",
+                    detail: error,
+                })
+            }
         }
         setLoading(false)
     }
-    
+
     return (
         <>
             {loading ? (

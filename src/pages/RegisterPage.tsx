@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react"
-import { FormDataRegister, Role } from "../Models"
+import React, { useState, useRef } from "react"
+import { FormDataRegister, RegisterRole } from "../Models"
 import { useNavigate } from "react-router-dom"
 import { InputText } from "primereact/inputtext"
 import { Password } from "primereact/password"
@@ -22,7 +22,7 @@ const RegisterPage = () => {
         email: "",
         name: "",
         surname: "",
-        role: "Contestant",
+        role: RegisterRole.CONTESTANT,
     })
     const [loading, setLoading] = useState<boolean>(false)
     const toast = useRef<Toast>(null)
@@ -35,6 +35,10 @@ const RegisterPage = () => {
         })
     }
 
+    const setFirstLetterToUpperCase = (str: string) => {
+        return str.charAt(0).toUpperCase() + str.slice(1)
+    }
+
     const sendToast = (toastMessage: any) => {
         toast.current?.show(toastMessage)
     }
@@ -42,8 +46,7 @@ const RegisterPage = () => {
     const submitForm = async () => {
         setLoading(true)
         try {
-            const role: Role = formData.role.toLowerCase() as Role
-            await register(formData.email, formData.username, formData.password, formData.name, formData.surname, role)
+            await register(formData.email, formData.username, formData.password, formData.name, formData.surname, formData.role)
             await updateAuth()
             sendToast({
                 severity: "success",
@@ -57,17 +60,26 @@ const RegisterPage = () => {
                 email: "",
                 name: "",
                 surname: "",
-                role: "Contestant",
+                role: RegisterRole.CONTESTANT,
             })
         } catch (err: any) {
-            const errorMsg = err.response.status === 422 ? "Please fill in all fields!" : err.response.data.detail
-            sendToast({
-                severity: "error",
-                summary: "Error!",
-                detail: errorMsg,
-            })
+            for (const error of err.response.data.errors) {
+                sendToast({
+                    severity: "error",
+                    summary: "Error!",
+                    detail: error,
+                })
+            }
         }
         setLoading(false)
+    }
+
+    const roleTemplate = (option: string) => {
+        return <div className="text-semibold">{setFirstLetterToUpperCase(option)}</div>
+    }
+
+    const selectedRoleTemplate = (option: string) => {
+        return <div className="text-semibold">{setFirstLetterToUpperCase(option)}</div>
     }
 
     return (
@@ -105,9 +117,11 @@ const RegisterPage = () => {
                                 name="role"
                                 value={formData.role}
                                 onChange={handleValueChange}
-                                options={["Contestant", "Admin", "Organizer"]}
+                                options={[RegisterRole.CONTESTANT, RegisterRole.ORGANISER]}
                                 placeholder="Select a Role"
                                 className="w-60"
+                                itemTemplate={roleTemplate}
+                                valueTemplate={selectedRoleTemplate}
                             />
                         </span>
                     </div>
