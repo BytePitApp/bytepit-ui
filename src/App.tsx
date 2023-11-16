@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom"
-import { AdminHomePage, ContestantHomePage, EmailConfirmPage, LoginPage, OrganiserHomePage, RegisterPage } from "./pages"
+import { AdminHomePage, ContestantHomePage, LandingPage, EmailConfirmPage, LoginPage, OrganiserHomePage, RegisterPage } from "./pages"
 import ProtectedRoute from "./components/ProtectedRoute"
 
 import "./global.css"
@@ -17,7 +17,7 @@ const App = () => {
     return (
         <AuthProvider>
             <Routes>
-                <Route index path="/" element={<Navbar />} />
+                <Route path="/" element={<LandingPage />} />
                 <Route element={<ProtectedRoute allowedRoles={[Role.ADMIN]}></ProtectedRoute>}>
                     <Route path="admin/home" element={<AdminHomePage></AdminHomePage>} />
                 </Route>

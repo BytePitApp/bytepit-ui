@@ -47,7 +47,7 @@ const Navbar = () => {
                         <VerticalLine />
                         <Button
                             label={auth ? "Logout" : "Register"}
-                            className="cursor-pointer text-white text-center font-bold text-l w-fit rounded-l py-2 px-4 hover:scale-[103%] bg-primary hover:bg-primarylight transition-all ease-in-out duration-300"
+                            className="text-white text-center font-bold text-l w-fit rounded-l py-2 px-4 hover:scale-[103%] bg-primary hover:bg-primarylight transition-all ease-in-out duration-300"
                             onClick={handleLogOut}
                         />
                     </>
@@ -55,7 +55,7 @@ const Navbar = () => {
                     <li className="flex flex-row items-center gap-2">
                         <Button
                             label="Login"
-                            className="cursor-pointer text-white text-center font-bold text-l w-fit rounded-l py-2 px-4 hover:scale-[103%] bg-primary hover:bg-primarylight transition-all ease-in-out duration-300"
+                            className="text-white text-center font-bold text-l w-fit rounded-l py-2 px-4 hover:scale-[103%] bg-primary hover:bg-primarylight transition-all ease-in-out duration-300"
                             onClick={() => navigate("/login")}
                             pt={{
                                 root: { className: "h-10" },
@@ -64,7 +64,7 @@ const Navbar = () => {
                         <VerticalLine />
                         <Button
                             label="Register"
-                            className="cursor-pointer text-white text-center font-bold w-fit rounded-l bg-secondary hover:bg-secondarylight hover:scale-[103%] border-secondarylight transition-all ease-in-out duration-300"
+                            className="text-white text-center font-bold w-fit rounded-l bg-secondary hover:bg-secondarylight hover:scale-[103%] border-secondarylight transition-all ease-in-out duration-300"
                             onClick={() => navigate("/register")}
                             pt={{
                                 root: { className: "h-10" },
