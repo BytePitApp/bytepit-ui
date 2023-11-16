@@ -63,11 +63,19 @@ const RegisterPage = () => {
                 role: RegisterRole.CONTESTANT,
             })
         } catch (err: any) {
-            for (const error of err.response.data.errors) {
+            if (Array.isArray(err.response.data.detail)) {
+                for (const error of err.response.data.detail) {
+                    sendToast({
+                        severity: "error",
+                        summary: "Error!",
+                        detail: error,
+                    })
+                }
+            } else {
                 sendToast({
                     severity: "error",
                     summary: "Error!",
-                    detail: error,
+                    detail: err.response.data.detail,
                 })
             }
         }
