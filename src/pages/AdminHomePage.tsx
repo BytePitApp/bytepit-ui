@@ -7,6 +7,7 @@ import { FilterMatchMode } from "primereact/api"
 import { TriStateCheckbox } from "primereact/tristatecheckbox"
 import { classNames } from "primereact/utils"
 import { Dropdown } from "primereact/dropdown"
+import { Avatar } from "primereact/avatar"
 import "./AdminHomePage.css"
 import { getAllUsers, confirmOrganiser, changeUserRole } from "../services/admin.service"
 
@@ -96,6 +97,31 @@ const AdminHomePage = () => {
         }
     }
 
+    const imageBodyTemplate = (rowData: any): React.ReactNode => {
+        if (rowData.image) {
+            return (
+                <div className="flex flex-col items-center">
+                    <Avatar
+                        className="transition-color ease-in-out duration-300 cursor-pointer hover:scale-105"
+                        image={`data:image/jpeg;base64,${rowData.image}`}
+                        size="large"
+                        pt={{ image: { className: "rounded-lg object-cover" } }}
+                    />
+                </div>
+            )
+        } else {
+            return (
+                <div className="flex flex-col items-center">
+                    <Avatar
+                        className="bg-secondary text-white hover:scale-105 transition-color ease-in-out duration-300 cursor-pointer"
+                        icon="pi pi-user"
+                        size="large"
+                    />
+                </div>
+            )
+        }
+    }
+
     const roleBodyTemplate = (rowData: any): React.ReactNode => {
         const roles = [
             { label: "Organiser", value: "organiser" },
@@ -105,7 +131,7 @@ const AdminHomePage = () => {
 
         return (
             <Dropdown
-                className="h-11 text-xs w-40"
+                className="h-11 text-xs w-full"
                 value={rowData.role}
                 options={roles}
                 onChange={(e) => changeUserRoleHandler(rowData.username, e.value)}></Dropdown>
@@ -153,6 +179,7 @@ const AdminHomePage = () => {
                         root: { className: "border-graydark border-2 rounded-t-xl rounded-b-xl" },
                         header: { className: "rounded-t-[0.6rem]" },
                     }}>
+                    <Column field="image" header="Image" headerClassName="centered-column-header" body={imageBodyTemplate}></Column>
                     <Column field="username" sortable header="Username"></Column>
                     <Column field="name" sortable header="Name"></Column>
                     <Column field="surname" sortable header="Surname"></Column>
@@ -161,7 +188,7 @@ const AdminHomePage = () => {
                         field="is_verified"
                         header="Verified Email"
                         body={verifiedBodyTemplate}
-                        style={{ maxWidth: "8rem", textAlign: "center" }}
+                        style={{ maxWidth: "5rem", textAlign: "center" }}
                         headerClassName="centered-column-header"></Column>
                     <Column field="role" header="Role" dataType="boolean" body={roleBodyTemplate}></Column>
                     <Column
@@ -170,14 +197,14 @@ const AdminHomePage = () => {
                         filter
                         body={approvedBodyTemplate}
                         filterElement={approvedFilterTemplate}
-                        style={{ maxWidth: "8rem", textAlign: "center" }}
+                        style={{ maxWidth: "7.5rem", textAlign: "center" }}
                         showFilterMatchModes={false}
                         headerClassName="centered-column-header"></Column>
                     <Column
                         field="approve"
                         header="Approve"
                         body={approveButtonBodyTemplate}
-                        style={{ textAlign: "center" }}
+                        style={{ textAlign: "center", maxWidth: "5rem" }}
                         headerClassName="centered-column-header"></Column>
                 </DataTable>
             </div>
