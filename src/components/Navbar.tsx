@@ -36,11 +36,21 @@ const Navbar = () => {
                 transition-all duration-500 ease-in-out">
                 {auth ? (
                     <>
-                        <Avatar
-                            className="bg-secondary text-white p-5 transition-color ease-in-out duration-300 cursor-pointer"
-                            icon="pi pi-user"
-                            size="normal"
-                        />
+                        {auth.image ? (
+                            <Avatar
+                                className="transition-color ease-in-out duration-300 cursor-pointer hover:scale-105"
+                                image={`data:image/jpeg;base64,${auth?.image}`}
+                                size="large"
+                                pt={{ image: { className: "rounded-lg object-cover" } }}
+                            />
+                        ) : (
+                            <Avatar
+                                className="bg-secondary text-white hover:scale-105 transition-color ease-in-out duration-300 cursor-pointer"
+                                icon="pi pi-user"
+                                size="large"
+                            />
+                        )}
+                        {/* <img src={`data:image/jpeg;base64,${auth?.image}`}></img> */}
                         <li className="flex flex-col">
                             <span className="text-lg">{auth["username"]}</span>
                         </li>
