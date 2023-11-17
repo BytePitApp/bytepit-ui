@@ -1,0 +1,8 @@
+.centered-column-header .p-column-header-content {
+    justify-content: center;
+    width: 100%;
+}
+
+.p-column-filter.p-fluid.p-column-filter-menu {
+    margin-left: 0;
+}
