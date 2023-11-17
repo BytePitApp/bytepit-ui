@@ -45,14 +45,16 @@ const EmailConfirmPage = () => {
     return (
         <div className="flex flex-col h-screen justify-center">
             <Navbar />
-            <div className="h-screen w-full flex grow flex-col justify-center items-center bg-form bg-cover">
+            <div className=" w-full flex grow flex-col justify-center items-center bg-form bg-cover">
                 {loading ? (
-                    <ProgressSpinner strokeWidth="8" className="w-72 h-72" />
+                    <div className="z-50 absolute top-1.5 left-[50%]">
+                        <ProgressSpinner style={{ width: "50px", height: "50px" }} fill="#dee2e6" strokeWidth="7" />
+                    </div>
                 ) : (
-                    <div className="bg-graymedium py-24 px-36 rounded-3xl">
-                        <h2 className="flex text-4xl text-center font-semibold gap-2 text-primary flex-col justify-center items-center">
+                    <div className="bg-graymedium py-8 2xl:py-16 px-16 2xl:px-24 rounded-xl 2xl:rounded-3xl border-graydark border-b-4 drop-shadow-xl">
+                        <h2 className="flex text-3xl 2xl:text-4xl text-center font-semibold gap-2 2xl:gap-3 text-primary flex-col justify-center items-center">
                             <span className="">Email confirmed!</span>
-                            <span className="">Reirecting in:</span>
+                            <span className="text-2xl 2xl:text-3xl">Redirecting in:</span>
                         </h2>
                         <h1 className="flex justify-center items-center">
                             <span>{countdown}</span>
