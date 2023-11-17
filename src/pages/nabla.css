@@ -15,5 +15,15 @@ h1 span {
     position: relative;
     display: inline-block;
     font-palette: --Nabla1;
-    font-size: 12rem;
+    font-size: 10rem;
+}
+
+@media (min-width: 1536px) {
+    h1 span {
+        animation: depth 1s ease-in-out alternate infinite;
+        position: relative;
+        display: inline-block;
+        font-palette: --Nabla1;
+        font-size: 12rem;
+    }
 }
