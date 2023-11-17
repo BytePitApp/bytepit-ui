@@ -25,7 +25,6 @@ const register = async (
     role: RegisterRole,
     image: any | undefined
 ) => {
-    console.log("image: ", image)
     const formData = new FormData()
     formData.append("email", email)
     formData.append("username", username)
