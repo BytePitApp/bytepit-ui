@@ -127,7 +127,7 @@ const RegisterPage = () => {
                         </span>
                     </div>
                     <div className="flex flex-col items-center w-full justify-center">
-                        <span className="p-float-label text-[2vh] w-1/2">
+                        <span className="p-float-label text-[2vh] w-full lg:w-1/2">
                             <Dropdown
                                 id="role"
                                 name="role"
