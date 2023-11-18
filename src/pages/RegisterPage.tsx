@@ -116,7 +116,7 @@ const RegisterPage = () => {
             <div className="bg-form bg-cover grow flex flex-row justify-center items-center">
                 <form
                     onSubmit={submitForm}
-                    className="mx-[5%] mt-[40vh] mb-[10vh] gap-[2vh] flex flex-col rounded-xl p-[5%] bg-graymedium drop-shadow-xl rounded-t-xl border-graydark border-b-4"
+                    className="mx-[5%] mt-[40vh] mb-[10vh] lg:my-0 gap-[2vh] flex flex-col rounded-xl p-[5%] bg-graymedium drop-shadow-xl rounded-t-xl border-graydark border-b-4"
                 >
                     <div className="m-[5%] flex flex-col gap-2">
                         <span className="text-[4vh] text-center font-semibold text-primary mb-2">
@@ -193,7 +193,7 @@ const RegisterPage = () => {
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-6 justify-center items-center">
+                    <div className="flex flex-col gap-[4vh] justify-center items-center">
                         <Button
                             className="w-full hover:scale-[102%] transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
                             label="Submit"
