@@ -31,7 +31,7 @@ const Navbar = () => {
             </Link>
             <ul
                 className="p-[1vh] bg-graymedium w-full md:w-auto max-md:left-0 md:static absolute
-                flex flex-col items-end  justify-center
+                flex flex-row items-center gap-[1vw] justify-center
                 transition-all duration-500 ease-in-out"
             >
                 {auth ? (

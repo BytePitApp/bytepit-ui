@@ -199,7 +199,7 @@ const RegisterPage = () => {
                             label="Submit"
                             type="submit"
                         />
-                        <span className="text-xl text-center text-slate-950">
+                        <span className="text-[2vh] text-center text-slate-950">
                             Already have an account on BytePit?{" "}
                             <Link to="/login" className="text-primary font-semibold">
                                 Login
