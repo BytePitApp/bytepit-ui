@@ -104,7 +104,7 @@ const AdminHomePage = () => {
                     <Avatar
                         className="transition-color ease-in-out duration-300 cursor-pointer hover:scale-105"
                         image={`data:image/jpeg;base64,${rowData.image}`}
-                        size="large"
+                        size="normal"
                         pt={{ image: { className: "rounded-lg object-cover" } }}
                     />
                 </div>
@@ -115,7 +115,7 @@ const AdminHomePage = () => {
                     <Avatar
                         className="bg-secondary text-white hover:scale-105 transition-color ease-in-out duration-300 cursor-pointer"
                         icon="pi pi-user"
-                        size="large"
+                        size="normal"
                     />
                 </div>
             )
@@ -131,16 +131,18 @@ const AdminHomePage = () => {
 
         return (
             <Dropdown
-                className="h-11 text-xs w-full"
+                className="h-7 w-full"
                 value={rowData.role}
                 options={roles}
-                onChange={(e) => changeUserRoleHandler(rowData.username, e.value)}></Dropdown>
+                onChange={(e) => changeUserRoleHandler(rowData.username, e.value)}
+                pt={{ input: { className: "text-xs p-1.5" }, list: { className: "text-xs" } }}
+            />
         )
     }
 
     const renderHeader = () => {
         return (
-            <div className="flex justify-content-between">
+            <div className="flex justify-content-between px-2">
                 <h2 className="text-2xl text-primary">Users List</h2>
             </div>
         )
@@ -155,7 +157,7 @@ const AdminHomePage = () => {
             <Navbar />
             <div className="p-2">
                 <DataTable
-                    className="my-10 mx-32"
+                    className="my-10 mx-16 2xl:mx-28 text-sm"
                     value={users}
                     paginator
                     rows={10}
@@ -178,34 +180,37 @@ const AdminHomePage = () => {
                     pt={{
                         root: { className: "border-graydark border-2 rounded-t-xl rounded-b-xl" },
                         header: { className: "rounded-t-[0.6rem]" },
-                    }}>
-                    <Column field="image" header="Image" headerClassName="centered-column-header" body={imageBodyTemplate}></Column>
-                    <Column field="username" sortable header="Username"></Column>
-                    <Column field="name" sortable header="Name"></Column>
-                    <Column field="surname" sortable header="Surname"></Column>
-                    <Column field="email" sortable header="Email"></Column>
+                        rowGroupHeader: { className: "text-xs" },
+                        // +: { className: "p-0" },
+                    }}
+                    cellClassName={(data) => ("p-1")}>
+                    <Column field="image" headerClassName="centered-column-header text-sm" body={imageBodyTemplate} style={{ maxWidth: "2.5rem" }}></Column>
+                    <Column field="username" sortable header="Username" headerClassName="text-sm"></Column>
+                    <Column field="name" sortable header="Name" headerClassName="text-sm"></Column>
+                    <Column field="surname" sortable header="Surname" headerClassName="text-sm"></Column>
+                    <Column field="email" sortable header="Email" headerClassName="text-sm"></Column>
                     <Column
                         field="is_verified"
-                        header="Verified Email"
+                        header="Verified"
                         body={verifiedBodyTemplate}
-                        style={{ maxWidth: "5rem", textAlign: "center" }}
-                        headerClassName="centered-column-header"></Column>
-                    <Column field="role" header="Role" dataType="boolean" body={roleBodyTemplate}></Column>
+                        style={{ maxWidth: "4rem", textAlign: "center" }}
+                        headerClassName="centered-column-header text-sm"></Column>
+                    <Column field="role" header="Role" dataType="boolean" body={roleBodyTemplate} style={{ maxWidth: "8rem" }}></Column>
                     <Column
                         field="approved_by_admin"
-                        header="Approved By Admin"
+                        header="Approved"
                         filter
                         body={approvedBodyTemplate}
                         filterElement={approvedFilterTemplate}
-                        style={{ maxWidth: "7.5rem", textAlign: "center" }}
+                        style={{ maxWidth: "5.5rem", textAlign: "center" }}
                         showFilterMatchModes={false}
-                        headerClassName="centered-column-header"></Column>
+                        headerClassName="centered-column-header text-sm"></Column>
                     <Column
                         field="approve"
                         header="Approve"
                         body={approveButtonBodyTemplate}
                         style={{ textAlign: "center", maxWidth: "5rem" }}
-                        headerClassName="centered-column-header"></Column>
+                        headerClassName="centered-column-header text-sm"></Column>
                 </DataTable>
             </div>
         </div>
