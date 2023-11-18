@@ -1,6 +1,6 @@
 import React, { useState, useRef, FormEvent } from "react"
 import { FormDataRegister, RegisterRole } from "../Models"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { InputText } from "primereact/inputtext"
 import { Password } from "primereact/password"
 import { Button } from "primereact/button"
@@ -113,71 +113,98 @@ const RegisterPage = () => {
             <div className="flex absolute right-0 py-10 px-6 z-30">
                 <Toast ref={toast} />
             </div>
-            <div className="bg-form bg-cover grow flex flex-col justify-center items-center">
+            <div className="bg-form bg-cover grow flex flex-row justify-center items-center">
                 <form
                     onSubmit={submitForm}
-                    className="flex flex-col rounded-xl gap-6 w-[30rem] px-8 py-6 bg-graymedium drop-shadow-xl rounded-t-xl border-graydark border-b-4">
-                    <span className="text-4xl text-center font-semibold text-primary mb-3">Register</span>
-                    <div className="flex flex-row justify-end">
-                        <span className="flex text-center items-center text-slate-700">Choose your role</span>
-                        <span className="p-float-label ml-6">
+                    className="mx-[5%] mt-[40vh] mb-[10vh] gap-[2vh] flex flex-col rounded-xl p-[5%] bg-graymedium drop-shadow-xl rounded-t-xl border-graydark border-b-4"
+                >
+                    <div className="m-[5%] flex flex-col gap-2">
+                        <span className="text-[4vh] text-center font-semibold text-primary mb-2">
+                            Welcome to BytePit
+                        </span>
+                        <span className="text-[2vh] text-center text-slate-950">
+                            Please fill in the form below to create your account.
+                        </span>
+                    </div>
+                    <div className="flex flex-col items-center w-full justify-center">
+                        <span className="p-float-label text-[2vh] w-full lg:w-1/2">
                             <Dropdown
+                                id="role"
                                 name="role"
                                 value={formData.role}
                                 onChange={handleValueChange}
                                 options={[RegisterRole.CONTESTANT, RegisterRole.ORGANISER]}
                                 placeholder="Select a Role"
-                                className="w-60"
+                                className="w-full text-[2vh] rounded-[1vh]"
                                 itemTemplate={roleTemplate}
                                 valueTemplate={selectedRoleTemplate}
                             />
+                            <label htmlFor="in">Role</label>
                         </span>
                     </div>
-                    <TextInput name="email" value={formData.email} label="Email" onUpdate={handleValueChange} />
-                    <TextInput name="username" value={formData.username} label="Username" onUpdate={handleValueChange} />
-                    <span className="p-float-label">
-                        <Password
-                            name="password"
-                            toggleMask
-                            value={formData.password}
-                            onChange={handleValueChange}
-                            feedback
-                            className="w-full"
-                            inputClassName="w-full min-w-[15rem]"
-                            pt={{
-                                showIcon: {
-                                    className: "mb-2 hover:cursor-pointer hover:scale-[108%] transition-all ease-in-out duration-300",
-                                },
-                                hideIcon: {
-                                    className: "mb-2 hover:cursor-pointer hover:scale-[108%] transition-all ease-in-out duration-300",
-                                },
-                            }}
-                        />
-                        <label htmlFor="in">Password</label>
-                    </span>
-                    <TextInput name="name" value={formData.name} label="Name" onUpdate={handleValueChange} />
-                    <TextInput name="surname" value={formData.surname} label="Surname" onUpdate={handleValueChange} />
-                    <div>
-                        <input
-                            className="w-full ml-2 block text-sm file:rounded-3xl file:bg-gray-300 file:hover:bg-gray-200 file:transition-all file:ease-in-out file:duration-300 file:border-none select-none file:cursor-pointer cursor-defualt file:text-gray-800 file:p-3 file:pointer-events-auto pointer-events-none bg-gray-50 text-gray-600"
-                            type="file"
-                            onChange={(e: any) => setSelectedImage(e.target.files[0])}
-                        />
+                    <div className="flex flex-col lg:flex-row gap-6">
+                        <div className="flex flex-col gap-6 w-full">
+                            <TextInput name="email" value={formData.email} label="Email" onUpdate={handleValueChange} />
+                            <TextInput
+                                name="username"
+                                value={formData.username}
+                                label="Username"
+                                onUpdate={handleValueChange}
+                            />
+                            <span className="p-float-label text-2vh">
+                                <Password
+                                    name="password"
+                                    toggleMask
+                                    value={formData.password}
+                                    onChange={handleValueChange}
+                                    feedback
+                                    className="text-[2vh] rounded-[1vh]"
+                                    inputClassName="text-[2vh] rounded-[1vh]"
+                                    pt={{
+                                        showIcon: {
+                                            className:
+                                                "mb-2 hover:cursor-pointer hover:scale-[108%] transition-all ease-in-out duration-300",
+                                        },
+                                        hideIcon: {
+                                            className:
+                                                "mb-2 hover:cursor-pointer hover:scale-[108%] transition-all ease-in-out duration-300",
+                                        },
+                                    }}
+                                />
+                                <label htmlFor="in">Password</label>
+                            </span>
+                        </div>
+                        <div className="flex flex-col gap-6 w-full">
+                            <TextInput name="name" value={formData.name} label="Name" onUpdate={handleValueChange} />
+                            <TextInput
+                                name="surname"
+                                value={formData.surname}
+                                label="Surname"
+                                onUpdate={handleValueChange}
+                            />
+                            <div>
+                                <input
+                                    id="image"
+                                    className="w-full text-[2vh] rounded-[1vh] file:w-1/2 block text-sm file:rounded-[1vh] file:bg-gray-300 file:hover:bg-gray-200 file:transition-all file:ease-in-out file:duration-300 file:border-none select-none file:cursor-pointer cursor-defualt file:text-gray-800 file:p-3 file:pointer-events-auto pointer-events-none bg-gray-50 text-gray-600"
+                                    type="file"
+                                    onClick={(e: any) => setSelectedImage(e.target.files[0])}
+                                />
+                            </div>
+                        </div>
                     </div>
-                    <div className="flex flex-row gap-4">
+
+                    <div className="flex flex-col gap-6 justify-center items-center">
                         <Button
                             className="w-full hover:scale-[102%] transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
                             label="Submit"
                             type="submit"
                         />
-                        <div>
-                            <Button
-                                className="w-full hover:scale-[104%] transition-all ease-in-out duration-300 bg-secondary hover:bg-secondarylight text-white"
-                                label="Login"
-                                onClick={() => navigate("/login")}
-                                text
-                            />
-                        </div>
+                        <span className="text-[2vh] text-center text-slate-950">
+                            Already have an account on BytePit?{" "}
+                            <Link to="/login" className="text-primary font-semibold">
+                                Login
+                            </Link>
+                        </span>
                     </div>
                 </form>
             </div>
@@ -195,7 +222,12 @@ type TextInputProps = {
 const TextInput = ({ name, value, label, onUpdate }: TextInputProps) => {
     return (
         <span className="p-float-label">
-            <InputText name={name} value={value} onChange={(e) => onUpdate(e)} className="w-full min-w-[15rem]" />
+            <InputText
+                name={name}
+                value={value}
+                onChange={(e) => onUpdate(e)}
+                className="w-full text-[2vh] rounded-[1vh]"
+            />
             <label htmlFor="in">{label}</label>
         </span>
     )
