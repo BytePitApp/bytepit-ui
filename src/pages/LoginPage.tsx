@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react"
 import { Button } from "primereact/button"
 import { ProgressSpinner } from "primereact/progressspinner"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { InputText } from "primereact/inputtext"
 import { Password } from "primereact/password"
 import { FormDataLogin } from "../Models"
@@ -81,7 +81,12 @@ const LoginPage = () => {
                             <div className="flex-grow flex flex-col gap-10 w-[32rem] h-[30rem] p-16 bg-graymedium rounded-l-xl border-graydark border-b-4">
                                 <span className="text-4xl text-center font-semibold text-primary">Login</span>
                                 <span className="p-float-label">
-                                    <InputText name="username" value={formData.username} onChange={handleValueChange} className="w-full" />
+                                    <InputText
+                                        name="username"
+                                        value={formData.username}
+                                        onChange={handleValueChange}
+                                        className="w-full"
+                                    />
                                     <label htmlFor="in">Username</label>
                                 </span>
                                 <span className="p-float-label flex items-center">
@@ -112,18 +117,20 @@ const LoginPage = () => {
                                     onClick={submitForm}
                                 />
                             </div>
-                            <div className="flex-grow flex flex-col justify-center items-center gap-4 bg- w-[32rem] h-[30rem] bg-primary rounded-r-xl border-primarylight border-b-4">
-                                <span className="text-2xl text-center font-semibold text-white">Welcome back!</span>
-                                <span className="text-lg text-center text-white px-6">
-                                    We hope you had a safe and enjoyable time away! <br /> Create your account and start coding right now!
+                            <div className="p-16 flex-grow flex flex-col justify-center items-center gap-8 bg- w-[32rem] h-[30rem] bg-primary rounded-r-xl border-primarylight border-b-4">
+                                <span className="text-4xl text-center font-semibold text-white">Welcome back!</span>
+                                <span className="text-lg text-center text-white">
+                                    We hope you had a safe time away! <br /> Log in and start coding right away.
                                 </span>
-                                <Button
-                                    className="bg-graydark rounded-3xl text-primary mt-1 hover:bg-white hover:scale-[102%] transition-all ease-in-out duration-300"
-                                    label="No account yet? Register now!"
-                                    size="small"
-                                    onClick={() => navigate("/register")}
-                                    text
-                                />
+                                <Link to="/register" className="w-full text-center">
+                                    <Button
+                                        className="font-semibold text-lg bg-graydark rounded-3xl text-primary mt-1 hover:bg-white hover:scale-[102%] transition-all ease-in-out duration-300"
+                                        size="small"
+                                        text
+                                    >
+                                        No account yet? Register now!
+                                    </Button>
+                                </Link>
                             </div>
                         </div>
                     </div>
