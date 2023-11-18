@@ -56,7 +56,11 @@ const AdminHomePage = () => {
                 <label htmlFor="approved-filter" className="font-bold">
                     Approved
                 </label>
-                <TriStateCheckbox id="approved-filter" value={options.value} onChange={(e) => options.filterCallback(e.value)} />
+                <TriStateCheckbox
+                    id="approved-filter"
+                    value={options.value}
+                    onChange={(e) => options.filterCallback(e.value)}
+                />
             </div>
         )
     }
@@ -66,7 +70,8 @@ const AdminHomePage = () => {
                 className={classNames("pi", {
                     "true-icon pi-check-circle text-green-500": rowData.approved_by_admin,
                     "false-icon pi-times-circle text-red-400": !rowData.approved_by_admin,
-                })}></i>
+                })}
+            ></i>
         )
     }
 
@@ -76,13 +81,21 @@ const AdminHomePage = () => {
                 className={classNames("pi", {
                     "true-icon pi-check-circle text-green-500": rowData.is_verified,
                     "false-icon pi-times-circle text-red-400": !rowData.is_verified,
-                })}></i>
+                })}
+            ></i>
         )
     }
 
     const approveButtonBodyTemplate = (rowData: any): React.ReactNode => {
         if (rowData.approved_by_admin) {
-            return <Button type="button" icon="pi pi-check" className="p-button-success p-0.5 bg-green-200 border-green-200" disabled />
+            return (
+                <Button
+                    type="button"
+                    icon="pi pi-check"
+                    className="p-button-success p-0.5 bg-green-200 border-green-200"
+                    disabled
+                />
+            )
         } else {
             return (
                 <Button
@@ -155,64 +168,77 @@ const AdminHomePage = () => {
     return (
         <div className="bg-form bg-cover min-h-screen">
             <Navbar />
-            <div className="p-2">
-                <DataTable
-                    className="my-10 mx-16 2xl:mx-28 text-sm"
-                    value={users}
-                    paginator
-                    rows={10}
-                    size={"small"}
-                    paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-                    currentPageReportTemplate="{first} to {last} of {totalRecords}"
-                    paginatorLeft={paginatorLeft}
-                    paginatorRight={paginatorRight}
-                    rowsPerPageOptions={[5, 10, 25, 50]}
-                    tableStyle={{ minWidth: "50rem" }}
-                    filters={filters}
-                    filterDisplay="menu"
-                    showGridlines={true}
-                    stripedRows
-                    sortField="name"
-                    sortOrder={1}
-                    emptyMessage="No users found."
-                    header={header}
-                    paginatorClassName="rounded-b-[0.6rem] border-graydark"
-                    pt={{
-                        root: { className: "border-graydark border-2 rounded-t-xl rounded-b-xl" },
-                        header: { className: "rounded-t-[0.6rem]" },
-                        rowGroupHeader: { className: "text-xs" },
-                        // +: { className: "p-0" },
-                    }}
-                    cellClassName={(data) => ("p-1")}>
-                    <Column field="image" headerClassName="centered-column-header text-sm" body={imageBodyTemplate} style={{ maxWidth: "2.5rem" }}></Column>
-                    <Column field="username" sortable header="Username" headerClassName="text-sm"></Column>
-                    <Column field="name" sortable header="Name" headerClassName="text-sm"></Column>
-                    <Column field="surname" sortable header="Surname" headerClassName="text-sm"></Column>
-                    <Column field="email" sortable header="Email" headerClassName="text-sm"></Column>
-                    <Column
-                        field="is_verified"
-                        header="Verified"
-                        body={verifiedBodyTemplate}
-                        style={{ maxWidth: "4rem", textAlign: "center" }}
-                        headerClassName="centered-column-header text-sm"></Column>
-                    <Column field="role" header="Role" dataType="boolean" body={roleBodyTemplate} style={{ maxWidth: "8rem" }}></Column>
-                    <Column
-                        field="approved_by_admin"
-                        header="Approved"
-                        filter
-                        body={approvedBodyTemplate}
-                        filterElement={approvedFilterTemplate}
-                        style={{ maxWidth: "5.5rem", textAlign: "center" }}
-                        showFilterMatchModes={false}
-                        headerClassName="centered-column-header text-sm"></Column>
-                    <Column
-                        field="approve"
-                        header="Approve"
-                        body={approveButtonBodyTemplate}
-                        style={{ textAlign: "center", maxWidth: "5rem" }}
-                        headerClassName="centered-column-header text-sm"></Column>
-                </DataTable>
-            </div>
+            <DataTable
+                className="mt-[5%] mx-[5%] text-[2vh]"
+                value={users}
+                paginator
+                rows={10}
+                size={"small"}
+                paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+                currentPageReportTemplate="{first} to {last} of {totalRecords}"
+                paginatorLeft={paginatorLeft}
+                paginatorRight={paginatorRight}
+                rowsPerPageOptions={[5, 10, 25, 50]}
+                tableStyle={{ minWidth: "50rem" }}
+                filters={filters}
+                filterDisplay="menu"
+                showGridlines={true}
+                stripedRows
+                sortField="name"
+                sortOrder={1}
+                emptyMessage="No users found."
+                header={header}
+                paginatorClassName="rounded-b-[0.6rem] border-graydark"
+                pt={{
+                    root: { className: "border-graydark border-2 rounded-t-xl rounded-b-xl" },
+                    header: { className: "rounded-t-[0.6rem]" },
+                    rowGroupHeader: { className: "text-xs" },
+                    // +: { className: "p-0" },
+                }}
+                cellClassName={(data) => "p-1"}
+            >
+                <Column
+                    field="image"
+                    headerClassName="centered-column-header text-sm"
+                    body={imageBodyTemplate}
+                    style={{ maxWidth: "2.5rem" }}
+                ></Column>
+                <Column field="username" sortable header="Username" headerClassName="text-sm"></Column>
+                <Column field="name" sortable header="Name" headerClassName="text-sm"></Column>
+                <Column field="surname" sortable header="Surname" headerClassName="text-sm"></Column>
+                <Column field="email" sortable header="Email" headerClassName="text-sm"></Column>
+                <Column
+                    field="is_verified"
+                    header="Verified"
+                    body={verifiedBodyTemplate}
+                    style={{ maxWidth: "4rem", textAlign: "center" }}
+                    headerClassName="centered-column-header text-sm"
+                ></Column>
+                <Column
+                    field="role"
+                    header="Role"
+                    dataType="boolean"
+                    body={roleBodyTemplate}
+                    style={{ maxWidth: "8rem" }}
+                ></Column>
+                <Column
+                    field="approved_by_admin"
+                    header="Approved"
+                    filter
+                    body={approvedBodyTemplate}
+                    filterElement={approvedFilterTemplate}
+                    style={{ maxWidth: "5.5rem", textAlign: "center" }}
+                    showFilterMatchModes={false}
+                    headerClassName="centered-column-header text-sm"
+                ></Column>
+                <Column
+                    field="approve"
+                    header="Approve"
+                    body={approveButtonBodyTemplate}
+                    style={{ textAlign: "center", maxWidth: "5rem" }}
+                    headerClassName="centered-column-header text-sm"
+                ></Column>
+            </DataTable>
         </div>
     )
 }
