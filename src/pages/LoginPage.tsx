@@ -120,12 +120,6 @@ const LoginPage = () => {
                                 label="Submit"
                                 onClick={submitForm}
                             />
-                            <span className="text-[2vh] text-center text-slate-950">
-                                No account yet?{" "}
-                                <Link to="/login" className="text-primary font-semibold">
-                                    Register now
-                                </Link>
-                            </span>
                         </div>
                     </div>
                     <div className="p-[5%] hidden lg:flex flex-col w-full h-full justify-center items-center gap-[10%] bg-primary rounded-r-[3%] border-primarylight border-b-4">
