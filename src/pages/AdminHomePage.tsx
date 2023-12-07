@@ -22,14 +22,14 @@ const AdminHomePage = () => {
 
     const fetchUsers = useCallback(async () => {
         try {
-            setLoading(true); 
-            const response = await getAllUsers();
-            setUsers(response.data);
-            setLoading(false);
+            setLoading(true)
+            const response = await getAllUsers()
+            setUsers(response.data)
+            setLoading(false)
         } catch (err: any) {
-            setError(err.response?.data?.detail ?? "Something went wrong");
+            setError(err.response?.data?.detail ?? "Something went wrong")
         }
-    }, []);
+    }, [])
 
     const updateOrganiser = useCallback(async (username: string) => {
         try {
