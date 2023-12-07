@@ -168,12 +168,12 @@ const AdminHomePage = () => {
     const renderProgressSpinner = () => {
         return (
             loading ? (
-            <div className="flex justify-center items-center h-56">
-                <ProgressSpinner style={{ width: "50px", height: "50px" }} fill="#dee2e6" strokeWidth="7" />
-            </div>
-        ) : (
-            "No users found."
-        )
+                <div className="flex justify-center items-center h-56">
+                    <ProgressSpinner style={{ width: "50px", height: "50px" }} fill="#dee2e6" strokeWidth="7" />
+                </div>
+            ) : (
+                "No users found."
+            )
         )
     }
 
