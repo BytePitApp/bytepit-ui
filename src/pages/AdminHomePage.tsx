@@ -13,7 +13,7 @@ import "./AdminHomePage.css"
 import { getAllUsers, confirmOrganiser, changeUserRole } from "../services/admin.service"
 
 const AdminHomePage = () => {
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true)
     const [error, setError] = useState("")
     const [users, setUsers] = useState<any>([])
     const filters = {
@@ -23,9 +23,14 @@ const AdminHomePage = () => {
     const fetchUsers = useCallback(async () => {
         try {
             setLoading(true)
-            const response = await getAllUsers()
-            setUsers(response.data)
-            setLoading(false)
+            setTimeout(async () => {
+                // Fetching data (replace this with your actual API call)
+                const response = await getAllUsers();
+                setUsers(response.data);
+
+                // Once data is fetched, setLoading to false
+                setLoading(false);
+            }, 5000);
         } catch (err: any) {
             setError(err.response?.data?.detail ?? "Something went wrong")
         }
@@ -165,9 +170,23 @@ const AdminHomePage = () => {
         )
     }
 
+    const renderProgressSpinner = () => {
+        return (
+            loading ? (
+            <div className="flex justify-center items-center h-56">
+                <ProgressSpinner style={{ width: "50px", height: "50px" }} fill="#dee2e6" strokeWidth="7" />
+            </div>
+        ) : (
+            "No users found."
+        )
+        )
+    }
+
+
     const header = renderHeader()
     const paginatorLeft = <Button type="button" icon="pi pi-refresh" text onClick={fetchUsers} />
     const paginatorRight = <Button type="button" className="hidden" />
+    const progressSpinner = renderProgressSpinner()
 
     return (
         <div className="bg-form bg-cover min-h-screen">
@@ -190,15 +209,7 @@ const AdminHomePage = () => {
                 stripedRows
                 sortField="name"
                 sortOrder={1}
-                emptyMessage={
-                    loading ? (
-                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '55px' }}>
-                            <ProgressSpinner style={{ width: "50px", height: "50px" }} fill="#dee2e6" strokeWidth="7" />
-                        </div>
-                    ) : (
-                        "No users found."
-                    )
-                }
+                emptyMessage={progressSpinner}
                 header={header}
                 paginatorClassName="rounded-b-[0.6rem] border-graydark"
                 pt={{
