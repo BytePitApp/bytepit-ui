@@ -23,14 +23,9 @@ const AdminHomePage = () => {
     const fetchUsers = useCallback(async () => {
         try {
             setLoading(true)
-            setTimeout(async () => {
-                // Fetching data (replace this with your actual API call)
-                const response = await getAllUsers();
-                setUsers(response.data);
-
-                // Once data is fetched, setLoading to false
-                setLoading(false);
-            }, 5000);
+            const response = await getAllUsers()
+            setUsers(response.data)
+            setLoading(false)
         } catch (err: any) {
             setError(err.response?.data?.detail ?? "Something went wrong")
         }
