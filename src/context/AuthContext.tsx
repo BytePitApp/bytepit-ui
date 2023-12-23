@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const fetchAuth = useCallback(async () => {
         setLoading(true)
         try {
-            const response = await requests.get("/user/current")
+            const response = await requests.get("/auth/current")
             setAuth(response.data)
         } catch (err) {
             setAuth(null)
