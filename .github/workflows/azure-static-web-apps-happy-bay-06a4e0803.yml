@@ -29,4 +29,4 @@ jobs:
                   ###### End of Repository/Build Configurations ######
 
               env:
-                  VITE_API_URL: "https://dev.bytepit.com/api"
+                  VITE_API_URL: "https://dev.bytepit.cloud/api"
