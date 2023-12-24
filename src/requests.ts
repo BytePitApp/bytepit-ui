@@ -1,6 +1,6 @@
 import axios from "axios"
 
-let url = process.env.API_URL || "http://localhost:8000/api"
+let url = import.meta.env.VITE_API_URL ?? "http://localhost:8000/api"
 
 const instance = axios.create({
     baseURL: url,
