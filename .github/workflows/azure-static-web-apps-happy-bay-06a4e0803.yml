@@ -28,5 +28,5 @@ jobs:
                   output_location: "dist" # Built app content directory - optional
                   ###### End of Repository/Build Configurations ######
 
-            - env:
+              env:
                   API_URL: "https://dev.bytepit.com/api"
