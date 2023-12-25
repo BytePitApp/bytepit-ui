@@ -501,7 +501,7 @@ const CreateCompetitionPage = () => {
                                     {formData.problems.map((problemId: string) => {
                                         const problem = problems.find((p: ProblemProps) => p.id === problemId)
                                         return (
-                                            <div className="bg-graydark m-2 border border-gray-400 rounded-lg py-2 px-4">
+                                            <div key={problem.id} className="bg-graydark m-2 border border-gray-400 rounded-lg py-2 px-4">
                                                 <div className="flex justify-between">
                                                     <div className="flex flex-col">
                                                         <span>{problem?.name}</span>
