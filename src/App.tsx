@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom"
-import { AdminHomePage, ContestantHomePage, LandingPage, EmailConfirmPage, LoginPage, OrganiserHomePage, RegisterPage } from "./pages"
+import { AdminHomePage, ContestantHomePage, LandingPage, EmailConfirmPage, LoginPage, OrganiserHomePage, RegisterPage, CreateCompetitionPage } from "./pages"
 import ProtectedRoute from "./components/ProtectedRoute"
 
 import "./global.css"
@@ -26,6 +26,7 @@ const App = () => {
                 </Route>
                 <Route element={<ProtectedRoute allowedRoles={[Role.ORGANISER]}></ProtectedRoute>}>
                     <Route path="organiser/home" element={<OrganiserHomePage></OrganiserHomePage>} />
+                    <Route path="organiser/create-competition" element={<CreateCompetitionPage></CreateCompetitionPage>} />
                 </Route>
                 <Route path="login" element={<LoginPage></LoginPage>} />
                 <Route path="register" element={<RegisterPage></RegisterPage>} />
