@@ -38,7 +38,7 @@ const LandingPage = () => {
                         <div className="flex flex-col   text-[10vh] select-none font-major-mono mr-4 2xl:mr-10">
                             <div className="flex">
                                 <p className="transition-all duration-200 ease-in-out hover:scale-110 text-primary font-[900]">
-                                    BA
+                                    B
                                 </p>
                                 <p className="transition-all duration-200 ease-in-out hover:scale-110 text-primary font-[900]">
                                     y
