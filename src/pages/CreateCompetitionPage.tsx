@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { createCompetition } from "../services/competition.service"
 import { getAllProblems } from "../services/problem.service"
 import { Problem, CreateCompetition } from "../Models"
-import { ProblemPicker, ProblemListItem } from "../components"
-import { Navbar } from "../components"
+import { Navbar, ProblemPicker, ProblemListItem } from "../components"
 import { Toast } from "primereact/toast"
 import { ProgressSpinner } from "primereact/progressspinner"
 import { Calendar } from "primereact/calendar"
@@ -210,11 +209,11 @@ const CreateCompetitionPage = () => {
 
     return (
         <div className="flex flex-col h-screen justify-center">
-            {loading && (
+            {loading === true ? (
                 <div className="z-50 absolute top-1.5 left-[50%]">
                     <ProgressSpinner style={{ width: "50px", height: "50px" }} fill="#dee2e6" strokeWidth="7" />
                 </div>
-            )}
+            ) : null}
             <Navbar />
             <div className="flex absolute right-0 py-10 px-6 z-30">
                 <Toast ref={toast} />
@@ -342,7 +341,7 @@ const CreateCompetitionPage = () => {
                                     selectedProblems={formData.problems}
                                 />
                             ) : null}
-                            {formData.problems.length > 0 && (
+                            {formData.problems.length > 0 === true ? (
                                 <div className="bg-secondarylight rounded-lg border-secondarylight border-2 my-4">
                                     <div className="py-2 text-xl p-2 justify-center items-center flex bg-secondarylight text-white font-semibold">
                                         Selected Problems
@@ -360,7 +359,7 @@ const CreateCompetitionPage = () => {
                                         )
                                     })}
                                 </div>
-                            )}
+                            ) : null}
                             <div className="flex justify-between items-center mt-4 mb-8 px-2">
                                 <Button
                                     label="Back"
