@@ -4,7 +4,9 @@ import ContestantHomePage from "./ContestantHomePage"
 import LoginPage from "./LoginPage"
 import RegisterPage from "./RegisterPage"
 import LandingPage from "./LandingPage"
-import EmailConfirmPage from './EmailConfirmPage';
+import EmailConfirmPage from './EmailConfirmPage'
+import CreateProblemPage from "./CreateProblemPage"
+import EditProblemPage from "./EditProblemPage"
 
 export {
     AdminHomePage,
@@ -14,4 +16,6 @@ export {
     RegisterPage,
     EmailConfirmPage,
     LandingPage,
+    CreateProblemPage,
+    EditProblemPage,
 }
