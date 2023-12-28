@@ -1,20 +1,22 @@
 import { useEffect, useState, useCallback, useRef } from "react"
-import { getAllCompetitions } from "../services/competition.service"
+import { getAllCompetitionsForOrganiser } from "../services/competition.service"
 import { CompetitionCard, Navbar } from "../components"
 import { Competition } from "../Models"
 import { ProgressSpinner } from "primereact/progressspinner"
 import { FaArrowCircleLeft, FaArrowCircleRight } from "react-icons/fa"
 import { Link } from "react-router-dom"
+import useAuth from "../hooks/useAuth"
 
 const OrganiserHomePage = () => {
     const [competitions, setCompetitions] = useState<Competition[]>([])
     const [loading, setLoading] = useState(true)
     const scrollContainerRef = useRef<HTMLDivElement>(null)
+    const { auth } = useAuth()
     
     const fetchCompetitions = useCallback(async () => {
         try {
             setLoading(true)
-            const response = await getAllCompetitions()
+            const response = await getAllCompetitionsForOrganiser(auth?.id)
             const competitions: Competition[] = response.data
             setCompetitions(competitions.sort((a, b) => {
                 const now = new Date()
