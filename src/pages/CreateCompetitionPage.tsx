@@ -1,7 +1,9 @@
 import { useRef, useState, useEffect, useCallback, FormEvent } from "react"
+import { useNavigate } from "react-router-dom"
 import { createCompetition } from "../services/competition.service"
 import { getAllProblems } from "../services/problem.service"
-import useAuth from "../hooks/useAuth"
+import { Problem } from "../Models"
+import { ProblemPicker, ProblemListItem } from "../components"
 import { Navbar } from "../components"
 import { Toast } from "primereact/toast"
 import { ProgressSpinner } from "primereact/progressspinner"
@@ -33,14 +35,12 @@ const CreateCompetitionPage = () => {
     const [problems, setProblems] = useState<any>([])
     const [dateTime, setDateTime] = useState<Nullable<(Date | null)[]>>(null)
     const [showProblems, setShowProblems] = useState(false)
-    const [showOption, setShowOption] = useState("your")
-    const [currentPage, setCurrentPage] = useState(1)
     const calendarRef = useRef<Calendar>(null)
     const toast = useRef<Toast>(null)
     const firstPlaceTrophyImageRef = useRef<HTMLInputElement>(null)
     const secondPlaceTrophyImageRef = useRef<HTMLInputElement>(null)
     const thirdPlaceTrophyImageRef = useRef<HTMLInputElement>(null)
-    const { auth } = useAuth()
+    const navigate = useNavigate()
 
     const handleValueChange = (e: any) => {
         const { name, value } = e.target
@@ -63,33 +63,8 @@ const CreateCompetitionPage = () => {
         setDateTime(null)
     }
 
-    const incrementPage = () => {
-        if (showOption === "your") {
-            if (problems.filter((p: ProblemProps) => p.organiser_id === auth?.id).length / 10 < currentPage) {
-                return
-            }
-        } else {
-            if (problems.filter((p: ProblemProps) => p.organiser_id !== auth?.id).length / 10 < currentPage) {
-                return
-            }
-        }
-        setCurrentPage(currentPage + 1)
-    }
-
-    const decrementPage = () => {
-        if (currentPage === 1) {
-            return
-        }
-        setCurrentPage(currentPage - 1)
-    }
-
-    const setProblemsToShow = (opt: string) => {
-        setShowOption(opt)
-        setCurrentPage(1)
-    }
-
     const navigateToHome = () => {
-        window.location.href = "/organiser/home"
+        navigate("/organiser/home")
     }
 
     const formatDates = (inputedDates: Nullable<(Date | null)[]>) => {
@@ -126,13 +101,6 @@ const CreateCompetitionPage = () => {
             ...formData,
             problems: formData.problems.filter((problem) => problem !== id),
         })
-    }
-
-    const summarizeDescription = (description: string): string => {
-        if (description.length > 70) {
-            return description.slice(0, 70) + "..."
-        }
-        return description
     }
 
     const formatDate = (inputedDate: Date): string => {
@@ -194,6 +162,7 @@ const CreateCompetitionPage = () => {
                 problems: [],
             })
             setDateTime(null)
+            setShowProblems(false)
             setFirstPlaceTrophyImage(undefined)
             setSecondPlaceTrophyImage(undefined)
             setThirdPlaceTrophyImage(undefined)
@@ -254,30 +223,36 @@ const CreateCompetitionPage = () => {
                 <form
                     onSubmit={submitForm}
                     className="mx-[5%] rounded-xl px-[5%] bg-graymedium drop-shadow-xl rounded-t-xl border-graydark border-b-4">
-                    <div className="flex flex-col gap-[3vh] h-[85vh] overflow-auto scrollbar-hide">
+                    <div className="flex flex-col gap-[3vh] h-[85vh] overflow-auto scrollbar-hide items-center">
                         <div className="m-[5%] flex flex-col gap-2 pt-20">
                             <span className="text-[4vh] text-center font-semibold text-primary mb-2">Create Competition</span>
                             <span className="text-[2vh] text-center text-slate-950">
                                 Please fill in the form below to create a competition.
                             </span>
                         </div>
-                        <TextInput name="name" value={formData.name} label="Name" onUpdate={handleValueChange} />
-                        <div className="flex justify-center items-center">
-                            <span className="p-float-label">
-                                <InputTextarea
-                                    id="description"
-                                    className="w-[20rem] lg:w-[24rem] text-sm rounded-[1vh]"
-                                    autoResize
-                                    name="description"
-                                    value={formData.description}
-                                    rows={5}
-                                    cols={30}
-                                    onChange={handleValueChange}
-                                />
-                                <label htmlFor="description">Description</label>
-                            </span>
-                        </div>
-                        <div className="flex justify-center items-center flex-col space-y-4">
+                        <span className="p-float-label">
+                            <InputText
+                                name="name"
+                                value={formData.name}
+                                onChange={handleValueChange}
+                                className="w-[20rem] lg:w-[24rem] text-[2vh] rounded-[1vh]"
+                            />
+                            <label htmlFor="in">Name</label>
+                        </span>
+                        <span className="p-float-label">
+                            <InputTextarea
+                                id="description"
+                                className="w-[20rem] lg:w-[24rem] text-sm rounded-[1vh]"
+                                autoResize
+                                name="description"
+                                value={formData.description}
+                                rows={5}
+                                cols={30}
+                                onChange={handleValueChange}
+                            />
+                            <label htmlFor="description">Description</label>
+                        </span>
+                        <div className="flex flex-col space-y-4">
                             <div className="relative pointer-events-none">
                                 <label
                                     htmlFor="firstPlaceTrophyImage"
@@ -321,37 +296,35 @@ const CreateCompetitionPage = () => {
                                 />
                             </div>
                         </div>
-                        <div className="flex items-center justify-center">
-                            <Calendar
-                                id="calendar-24h"
-                                className="w-[20rem] lg:w-[24rem]"
-                                panelStyle={{
-                                    backgroundColor: "#f8f9fa",
-                                    border: "1px",
-                                    borderColor: "#554acf",
-                                    borderRadius: "0.5rem",
-                                    borderStyle: "solid",
-                                }}
-                                pt={{
-                                    input: {
-                                        root: { className: "hover:border-[#554acf]" },
-                                    },
-                                    dropdownButton: {
-                                        root: { className: "bg-[#554acf] border-[#554acf]" },
-                                    },
-                                }}
-                                value={dateTime}
-                                onChange={(e) => formatDates(e.value)}
-                                selectionMode="range"
-                                showTime
-                                showIcon
-                                hourFormat="24"
-                                readOnlyInput
-                                ref={calendarRef}
-                                footerTemplate={footerTemplate}
-                                placeholder="Duration"
-                            />
-                        </div>
+                        <Calendar
+                            id="calendar-24h"
+                            className="w-[20rem] lg:w-[24rem]"
+                            panelStyle={{
+                                backgroundColor: "#f8f9fa",
+                                border: "1px",
+                                borderColor: "#554acf",
+                                borderRadius: "0.5rem",
+                                borderStyle: "solid",
+                            }}
+                            pt={{
+                                input: {
+                                    root: { className: "hover:border-[#554acf]" },
+                                },
+                                dropdownButton: {
+                                    root: { className: "bg-[#554acf] border-[#554acf]" },
+                                },
+                            }}
+                            value={dateTime}
+                            onChange={(e) => formatDates(e.value)}
+                            selectionMode="range"
+                            showTime
+                            showIcon
+                            hourFormat="24"
+                            readOnlyInput
+                            ref={calendarRef}
+                            footerTemplate={footerTemplate}
+                            placeholder="Duration"
+                        />
                         <div className="lg:w-[50rem]">
                             <div className="flex justify-center items-center">
                                 <Button
@@ -361,157 +334,29 @@ const CreateCompetitionPage = () => {
                                     onClick={handleAddProblemsClick}
                                 />
                             </div>
-                            {showProblems && (
-                                <div className="grid grid-cols-2 my-4">
-                                    <div
-                                        className={`${
-                                            showOption === "your" ? "bg-secondarylight" : "bg-secondarydark"
-                                        } hover:bg-secondary flex justify-center items-center text-white p-2 rounded-tl-lg cursor-pointer font-semibold text-md`}
-                                        onClick={() => setProblemsToShow("your")}>
-                                        Your Problems
-                                    </div>
-                                    <div
-                                        className={`${
-                                            showOption === "other" ? "bg-secondarylight" : "bg-secondarydark"
-                                        } hover:bg-secondary flex justify-center items-center text-white p-2 rounded-tr-lg cursor-pointer font-semibold text-md`}
-                                        onClick={() => setProblemsToShow("other")}>
-                                        Other Problems
-                                    </div>
-                                    <div className="col-span-2 border-b-2 border-x-2 border-secondary bg-gray-300 rounded-b-lg">
-                                        <div>
-                                            {showOption === "your" ? (
-                                                <>
-                                                    {problems.find((p: ProblemProps) => p.organiser_id === auth?.id) ? (
-                                                        <div>
-                                                            {problems
-                                                                .filter((p: ProblemProps) => p.organiser_id === auth?.id)
-                                                                .slice((currentPage - 1) * 10, currentPage * 10)
-                                                                .map((problem: ProblemProps) => {
-                                                                    return (
-                                                                        <div
-                                                                            key={problem.id}
-                                                                            className="bg-graydark m-2 border border-gray-400 rounded-lg py-2 px-4">
-                                                                            <div className="flex justify-between">
-                                                                                <div className="flex flex-col">
-                                                                                    <span>{problem.name}</span>
-                                                                                    <span className="text-xs">
-                                                                                        {summarizeDescription(problem.description)}
-                                                                                    </span>
-                                                                                </div>
-                                                                                <div className="flex justify-center items-center gap-4">
-                                                                                    <span className="text-sm">
-                                                                                        {problem.num_of_points} points
-                                                                                    </span>
-                                                                                    {formData.problems.includes(problem.id) ? (
-                                                                                        <div
-                                                                                            className="bg-secondarylight pi pi-times text-white p-1 rounded-xl cursor-pointer"
-                                                                                            onClick={() => removeProblem(problem.id)}></div>
-                                                                                    ) : (
-                                                                                        <div
-                                                                                            className="bg-primarylight pi pi-plus text-white p-1 rounded-xl cursor-pointer"
-                                                                                            onClick={() => addProblem(problem.id)}></div>
-                                                                                    )}
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    )
-                                                                })}
-                                                            <div className="flex p-2 justify-center items-center gap-8">
-                                                                <div
-                                                                    className="pi pi-chevron-left bg-primarylight text-white p-2 rounded-2xl cursor-pointer"
-                                                                    onClick={decrementPage}></div>
-                                                                <div className="text-xl w-14 flex justify-center items-center select-none">
-                                                                    {currentPage}
-                                                                </div>
-                                                                <div
-                                                                    className="pi pi-chevron-right bg-primarylight text-white p-2 rounded-2xl cursor-pointer"
-                                                                    onClick={incrementPage}></div>
-                                                            </div>
-                                                        </div>
-                                                    ) : (
-                                                        <div className="flex justify-center items-center">No problems found</div>
-                                                    )}
-                                                </>
-                                            ) : (
-                                                <>
-                                                    {problems.find((p: ProblemProps) => p.organiser_id !== auth?.id) ? (
-                                                        <div>
-                                                            {problems
-                                                                .filter((p: ProblemProps) => p.organiser_id !== auth?.id)
-                                                                .slice((currentPage - 1) * 10, currentPage * 10)
-                                                                .map((problem: ProblemProps) => {
-                                                                    return (
-                                                                        <div
-                                                                            key={problem.id}
-                                                                            className="bg-graydark m-2 border border-gray-400 rounded-lg py-2 px-4">
-                                                                            <div className="flex justify-between">
-                                                                                <div className="flex flex-col">
-                                                                                    <span>{problem.name}</span>
-                                                                                    <span className="text-xs">
-                                                                                        {summarizeDescription(problem.description)}
-                                                                                    </span>
-                                                                                </div>
-                                                                                <div className="flex justify-center items-center gap-4">
-                                                                                    <span className="text-sm">
-                                                                                        {problem.num_of_points} points
-                                                                                    </span>
-                                                                                    {formData.problems.includes(problem.id) ? (
-                                                                                        <div
-                                                                                            className="bg-secondarylight pi pi-times text-white p-1 rounded-xl cursor-pointer"
-                                                                                            onClick={() => removeProblem(problem.id)}></div>
-                                                                                    ) : (
-                                                                                        <div
-                                                                                            className="bg-primarylight pi pi-plus text-white p-1 rounded-xl cursor-pointer"
-                                                                                            onClick={() => addProblem(problem.id)}></div>
-                                                                                    )}
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    )
-                                                                })}
-                                                            <div className="flex p-2 justify-center items-center gap-8">
-                                                                <div
-                                                                    className="pi pi-chevron-left bg-primarylight text-white p-2 rounded-2xl cursor-pointer"
-                                                                    onClick={decrementPage}></div>
-                                                                <div className="text-xl w-14 flex justify-center items-center select-none">
-                                                                    {currentPage}
-                                                                </div>
-                                                                <div
-                                                                    className="pi pi-chevron-right bg-primarylight text-white p-2 rounded-2xl cursor-pointer"
-                                                                    onClick={incrementPage}></div>
-                                                            </div>
-                                                        </div>
-                                                    ) : (
-                                                        <div className="flex justify-center items-center">No problems found</div>
-                                                    )}
-                                                </>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
+                            {showProblems ? (
+                                <ProblemPicker
+                                    problems={problems}
+                                    addProblem={addProblem}
+                                    removeProblem={removeProblem}
+                                    selectedProblems={formData.problems}
+                                />
+                            ) : null}
                             {formData.problems.length > 0 && (
-                                <div className="bg-gray-300 rounded-lg border-secondary border-2 my-4">
-                                    <div className="py-2 text-xl p-2 justify-center items-center flex bg-secondary text-white font-semibold">
+                                <div className="bg-secondarylight rounded-lg border-secondarylight border-2 my-4">
+                                    <div className="py-2 text-xl p-2 justify-center items-center flex bg-secondarylight text-white font-semibold">
                                         Selected Problems
                                     </div>
                                     {formData.problems.map((problemId: string) => {
-                                        const problem = problems.find((p: ProblemProps) => p.id === problemId)
+                                        const problem = problems.find((p: Problem) => p.id === problemId)
                                         return (
-                                            <div key={problem.id} className="bg-graydark m-2 border border-gray-400 rounded-lg py-2 px-4">
-                                                <div className="flex justify-between">
-                                                    <div className="flex flex-col">
-                                                        <span>{problem?.name}</span>
-                                                        <span className="text-xs">{summarizeDescription(problem?.description)}</span>
-                                                    </div>
-                                                    <div className="flex justify-center items-center gap-4">
-                                                        <span className="text-sm">{problem?.num_of_points} points</span>
-                                                        <div
-                                                            className="bg-secondarylight pi pi-times text-white p-1 rounded-xl cursor-pointer"
-                                                            onClick={() => removeProblem(problemId)}></div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <ProblemListItem
+                                                key={problem?.id}
+                                                problem={problem}
+                                                selectedProblems={formData.problems}
+                                                removeProblem={removeProblem}
+                                                addProblem={addProblem}
+                                            />
                                         )
                                     })}
                                 </div>
@@ -535,43 +380,6 @@ const CreateCompetitionPage = () => {
                     </div>
                 </form>
             </div>
-        </div>
-    )
-}
-
-type ProblemProps = {
-    id: string
-    name: string
-    example_input: string
-    example_output: string
-    is_hidden: boolean
-    num_of_points: number
-    runtime_limit: number
-    description: string
-    organiser_id: string
-    is_private: boolean
-    created_on: string
-}
-
-type TextInputProps = {
-    name: string
-    value: string
-    label: string
-    onUpdate: (value: any) => void
-}
-
-const TextInput = ({ name, value, label, onUpdate }: TextInputProps) => {
-    return (
-        <div className="flex justify-center items-center">
-            <span className="p-float-label">
-                <InputText
-                    name={name}
-                    value={value}
-                    onChange={(e) => onUpdate(e)}
-                    className="w-[20rem] lg:w-[24rem] text-[2vh] rounded-[1vh]"
-                />
-                <label htmlFor="in">{label}</label>
-            </span>
         </div>
     )
 }
