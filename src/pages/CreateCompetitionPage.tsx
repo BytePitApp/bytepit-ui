@@ -2,7 +2,7 @@ import { useRef, useState, useEffect, useCallback, FormEvent } from "react"
 import { useNavigate } from "react-router-dom"
 import { createCompetition } from "../services/competition.service"
 import { getAllProblems } from "../services/problem.service"
-import { Problem } from "../Models"
+import { Problem, CreateCompetition } from "../Models"
 import { ProblemPicker, ProblemListItem } from "../components"
 import { Navbar } from "../components"
 import { Toast } from "primereact/toast"
@@ -12,7 +12,6 @@ import { Button } from "primereact/button"
 import { InputText } from "primereact/inputtext"
 import { Nullable } from "primereact/ts-helpers"
 import { InputTextarea } from "primereact/inputtextarea"
-import "./Organiser.css"
 
 const CreateCompetitionPage = () => {
     const [loading, setLoading] = useState(false)
@@ -138,16 +137,17 @@ const CreateCompetitionPage = () => {
         e.preventDefault()
         setLoading(true)
         try {
-            await createCompetition(
-                formData.name,
-                formData.description,
-                formData.startTime,
-                formData.endTime,
-                formData.problems,
-                firsPlaceTrophyImage,
-                secondPlaceTrophyImage,
-                thirdPlaceTrophyImage
-            )
+            const competition: CreateCompetition = {
+                name: formData.name,
+                description: formData.description,
+                startTime: formData.startTime,
+                endTime: formData.endTime,
+                problems: formData.problems,
+                firstPlaceTrophyImage: firsPlaceTrophyImage,
+                secondPlaceTrophyImage: secondPlaceTrophyImage,
+                thirdPlaceTrophyImage: thirdPlaceTrophyImage,
+            }
+            await createCompetition(competition)
             sendToast({
                 severity: "success",
                 summary: "Success!",

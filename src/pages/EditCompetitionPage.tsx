@@ -5,27 +5,13 @@ import { Toast, ToastMessage } from "primereact/toast"
 import { getCompetition, modifyCompetition } from "../services/competition.service"
 import { getAllProblems } from "../services/problem.service"
 import { useNavigate, useParams } from "react-router-dom"
-import { FormDataCompetition } from "../Models"
+import { ModifyCompetition, Problem } from "../Models"
 import { Calendar } from "primereact/calendar"
 import { Button } from "primereact/button"
 import { InputText } from "primereact/inputtext"
 import { InputTextarea } from "primereact/inputtextarea"
 import { Nullable } from "primereact/ts-helpers"
 import useAuth from "../hooks/useAuth"
-
-type ProblemProps = {
-    id: string
-    name: string
-    example_input: string
-    example_output: string
-    is_hidden: boolean
-    num_of_points: number
-    runtime_limit: number
-    description: string
-    organiser_id: string
-    is_private: boolean
-    created_on: string
-}
 
 const EditCompetitionPage = () => {
     const navigate = useNavigate()
@@ -36,7 +22,7 @@ const EditCompetitionPage = () => {
     const [showProblems, setShowProblems] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const [problems, setProblems] = useState<any>([])
-    const [formDataModified, setFormDataModified] = useState<FormDataCompetition>({
+    const [formDataModified, setFormDataModified] = useState<ModifyCompetition>({
         name: "",
         description: "",
         startTime: "",
@@ -46,7 +32,7 @@ const EditCompetitionPage = () => {
         secondPlaceTrophyImage: undefined,
         thirdPlaceTrophyImage: undefined,
     })
-    const [formData, setFormData] = useState<FormDataCompetition>({
+    const [formData, setFormData] = useState<ModifyCompetition>({
         name: "",
         description: "",
         startTime: "",
@@ -168,11 +154,11 @@ const EditCompetitionPage = () => {
 
     const incrementPage = () => {
         if (showOption === "your") {
-            if (problems.filter((p: ProblemProps) => p.organiser_id === auth?.id).length / 10 < currentPage) {
+            if (problems.filter((p: Problem) => p.organiser_id === auth?.id).length / 10 < currentPage) {
                 return
             }
         } else {
-            if (problems.filter((p: ProblemProps) => p.organiser_id !== auth?.id).length / 10 < currentPage) {
+            if (problems.filter((p: Problem) => p.organiser_id !== auth?.id).length / 10 < currentPage) {
                 return
             }
         }
@@ -225,7 +211,10 @@ const EditCompetitionPage = () => {
                     label="Clear"
                     icon="pi pi-times-circle"
                     className="hover:scale-[102%] transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
-                    onClick={() => {calendarRef.current?.hide(); setDateTime(null)}}
+                    onClick={() => {
+                        calendarRef.current?.hide()
+                        setDateTime(null)
+                    }}
                 />
                 <Button
                     label="Close"
@@ -251,8 +240,7 @@ const EditCompetitionPage = () => {
             <div className="bg-form bg-cover grow flex flex-row justify-center items-center">
                 <form
                     onSubmit={submitForm}
-                    className="mx-[5%] rounded-xl px-[5%] bg-graymedium drop-shadow-xl rounded-t-xl border-graydark border-b-4"
-                >
+                    className="mx-[5%] rounded-xl px-[5%] bg-graymedium drop-shadow-xl rounded-t-xl border-graydark border-b-4">
                     <div className="flex flex-col gap-[3vh] h-[85vh] py-10 overflow-auto scrollbar-hide items-center">
                         <span className="text-[4vh] text-center font-semibold text-primary">Modify Competition</span>
                         <span className="text-[2vh] text-center text-slate-950 mb-0">
@@ -280,13 +268,13 @@ const EditCompetitionPage = () => {
                             />
                             <label htmlFor="description">Description</label>
                         </span>
-                        {formData.firstPlaceTrophyImage &&
-                            <img 
+                        {formData.firstPlaceTrophyImage && (
+                            <img
                                 src={`data:image/jpeg;base64,${formData.firstPlaceTrophyImage}`}
-                                alt="First Place Trophy" 
+                                alt="First Place Trophy"
                                 className="bg-center bg-cover w-[20rem] lg:w-[24rem] rounded-[1vh]"
                             />
-                        }
+                        )}
                         <div className="relative pointer-events-none">
                             <label
                                 htmlFor="firstPlaceTrophyImage"
@@ -297,19 +285,21 @@ const EditCompetitionPage = () => {
                                 id="firstPlaceTrophyImage"
                                 className="w-[20rem] lg:w-[24rem] pointer-events-none rounded-[1vh] file:w-1/2 block text-sm file:text-white/0 file:rounded-[1vh] file:bg-gray-300 file:hover:bg-gray-200 file:transition-all file:ease-in-out file:duration-300 file:border-none select-none file:cursor-pointer cursor-defualt file:text-gray-800 file:p-3 file:pointer-events-auto bg-gray-50 text-gray-600"
                                 type="file"
-                                onChange={(e: any) => setFormDataModified({
-                                    ...formDataModified,
-                                    firstPlaceTrophyImage: e.target.files[0]
-                                })}
+                                onChange={(e: any) =>
+                                    setFormDataModified({
+                                        ...formDataModified,
+                                        firstPlaceTrophyImage: e.target.files[0],
+                                    })
+                                }
                             />
                         </div>
-                        {formData.secondPlaceTrophyImage &&
+                        {formData.secondPlaceTrophyImage && (
                             <img
                                 src={`data:image/jpeg;base64,${formData.secondPlaceTrophyImage}`}
                                 alt="Second Place Trophy"
                                 className="bg-center bg-cover w-[20rem] lg:w-[24rem] rounded-[1vh]"
                             />
-                        }
+                        )}
                         <div className="relative pointer-events-none">
                             <label
                                 htmlFor="secondPlaceTrophyImage"
@@ -320,19 +310,21 @@ const EditCompetitionPage = () => {
                                 id="secondPlaceTrophyImage"
                                 className="w-[20rem] lg:w-[24rem] pointer-events-none rounded-[1vh] file:w-1/2 block text-sm file:text-white/0 file:rounded-[1vh] file:bg-gray-300 file:hover:bg-gray-200 file:transition-all file:ease-in-out file:duration-300 file:border-none select-none file:cursor-pointer cursor-defualt file:text-gray-800 file:p-3 file:pointer-events-auto bg-gray-50 text-gray-600"
                                 type="file"
-                                onChange={(e: any) => setFormDataModified({
-                                    ...formDataModified,
-                                    secondPlaceTrophyImage: e.target.files[0]
-                                })}
+                                onChange={(e: any) =>
+                                    setFormDataModified({
+                                        ...formDataModified,
+                                        secondPlaceTrophyImage: e.target.files[0],
+                                    })
+                                }
                             />
                         </div>
-                        {formData.thirdPlaceTrophyImage &&
+                        {formData.thirdPlaceTrophyImage && (
                             <img
                                 src={`data:image/jpeg;base64,${formData.thirdPlaceTrophyImage}`}
-                                alt="Third Place Trophy" 
+                                alt="Third Place Trophy"
                                 className="bg-center bg-cover w-[20rem] lg:w-[24rem] rounded-[1vh]"
                             />
-                        }
+                        )}
                         <div className="relative pointer-events-none">
                             <label
                                 htmlFor="thirdPlaceTrophyImage"
@@ -343,10 +335,12 @@ const EditCompetitionPage = () => {
                                 id="thirdPlaceTrophyImage"
                                 className="w-[20rem] lg:w-[24rem] pointer-events-none rounded-[1vh] file:w-1/2 block text-sm file:text-white/0 file:rounded-[1vh] file:bg-gray-300 file:hover:bg-gray-200 file:transition-all file:ease-in-out file:duration-300 file:border-none select-none file:cursor-pointer cursor-defualt file:text-gray-800 file:p-3 file:pointer-events-auto bg-gray-50 text-gray-600"
                                 type="file"
-                                onChange={(e: any) => setFormDataModified({
-                                    ...formDataModified,
-                                    thirdPlaceTrophyImage: e.target.files[0]
-                                })}
+                                onChange={(e: any) =>
+                                    setFormDataModified({
+                                        ...formDataModified,
+                                        thirdPlaceTrophyImage: e.target.files[0],
+                                    })
+                                }
                             />
                         </div>
                         <Calendar
@@ -405,12 +399,12 @@ const EditCompetitionPage = () => {
                                         <div>
                                             {showOption === "your" ? (
                                                 <>
-                                                    {problems.find((p: ProblemProps) => p.organiser_id === auth?.id) ? (
+                                                    {problems.find((p: Problem) => p.organiser_id === auth?.id) ? (
                                                         <div>
                                                             {problems
-                                                                .filter((p: ProblemProps) => p.organiser_id === auth?.id)
+                                                                .filter((p: Problem) => p.organiser_id === auth?.id)
                                                                 .slice((currentPage - 1) * 10, currentPage * 10)
-                                                                .map((problem: ProblemProps) => {
+                                                                .map((problem: Problem) => {
                                                                     return (
                                                                         <div
                                                                             key={problem.id}
@@ -458,12 +452,12 @@ const EditCompetitionPage = () => {
                                                 </>
                                             ) : (
                                                 <>
-                                                    {problems.find((p: ProblemProps) => p.organiser_id !== auth?.id) ? (
+                                                    {problems.find((p: Problem) => p.organiser_id !== auth?.id) ? (
                                                         <div>
                                                             {problems
-                                                                .filter((p: ProblemProps) => p.organiser_id !== auth?.id)
+                                                                .filter((p: Problem) => p.organiser_id !== auth?.id)
                                                                 .slice((currentPage - 1) * 10, currentPage * 10)
-                                                                .map((problem: ProblemProps) => {
+                                                                .map((problem: Problem) => {
                                                                     return (
                                                                         <div
                                                                             key={problem.id}
@@ -514,21 +508,19 @@ const EditCompetitionPage = () => {
                                     </div>
                                 </div>
                             )}
-                            {(showProblems && formDataModified.problems.length > 0) && (
+                            {showProblems && formDataModified.problems.length > 0 && (
                                 <div className="bg-gray-300 rounded-lg border-secondary border-2 my-4 w-full">
                                     <div className="py-2 text-xl p-2 justify-center items-center flex bg-secondary text-white font-semibold">
                                         Selected Problems
                                     </div>
                                     {formDataModified.problems.map((problemId: string) => {
-                                        const problem = problems.find((p: ProblemProps) => p.id === problemId)
+                                        const problem = problems.find((p: Problem) => p.id === problemId)
                                         return (
                                             <div key={problem.id} className="bg-graydark m-2 border border-gray-400 rounded-lg py-2 px-4">
                                                 <div className="flex justify-between">
                                                     <div className="flex flex-col">
                                                         <span>{problem?.name}</span>
-                                                        <span className="text-xs">
-                                                            {summarizeDescription(problem?.description)}
-                                                        </span>
+                                                        <span className="text-xs">{summarizeDescription(problem?.description)}</span>
                                                     </div>
                                                     <div className="flex justify-center items-center gap-4">
                                                         <span className="text-sm">{problem?.num_of_points} points</span>
