@@ -9,7 +9,6 @@ import { Link } from "react-router-dom"
 const OrganiserHomePage = () => {
     const [competitions, setCompetitions] = useState<Competition[]>([])
     const [loading, setLoading] = useState(true)
-    const [error, setError] = useState("")
     const scrollContainerRef = useRef<HTMLDivElement>(null)
     
     const fetchCompetitions = useCallback(async () => {
@@ -17,7 +16,6 @@ const OrganiserHomePage = () => {
             setLoading(true)
             const response = await getAllCompetitions()
             const competitions: Competition[] = response.data
-            // Sort competitions, first ones that are active (start_time < now < end_time), then ones that are upcoming (now < start_time), then ones that are finished (end_time < now)
             setCompetitions(competitions.sort((a, b) => {
                 const now = new Date()
                 const aStartTime = new Date(a.start_time)
@@ -42,7 +40,7 @@ const OrganiserHomePage = () => {
             }))
             setLoading(false)
         } catch (err: any) {
-            setError(err.response?.data?.detail ?? "Something went wrong")
+            console.log(err.response?.data?.detail ?? "Something went wrong")
         }
     }, [])
     

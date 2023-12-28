@@ -30,19 +30,20 @@ const createCompetition = async (competition: CreateCompetition) => {
 
 const modifyCompetition = async (id: string, competition: ModifyCompetition, oldValue: ModifyCompetition) => {
     const formData = new FormData()
-    if (competition.name && competition.name !== oldValue.name) {
+    console.log("comptition", competition)
+    if (competition.name !== oldValue.name) {
         formData.append("name", competition.name)
     }
-    if (competition.description && competition.description !== oldValue.description) {
+    if (competition.description !== oldValue.description) {
         formData.append("description", competition.description)
     }
-    if (competition.startTime && competition.startTime !== oldValue.startTime?.replace("T", " ")) {
+    if (competition.startTime.replace("T", " ") !== oldValue.startTime.replace("T", " ")) {
         formData.append("start_time", competition.startTime)
     }
-    if (competition.endTime && competition.endTime !== oldValue.endTime?.replace("T", " ")) {
+    if (competition.endTime.replace("T", " ") !== oldValue.endTime.replace("T", " ")) {
         formData.append("end_time", competition.endTime)
     }
-    if (competition.problems && competition.problems.length > 0) {
+    if (competition.problems.length > 0) {
         let problemsChanged = false
         for (let i = 0; i < competition.problems.length; i++) {
             if (competition.problems[i] !== oldValue.problems[i]) {

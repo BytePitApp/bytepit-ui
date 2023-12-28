@@ -1,5 +1,5 @@
 import { useState, useRef, FormEvent, useCallback, useEffect } from "react"
-import { Navbar } from "../components"
+import { Navbar, ProblemListItem, ProblemPicker } from "../components"
 import { ProgressSpinner } from "primereact/progressspinner"
 import { Toast, ToastMessage } from "primereact/toast"
 import { getCompetition, modifyCompetition } from "../services/competition.service"
@@ -11,17 +11,14 @@ import { Button } from "primereact/button"
 import { InputText } from "primereact/inputtext"
 import { InputTextarea } from "primereact/inputtextarea"
 import { Nullable } from "primereact/ts-helpers"
-import useAuth from "../hooks/useAuth"
 
 const EditCompetitionPage = () => {
     const navigate = useNavigate()
     const { id } = useParams()
     const [loading, setLoading] = useState(false)
-    const [showOption, setShowOption] = useState("your")
     const [dateTime, setDateTime] = useState<Nullable<(Date | null)[]>>(null)
     const [showProblems, setShowProblems] = useState(false)
-    const [currentPage, setCurrentPage] = useState(1)
-    const [problems, setProblems] = useState<any>([])
+    const [problems, setProblems] = useState<Problem[]>([])
     const [formDataModified, setFormDataModified] = useState<ModifyCompetition>({
         name: "",
         description: "",
@@ -42,8 +39,6 @@ const EditCompetitionPage = () => {
         secondPlaceTrophyImage: undefined,
         thirdPlaceTrophyImage: undefined,
     })
-    const { auth } = useAuth()
-
     const toast = useRef<Toast>(null)
     const calendarRef = useRef<Calendar>(null)
 
@@ -65,18 +60,6 @@ const EditCompetitionPage = () => {
         })
     }
 
-    const setProblemsToShow = (opt: string) => {
-        setShowOption(opt)
-        setCurrentPage(1)
-    }
-
-    const summarizeDescription = (description: string): string => {
-        if (description.length > 70) {
-            return description.slice(0, 70) + "..."
-        }
-        return description
-    }
-
     const handleValueChange = (e: any) => {
         const { name, value } = e.target
         setFormDataModified({
@@ -87,10 +70,8 @@ const EditCompetitionPage = () => {
 
     const fetchProblems = useCallback(async () => {
         try {
-            setLoading(true)
             const response = await getAllProblems()
             setProblems(response.data)
-            setLoading(false)
         } catch (err: any) {
             console.log(err)
         }
@@ -98,7 +79,6 @@ const EditCompetitionPage = () => {
 
     const fetchCompetition = useCallback(async (competitionId: string) => {
         try {
-            setLoading(true)
             const res = await getCompetition(competitionId)
             setFormDataModified({
                 name: res.data.name,
@@ -121,17 +101,18 @@ const EditCompetitionPage = () => {
                 thirdPlaceTrophyImage: res.data.trophies[2]?.icon || undefined,
             })
             setDateTime([new Date(res.data.start_time), new Date(res.data.end_time)])
-            setLoading(false)
         } catch (err: any) {
             console.log(err)
         }
     }, [])
 
     useEffect(() => {
+        setLoading(true)
         if (id) {
             fetchCompetition(id)
         }
         fetchProblems()
+        setLoading(false)
     }, [])
 
     const handleDateTimeChange = (inputDates: Nullable<(Date | null)[]>) => {
@@ -152,39 +133,22 @@ const EditCompetitionPage = () => {
         return `${date[2]}-${date[1].padStart(2, "0")}-${date[0].padStart(2, "0")} ${time[0]}:${time[1]}:00`
     }
 
-    const incrementPage = () => {
-        if (showOption === "your") {
-            if (problems.filter((p: Problem) => p.organiser_id === auth?.id).length / 10 < currentPage) {
-                return
-            }
-        } else {
-            if (problems.filter((p: Problem) => p.organiser_id !== auth?.id).length / 10 < currentPage) {
-                return
-            }
-        }
-        setCurrentPage(currentPage + 1)
-    }
-
-    const decrementPage = () => {
-        if (currentPage === 1) {
-            return
-        }
-        setCurrentPage(currentPage - 1)
-    }
-
     const submitForm = async (e: FormEvent) => {
+        e.preventDefault()
+        setLoading(true)
         try {
-            e.preventDefault()
-            setLoading(true)
+            if (formDataModified.startTime === "" || formDataModified.endTime === ""
+                || formDataModified.name === "" || formDataModified.description === ""
+                || formDataModified.problems.length === 0) {
+                sendToast({
+                    severity: "error",
+                    summary: "Error!",
+                    detail: "Please fill in all the required fields!",
+                })
+                setLoading(false)
+                return
+            }
             await modifyCompetition(id!, formDataModified, formData)
-            sendToast({
-                severity: "success",
-                summary: "Success!",
-                detail: "Competition created successfully!",
-                life: 10000,
-            })
-            setLoading(false)
-            navigate("/organiser/home", { replace: true })
         } catch (err: any) {
             if (Array.isArray(err.response.data.detail)) {
                 for (const error of err.response.data.detail) {
@@ -202,6 +166,8 @@ const EditCompetitionPage = () => {
                 })
             }
         }
+        setLoading(false)
+        navigate("/organiser/home")
     }
 
     const footerTemplate = () => {
@@ -242,10 +208,12 @@ const EditCompetitionPage = () => {
                     onSubmit={submitForm}
                     className="mx-[5%] rounded-xl px-[5%] bg-graymedium drop-shadow-xl rounded-t-xl border-graydark border-b-4">
                     <div className="flex flex-col gap-[3vh] h-[85vh] py-10 overflow-auto scrollbar-hide items-center">
-                        <span className="text-[4vh] text-center font-semibold text-primary">Modify Competition</span>
-                        <span className="text-[2vh] text-center text-slate-950 mb-0">
-                            Please fill in the form fields that you wish to change.
-                        </span>
+                        <div className="m-[5%] flex flex-col gap-2 pt-20">                        
+                            <span className="text-[4vh] text-center font-semibold text-primary">Modify Competition</span>
+                            <span className="text-[2vh] text-center text-slate-950 mb-0">
+                                Please fill in the form fields that you wish to change.
+                            </span>
+                        </div>
                         <span className="p-float-label mb-4">
                             <InputText
                                 name="name"
@@ -372,175 +340,49 @@ const EditCompetitionPage = () => {
                             placeholder="Duration"
                             footerTemplate={footerTemplate}
                         />
-                        <div className="lg:w-[50rem] flex flex-col items-center">
-                            <Button
-                                label={showProblems ? "Hide Problems" : "Show Problems"}
-                                className="bg-primary hover:bg-primarylight text-white font-semibold w-fit"
-                                type="button"
-                                onClick={() => setShowProblems(!showProblems)}
-                            />
+                        <div className="lg:w-[50rem]">
+                            <div className="flex justify-center">
+                                <Button
+                                    label={showProblems ? "Hide Problems" : "Show Problems"}
+                                    className="bg-primary hover:bg-primarylight text-white font-semibold w-fit"
+                                    type="button"
+                                    onClick={() => setShowProblems(!showProblems)}
+                                />
+                            </div>
                             {showProblems && (
-                                <div className="grid grid-cols-2 my-4 w-full">
-                                    <div
-                                        className={`${
-                                            showOption === "your" ? "bg-secondarylight" : "bg-secondarydark"
-                                        } hover:bg-secondary flex justify-center items-center text-white p-2 rounded-tl-lg cursor-pointer font-semibold text-md`}
-                                        onClick={() => setProblemsToShow("your")}>
-                                        Your Problems
-                                    </div>
-                                    <div
-                                        className={`${
-                                            showOption === "other" ? "bg-secondarylight" : "bg-secondarydark"
-                                        } hover:bg-secondary flex justify-center items-center text-white p-2 rounded-tr-lg cursor-pointer font-semibold text-md`}
-                                        onClick={() => setProblemsToShow("other")}>
-                                        Other Problems
-                                    </div>
-                                    <div className="col-span-2 border-b-2 border-x-2 border-secondary bg-gray-300 rounded-b-lg">
-                                        <div>
-                                            {showOption === "your" ? (
-                                                <>
-                                                    {problems.find((p: Problem) => p.organiser_id === auth?.id) ? (
-                                                        <div>
-                                                            {problems
-                                                                .filter((p: Problem) => p.organiser_id === auth?.id)
-                                                                .slice((currentPage - 1) * 10, currentPage * 10)
-                                                                .map((problem: Problem) => {
-                                                                    return (
-                                                                        <div
-                                                                            key={problem.id}
-                                                                            className="bg-graydark m-2 border border-gray-400 rounded-lg py-2 px-4">
-                                                                            <div className="flex justify-between">
-                                                                                <div className="flex flex-col">
-                                                                                    <span>{problem.name}</span>
-                                                                                    <span className="text-xs">
-                                                                                        {summarizeDescription(problem.description)}
-                                                                                    </span>
-                                                                                </div>
-                                                                                <div className="flex justify-center items-center gap-4">
-                                                                                    <span className="text-sm">
-                                                                                        {problem.num_of_points} points
-                                                                                    </span>
-                                                                                    {formDataModified.problems.includes(problem.id) ? (
-                                                                                        <div
-                                                                                            className="bg-secondarylight pi pi-times text-white p-1 rounded-xl cursor-pointer"
-                                                                                            onClick={() => removeProblem(problem.id)}></div>
-                                                                                    ) : (
-                                                                                        <div
-                                                                                            className="bg-primarylight pi pi-plus text-white p-1 rounded-xl cursor-pointer"
-                                                                                            onClick={() => addProblem(problem.id)}></div>
-                                                                                    )}
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    )
-                                                                })}
-                                                            <div className="flex p-2 justify-center items-center gap-8">
-                                                                <div
-                                                                    className="pi pi-chevron-left bg-primarylight text-white p-2 rounded-2xl cursor-pointer"
-                                                                    onClick={decrementPage}></div>
-                                                                <div className="text-xl w-14 flex justify-center items-center select-none">
-                                                                    {currentPage}
-                                                                </div>
-                                                                <div
-                                                                    className="pi pi-chevron-right bg-primarylight text-white p-2 rounded-2xl cursor-pointer"
-                                                                    onClick={incrementPage}></div>
-                                                            </div>
-                                                        </div>
-                                                    ) : (
-                                                        <div className="flex justify-center items-center">No problems found</div>
-                                                    )}
-                                                </>
-                                            ) : (
-                                                <>
-                                                    {problems.find((p: Problem) => p.organiser_id !== auth?.id) ? (
-                                                        <div>
-                                                            {problems
-                                                                .filter((p: Problem) => p.organiser_id !== auth?.id)
-                                                                .slice((currentPage - 1) * 10, currentPage * 10)
-                                                                .map((problem: Problem) => {
-                                                                    return (
-                                                                        <div
-                                                                            key={problem.id}
-                                                                            className="bg-graydark m-2 border border-gray-400 rounded-lg py-2 px-4">
-                                                                            <div className="flex justify-between">
-                                                                                <div className="flex flex-col">
-                                                                                    <span>{problem.name}</span>
-                                                                                    <span className="text-xs">
-                                                                                        {summarizeDescription(problem.description)}
-                                                                                    </span>
-                                                                                </div>
-                                                                                <div className="flex justify-center items-center gap-4">
-                                                                                    <span className="text-sm">
-                                                                                        {problem.num_of_points} points
-                                                                                    </span>
-                                                                                    {formDataModified.problems.includes(problem.id) ? (
-                                                                                        <div
-                                                                                            className="bg-secondarylight pi pi-times text-white p-1 rounded-xl cursor-pointer"
-                                                                                            onClick={() => removeProblem(problem.id)}></div>
-                                                                                    ) : (
-                                                                                        <div
-                                                                                            className="bg-primarylight pi pi-plus text-white p-1 rounded-xl cursor-pointer"
-                                                                                            onClick={() => addProblem(problem.id)}></div>
-                                                                                    )}
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    )
-                                                                })}
-                                                            <div className="flex p-2 justify-center items-center gap-8">
-                                                                <div
-                                                                    className="pi pi-chevron-left bg-primarylight text-white p-2 rounded-2xl cursor-pointer"
-                                                                    onClick={decrementPage}></div>
-                                                                <div className="text-xl w-14 flex justify-center items-center select-none">
-                                                                    {currentPage}
-                                                                </div>
-                                                                <div
-                                                                    className="pi pi-chevron-right bg-primarylight text-white p-2 rounded-2xl cursor-pointer"
-                                                                    onClick={incrementPage}></div>
-                                                            </div>
-                                                        </div>
-                                                    ) : (
-                                                        <div className="flex justify-center items-center">No problems found</div>
-                                                    )}
-                                                </>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
+                                <ProblemPicker
+                                    problems={problems}
+                                    addProblem={addProblem}
+                                    removeProblem={removeProblem}
+                                    selectedProblems={formDataModified.problems}
+                                />
                             )}
-                            {showProblems && formDataModified.problems.length > 0 && (
-                                <div className="bg-gray-300 rounded-lg border-secondary border-2 my-4 w-full">
-                                    <div className="py-2 text-xl p-2 justify-center items-center flex bg-secondary text-white font-semibold">
+                            {(formDataModified.problems.length > 0 && problems.length > 0) ? (
+                                <div className="bg-secondarylight rounded-lg border-secondarylight border-2 my-4">
+                                    <div className="py-2 text-xl p-2 justify-center items-center flex bg-secondarylight text-white font-semibold">
                                         Selected Problems
                                     </div>
                                     {formDataModified.problems.map((problemId: string) => {
                                         const problem = problems.find((p: Problem) => p.id === problemId)
                                         return (
-                                            <div key={problem.id} className="bg-graydark m-2 border border-gray-400 rounded-lg py-2 px-4">
-                                                <div className="flex justify-between">
-                                                    <div className="flex flex-col">
-                                                        <span>{problem?.name}</span>
-                                                        <span className="text-xs">{summarizeDescription(problem?.description)}</span>
-                                                    </div>
-                                                    <div className="flex justify-center items-center gap-4">
-                                                        <span className="text-sm">{problem?.num_of_points} points</span>
-                                                        <div
-                                                            className="bg-secondarylight pi pi-times text-white p-1 rounded-xl cursor-pointer"
-                                                            onClick={() => removeProblem(problemId)}></div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <ProblemListItem
+                                                key={problemId}
+                                                problem={problem!!}
+                                                selectedProblems={formDataModified.problems}
+                                                addProblem={addProblem}
+                                                removeProblem={removeProblem}
+                                            />
                                         )
                                     })}
                                 </div>
-                            )}
+                            ) : null}
                             <div className="flex justify-between items-center w-full px-2">
                                 <Button
                                     label="Back"
                                     icon="pi pi-arrow-left"
                                     className="hover:scale-[102%] transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
                                     type="button"
-                                    onClick={() => navigate("/organiser/home", { replace: true })}
+                                    onClick={() => navigate("/organiser/home")}
                                 />
                                 <Button
                                     label="Submit"
