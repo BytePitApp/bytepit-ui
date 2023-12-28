@@ -31,7 +31,7 @@ const CreateCompetitionPage = () => {
         endTime: "",
         problems: [],
     })
-    const [problems, setProblems] = useState<any>([])
+    const [problems, setProblems] = useState<Problem[]>([])
     const [dateTime, setDateTime] = useState<Nullable<(Date | null)[]>>(null)
     const [showProblems, setShowProblems] = useState(false)
     const calendarRef = useRef<Calendar>(null)
@@ -352,7 +352,7 @@ const CreateCompetitionPage = () => {
                                         return (
                                             <ProblemListItem
                                                 key={problem?.id}
-                                                problem={problem}
+                                                problem={problem!!}
                                                 selectedProblems={formData.problems}
                                                 removeProblem={removeProblem}
                                                 addProblem={addProblem}
