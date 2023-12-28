@@ -30,7 +30,6 @@ const createCompetition = async (competition: CreateCompetition) => {
 
 const modifyCompetition = async (id: string, competition: ModifyCompetition, oldValue: ModifyCompetition) => {
     const formData = new FormData()
-    console.log("comptition", competition)
     if (competition.name !== oldValue.name) {
         formData.append("name", competition.name)
     }
@@ -77,8 +76,8 @@ const modifyCompetition = async (id: string, competition: ModifyCompetition, old
     return response
 }
 
-const getAllCompetitions = async () => {
-    const response = await requests("/competitions")
+const getAllCompetitionsForOrganiser = async (organiserId: string | undefined) => {
+    const response = await requests(`organiser/${organiserId}/competitions`)
     return response
 }
 
@@ -87,4 +86,4 @@ const getCompetition = async (competitionId: string) => {
     return response
 }
 
-export { createCompetition, getAllCompetitions, modifyCompetition, getCompetition }
+export { createCompetition, getAllCompetitionsForOrganiser, modifyCompetition, getCompetition }
