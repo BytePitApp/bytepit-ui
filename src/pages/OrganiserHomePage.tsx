@@ -4,7 +4,6 @@ import { CompetitionCard, Navbar } from "../components"
 import { Competition } from "../Models"
 import { ProgressSpinner } from "primereact/progressspinner"
 import { FaArrowCircleLeft, FaArrowCircleRight } from "react-icons/fa"
-import "./Organiser.css"
 import { Link } from "react-router-dom"
 
 const OrganiserHomePage = () => {

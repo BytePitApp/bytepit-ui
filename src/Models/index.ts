@@ -7,7 +7,8 @@ import Problem from "./Problem"
 import ProblemPickerProps from "./ProblemPickerProps"
 import ProblemListItemProps from "./ProblemListItemProps"
 import Competition from "./Competition"
-import FormDataCompetition from "./FormDataCompetition"
+import ModifyCompetition from "./ModifyCompetition"
+import CreateCompetition from "./CreateCompetition"
 
 export {
     Role,
@@ -19,5 +20,6 @@ export {
     type ProblemPickerProps,
     type ProblemListItemProps,
     type Competition,
-    type FormDataCompetition,
+    type ModifyCompetition,
+    type CreateCompetition,
 }

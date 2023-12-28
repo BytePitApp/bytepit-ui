@@ -1,4 +1,4 @@
-interface FormDataCompetition {
+export default interface ModifyCompetition {
     name: string | undefined,
     description: string | undefined,
     startTime: string | undefined,
@@ -8,5 +8,3 @@ interface FormDataCompetition {
     secondPlaceTrophyImage: any | undefined,
     thirdPlaceTrophyImage: any | undefined
 }
-
-export default FormDataCompetition
