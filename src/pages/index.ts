@@ -1,10 +1,11 @@
 import AdminHomePage from "./AdminHomePage"
-import OrganiserHomePage from "./OrganiserHomePage"
+import OrganiserHomePage from "./OrganiserProblemPage"
 import ContestantHomePage from "./ContestantHomePage"
 import LoginPage from "./LoginPage"
 import RegisterPage from "./RegisterPage"
 import LandingPage from "./LandingPage"
 import EmailConfirmPage from './EmailConfirmPage';
+import OrganiserProblemPage from "./OrganiserProblemPage"
 
 export {
     AdminHomePage,
@@ -14,4 +15,5 @@ export {
     RegisterPage,
     EmailConfirmPage,
     LandingPage,
+    OrganiserProblemPage,
 }
