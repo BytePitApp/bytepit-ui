@@ -25,7 +25,8 @@ const App = () => {
                     <Route path="contestant/home" element={<ContestantHomePage></ContestantHomePage>} />
                 </Route>
                 <Route element={<ProtectedRoute allowedRoles={[Role.ORGANISER]}></ProtectedRoute>}>
-                    <Route path="organiser/home" element={<OrganiserProblemPage></OrganiserProblemPage>} />
+                    <Route path="organiser/home" element={<OrganiserHomePage></OrganiserHomePage>} />
+                    <Route path="organiser/view-problem" element={<OrganiserProblemPage></OrganiserProblemPage>} />
                 </Route>
                 <Route path="login" element={<LoginPage></LoginPage>} />
                 <Route path="register" element={<RegisterPage></RegisterPage>} />
