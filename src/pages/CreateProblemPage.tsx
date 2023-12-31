@@ -1,23 +1,23 @@
-import { Navbar } from "../components";
-import { useState, useRef, FormEvent, useEffect } from "react";
-import { Button } from "primereact/button";
-import { ProgressSpinner } from "primereact/progressspinner";
-import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
-import { CreateProblem } from "../Models";
-import { createProblem } from "../services/problem.service";
-import { Toast } from "primereact/toast";
-import { RadioButton } from "primereact/radiobutton";
+import { Navbar } from "../components"
+import { useState, useRef, FormEvent, useEffect } from "react"
+import { Button } from "primereact/button"
+import { ProgressSpinner } from "primereact/progressspinner"
+import { InputText } from "primereact/inputtext"
+import { InputTextarea } from "primereact/inputtextarea"
+import { CreateProblem } from "../Models"
+import { createProblem } from "../services/problem.service"
+import { Toast } from "primereact/toast"
+import { RadioButton } from "primereact/radiobutton"
 import {
 	InputNumber,
 	InputNumberValueChangeEvent,
-} from "primereact/inputnumber";
-import "./Organiser.css";
+} from "primereact/inputnumber"
+import "./Organiser.css"
 
 const CreateProblemPage = () => {
-	const [selectedTestFiles, setSelectedTestFiles] = useState(undefined);
-	const [loading, setLoading] = useState(false);
-	const toast = useRef<Toast>(null);
+	const [selectedTestFiles, setSelectedTestFiles] = useState(undefined)
+	const [loading, setLoading] = useState(false)
+	const toast = useRef<Toast>(null)
 
 	const [formData, setFormData] = useState<CreateProblem>({
 		name: "",
@@ -28,31 +28,31 @@ const CreateProblemPage = () => {
 		exampleOutput: "",
 		isPrivate: false,
 		isHidden: false,
-	});
+	})
 
 	const handleValueChange = (e: any) => {
-		const { name, value } = e.target;
+		const { name, value } = e.target
 		setFormData({
 			...formData,
 			[name]: value,
-		});
-	};
+		})
+	}
 
 	const sendToast = (toastMessage: any) => {
-		toast.current?.show(toastMessage);
-	};
+		toast.current?.show(toastMessage)
+	}
 
 	const navigateToHome = () => {
-		window.location.href = "/organiser/home";
-	};
+		window.location.href = "/organiser/home"
+	}
 
 	const submitForm = async (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		setLoading(true);
+		e.preventDefault()
+		setLoading(true)
 		try {
-			let files: any = undefined;
+			let files: any = undefined
 			if (selectedTestFiles) {
-				files = Array.from(selectedTestFiles);
+				files = Array.from(selectedTestFiles)
 			}
 			await createProblem(
 				formData.name,
@@ -64,7 +64,7 @@ const CreateProblemPage = () => {
 				formData.isPrivate,
 				formData.isHidden,
 				files
-			);
+			)
 			setFormData({
 				name: "",
 				description: "",
@@ -74,7 +74,7 @@ const CreateProblemPage = () => {
 				exampleOutput: "",
 				isPrivate: false,
 				isHidden: false,
-			});
+			})
 		} catch (err: any) {
 			if (Array.isArray(err.response.data.detail)) {
 				for (const error of err.response.data.detail) {
@@ -82,18 +82,18 @@ const CreateProblemPage = () => {
 						severity: "error",
 						summary: "Error!",
 						detail: error,
-					});
+					})
 				}
 			} else {
 				sendToast({
 					severity: "error",
 					summary: "Error!",
 					detail: err.response.data.detail,
-				});
+				})
 			}
 		}
-		setLoading(false);
-	};
+		setLoading(false)
+	}
 
 	return (
 		<div className="flex flex-col h-screen justify-center">
@@ -237,27 +237,27 @@ const CreateProblemPage = () => {
 				</form>
 			</div>
 		</div>
-	);
-};
+	)
+}
 
 type TextInputProps = {
-	name: string;
-	value: string;
-	label: string;
-	onUpdate: (value: any) => void;
-};
+	name: string
+	value: string
+	label: string
+	onUpdate: (value: any) => void
+}
 
 type BoolInputProps = {
-	label: string;
-	value: boolean;
-	onChange: (value: boolean) => void;
-};
+	label: string
+	value: boolean
+	onChange: (value: boolean) => void
+}
 
 type NumberInputProps = {
-	value: number;
-	label: string;
-	onValueChange: (value: number) => void;
-};
+	value: number
+	label: string
+	onValueChange: (value: number) => void
+}
 
 const TextInput = ({ name, value, label, onUpdate }: TextInputProps) => {
 	return (
@@ -270,8 +270,8 @@ const TextInput = ({ name, value, label, onUpdate }: TextInputProps) => {
 			/>
 			<label htmlFor="in">{label}</label>
 		</span>
-	);
-};
+	)
+}
 
 const BoolInput = ({ value, label, onChange }: BoolInputProps) => {
 	return (
@@ -304,8 +304,8 @@ const BoolInput = ({ value, label, onChange }: BoolInputProps) => {
 				</label>
 			</div>
 		</div>
-	);
-};
+	)
+}
 
 const NumberInput = ({ value, label, onValueChange }: NumberInputProps) => {
 	return (
@@ -316,7 +316,7 @@ const NumberInput = ({ value, label, onValueChange }: NumberInputProps) => {
 				maxFractionDigits={1}
 				value={value}
 				onValueChange={(e: InputNumberValueChangeEvent) => {
-					onValueChange(e.value ? e.value : 0);
+					onValueChange(e.value ? e.value : 0)
 				}}
 				mode="decimal"
 				showButtons
@@ -326,8 +326,8 @@ const NumberInput = ({ value, label, onValueChange }: NumberInputProps) => {
 			/>
 			<label htmlFor="in">{label}</label>
 		</span>
-	);
-};
+	)
+}
 
 const TimeInput = ({ value, label, onValueChange }: NumberInputProps) => {
 	return (
@@ -338,7 +338,7 @@ const TimeInput = ({ value, label, onValueChange }: NumberInputProps) => {
 				maxFractionDigits={1}
 				value={value}
 				onValueChange={(e: InputNumberValueChangeEvent) => {
-					onValueChange(e.value ? e.value : 0);
+					onValueChange(e.value ? e.value : 0)
 				}}
 				suffix=" s"
 				mode="decimal"
@@ -349,7 +349,7 @@ const TimeInput = ({ value, label, onValueChange }: NumberInputProps) => {
 			/>
 			<label htmlFor="in">{label}</label>
 		</span>
-	);
-};
+	)
+}
 
-export default CreateProblemPage;
+export default CreateProblemPage
