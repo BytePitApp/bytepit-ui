@@ -38,8 +38,8 @@ const createProblem = async (
 const modifyProblem = async (
 	problem_id: string,
 	name: string,
-	points: number,
 	description: string,
+	points: number,
 	runtimeLimit: number,
 	exampleInput: string,
 	exampleOutput: string,
@@ -50,8 +50,8 @@ const modifyProblem = async (
 	const formData = new FormData()
 
 	formData.append("name", name)
-	formData.append("num_of_points", points.toString())
 	formData.append("description", description)
+	formData.append("num_of_points", points.toString())
 	formData.append("runtime_limit", runtimeLimit.toString())
 	formData.append("example_input", exampleInput)
 	formData.append("example_output", exampleOutput)
@@ -70,4 +70,19 @@ const modifyProblem = async (
 	return response
 }
 
-export { createProblem, modifyProblem }
+const getProblem = async (problem_id: string) => {
+	try {
+	  const response = await requests.get(`/problems/${problem_id}`, {
+		params: {
+		  _: Date.now(),
+		},
+	  })
+	  return response.data
+	} catch (error) {
+	  console.error('Failed to fetch problem:', error)
+	  throw error
+	}
+  }
+
+
+export { createProblem, modifyProblem, getProblem }

@@ -1,7 +1,7 @@
 interface ModifyProblem {
     name: string | undefined,
-    points: number | undefined,
     description: string | undefined,
+    points: number | undefined,
     runtimeLimit: number | undefined,
     exampleInput: string | undefined,
     exampleOutput: string | undefined,
