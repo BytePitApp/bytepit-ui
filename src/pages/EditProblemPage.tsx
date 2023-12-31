@@ -1,75 +1,105 @@
-import { Navbar } from "../components";
-import { useState, useRef, FormEvent, useEffect } from "react";
-import { Button } from "primereact/button";
-import { ProgressSpinner } from "primereact/progressspinner";
-import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
-import { ModifyProblem } from "../Models";
-import { modifyProblem } from "../services/problem.service";
-import { Toast } from "primereact/toast";
-import { RadioButton } from "primereact/radiobutton";
+import { Navbar } from "../components"
+import { useState, useRef, FormEvent, useEffect } from "react"
+import { Button } from "primereact/button"
+import { ProgressSpinner } from "primereact/progressspinner"
+import { InputText } from "primereact/inputtext"
+import { InputTextarea } from "primereact/inputtextarea"
+import { ModifyProblem } from "../Models"
+import { modifyProblem, getProblem } from "../services/problem.service"
+import { Toast } from "primereact/toast"
+import { RadioButton } from "primereact/radiobutton"
 import {
 	InputNumber,
 	InputNumberValueChangeEvent,
-} from "primereact/inputnumber";
-import "./Organiser.css";
-import { useParams } from "react-router-dom";
+} from "primereact/inputnumber"
+import "./Organiser.css"
+import { useNavigate, useParams } from "react-router-dom"
 
 const EditProblemPage = () => {
-	const [selectedTestFiles, setSelectedTestFiles] = useState(undefined);
-	const [loading, setLoading] = useState(false);
-	const toast = useRef<Toast>(null);
+	const [selectedTestFiles, setSelectedTestFiles] = useState(undefined)
+	const [loading, setLoading] = useState(false)
+	const toast = useRef<Toast>(null)
+	const navigate = useNavigate()
 
-	const { problem_id } = useParams<{ problem_id: string }>();
-
+	const { problem_id } = useParams<{ problem_id: string }>()
+	const [problem, setProblem] = useState(null)
 	const [formData, setFormData] = useState<ModifyProblem>({
-		name: "",
-		description: "",
-		points: 0,
-		runtimeLimit: 0,
-		exampleInput: "",
-		exampleOutput: "",
-		isPrivate: false,
-		isHidden: false,
-		testFiles: [],
-	});
+	  name: "",
+	  description: "",
+	  points: 0,
+	  runtimeLimit: 0,
+	  exampleInput: "",
+	  exampleOutput: "",
+	  isPrivate: false,
+	  isHidden: false,
+	  testFiles: [],
+	})
+  
+	useEffect(() => {
+		const fetchProblemData = async () => {
+		  if (problem_id) {
+			try {
+			  const response = await getProblem(problem_id)
+			  setProblem(response)
+			  setFormData({
+				name: response.name,
+				description: response.description,
+				points: response.num_of_points,
+				runtimeLimit: response.runtime_limit,
+				exampleInput: response.example_input,
+				exampleOutput: response.example_output,
+				isPrivate: response.is_private,
+				isHidden: response.is_hidden,
+				testFiles: response.test_files,
+			  })
+			} catch (error) {
+			  console.error('Failed to fetch problem:', error)
+			}
+		  } else {
+			console.error('Problem ID is undefined')
+		  }
+		}
+	  
+		fetchProblemData()
+	  }, [problem_id])
 
 	const handleValueChange = (e: any) => {
-		const { name, value } = e.target;
+		const { name, value, type, checked } = e.target
 		setFormData({
-			...formData,
-			[name]: value,
-		});
-	};
+		  ...formData,
+		  [name]: type === 'checkbox' ? checked : value,
+		})
+	}
 
 	const sendToast = (toastMessage: any) => {
-		toast.current?.show(toastMessage);
-	};
+		toast.current?.show(toastMessage)
+	}
 
 	const navigateToHome = () => {
-		window.location.href = "/organiser/home";
-	};
+		window.location.href = "/organiser/home"
+	}
 
 	const submitForm = async (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		setLoading(true);
+		e.preventDefault()
+		setLoading(true)
 		try {
 			if (problem_id !== undefined) {
-				let files: any = undefined;
+				let files: any = undefined
 				if (selectedTestFiles) {
-					files = Array.from(selectedTestFiles);
+					files = Array.from(selectedTestFiles)
 				}
 				await modifyProblem(
-					formData.name,
-					formData.points,
-					formData.description,
-					formData.runtimeLimit,
-					formData.exampleInput,
-					formData.exampleOutput,
-					formData.isPrivate,
-					formData.isHidden,
+					problem_id,
+					formData.name || '',
+					formData.description || '',
+					formData.points || 0,
+					formData.runtimeLimit || 0,
+					formData.exampleInput || '',
+					formData.exampleOutput || '',
+					formData.isPrivate || false,
+					formData.isHidden || false,
 					files
-				);
+				  )
 			}
 			setFormData({
 				name: formData.name,
@@ -81,7 +111,7 @@ const EditProblemPage = () => {
 				isPrivate: formData.isPrivate,
 				isHidden: formData.isHidden,
 				testFiles: formData.testFiles,
-			});
+			})
 		} catch (err: any) {
 			if (Array.isArray(err.response.data.detail)) {
 				for (const error of err.response.data.detail) {
@@ -89,18 +119,19 @@ const EditProblemPage = () => {
 						severity: "error",
 						summary: "Error!",
 						detail: error,
-					});
+					})
 				}
 			} else {
 				sendToast({
 					severity: "error",
 					summary: "Error!",
 					detail: err.response.data.detail,
-				});
+				})
 			}
 		}
-		setLoading(false);
-	};
+		setLoading(false)
+		navigate('/organiser/home')
+	}
 
 	return (
 		<div className="flex flex-col h-screen justify-center">
@@ -121,16 +152,16 @@ const EditProblemPage = () => {
 					<div className="flex flex-col gap-[3vh] h-[85vh] items-center overflow-y-auto scrollbar-hide">
 						<div className="m-[5%] flex flex-col gap-2 pt-20">
 							<span className="text-[4vh] text-center font-semibold text-primary mb-2">
-								Create Problem
+								Edit Problem
 							</span>
 							<span className="text-[2vh] text-center text-slate-950">
-								Please fill in the form below to create a
+								Please fill in the form below to edit a
 								problem.
 							</span>
 						</div>
 						<TextInput
 							name="name"
-							value={formData.name}
+							value={formData.name || ''}
 							label="Name"
 							onUpdate={handleValueChange}
 						/>
@@ -148,14 +179,14 @@ const EditProblemPage = () => {
 							<label htmlFor="description">Description</label>
 						</span>
 						<NumberInput
-							value={formData.points}
+							value={formData.points || 0}
 							label="Points"
 							onValueChange={(value) =>
 								setFormData({ ...formData, points: value })
 							}
 						/>
 						<TimeInput
-							value={formData.runtimeLimit}
+							value={formData.runtimeLimit || 0}
 							label="Runtime limit"
 							onValueChange={(value) =>
 								setFormData({
@@ -211,14 +242,14 @@ const EditProblemPage = () => {
 						</div>
 						<BoolInput
 							label="Private"
-							value={formData.isPrivate}
+							value={formData.isPrivate || false}
 							onChange={(value) =>
 								setFormData({ ...formData, isPrivate: value })
 							}
 						/>
 						<BoolInput
 							label="Hidden"
-							value={formData.isHidden}
+							value={formData.isHidden || false}
 							onChange={(value) =>
 								setFormData({ ...formData, isHidden: value })
 							}
@@ -244,27 +275,27 @@ const EditProblemPage = () => {
 				</form>
 			</div>
 		</div>
-	);
-};
+	)
+}
 
 type TextInputProps = {
-	name: string;
-	value: string;
-	label: string;
-	onUpdate: (value: any) => void;
-};
+	name: string
+	value: string
+	label: string
+	onUpdate: (value: any) => void
+}
 
 type BoolInputProps = {
-	label: string;
-	value: boolean;
-	onChange: (value: boolean) => void;
-};
+	label: string
+	value: boolean
+	onChange: (value: boolean) => void
+}
 
 type NumberInputProps = {
-	value: number;
-	label: string;
-	onValueChange: (value: number) => void;
-};
+	value: number
+	label: string
+	onValueChange: (value: number) => void
+}
 
 const TextInput = ({ name, value, label, onUpdate }: TextInputProps) => {
 	return (
@@ -277,8 +308,8 @@ const TextInput = ({ name, value, label, onUpdate }: TextInputProps) => {
 			/>
 			<label htmlFor="in">{label}</label>
 		</span>
-	);
-};
+	)
+}
 
 const BoolInput = ({ value, label, onChange }: BoolInputProps) => {
 	return (
@@ -311,8 +342,8 @@ const BoolInput = ({ value, label, onChange }: BoolInputProps) => {
 				</label>
 			</div>
 		</div>
-	);
-};
+	)
+}
 
 const NumberInput = ({ value, label, onValueChange }: NumberInputProps) => {
 	return (
@@ -323,7 +354,7 @@ const NumberInput = ({ value, label, onValueChange }: NumberInputProps) => {
 				maxFractionDigits={1}
 				value={value}
 				onValueChange={(e: InputNumberValueChangeEvent) => {
-					onValueChange(e.value ? e.value : 0);
+					onValueChange(e.value ? e.value : 0)
 				}}
 				mode="decimal"
 				showButtons
@@ -333,8 +364,8 @@ const NumberInput = ({ value, label, onValueChange }: NumberInputProps) => {
 			/>
 			<label htmlFor="in">{label}</label>
 		</span>
-	);
-};
+	)
+}
 
 const TimeInput = ({ value, label, onValueChange }: NumberInputProps) => {
 	return (
@@ -345,7 +376,7 @@ const TimeInput = ({ value, label, onValueChange }: NumberInputProps) => {
 				maxFractionDigits={1}
 				value={value}
 				onValueChange={(e: InputNumberValueChangeEvent) => {
-					onValueChange(e.value ? e.value : 0);
+					onValueChange(e.value ? e.value : 0)
 				}}
 				suffix=" s"
 				mode="decimal"
@@ -356,7 +387,7 @@ const TimeInput = ({ value, label, onValueChange }: NumberInputProps) => {
 			/>
 			<label htmlFor="in">{label}</label>
 		</span>
-	);
-};
+	)
+}
 
-export default EditProblemPage;
+export default EditProblemPage
