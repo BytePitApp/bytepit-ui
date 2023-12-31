@@ -3,6 +3,8 @@ import Footer from "./Footer"
 import HoverCard from "./HoverCard"
 import ProblemListItem from "./ProblemListItem"
 import ProblemList from "./ProblemList"
+import ProblemBox from "./ProblemBox"
+import ViewProblemBox from "./ViewProblemBox"
 
 export { 
     Navbar,
@@ -10,4 +12,6 @@ export {
     HoverCard,
     type ProblemListItem,
     ProblemList,
+    ProblemBox,
+    ViewProblemBox,
 }
