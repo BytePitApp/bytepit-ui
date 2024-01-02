@@ -13,7 +13,6 @@ import { Role } from "./Models"
 import { Navbar } from "./components"
 import { AuthProvider } from "./context/AuthContext"
 
-
 const App = () => {
     return (
         <AuthProvider>

@@ -12,7 +12,6 @@ import {
 	InputNumber,
 	InputNumberValueChangeEvent,
 } from "primereact/inputnumber"
-import "./Organiser.css"
 import { useNavigate, useParams } from "react-router-dom"
 
 const EditProblemPage = () => {
@@ -88,18 +87,24 @@ const EditProblemPage = () => {
 				if (selectedTestFiles) {
 					files = Array.from(selectedTestFiles)
 				}
-				await modifyProblem(
-					problem_id,
-					formData.name || '',
-					formData.description || '',
-					formData.points || 0,
-					formData.runtimeLimit || 0,
-					formData.exampleInput || '',
-					formData.exampleOutput || '',
-					formData.isPrivate || false,
-					formData.isHidden || false,
-					files
-				  )
+				const problem: ModifyProblem = {
+					name: formData.name || '',
+					description: formData.description || '',
+					points: formData.points || 0,
+					runtimeLimit: formData.runtimeLimit || 0,
+					exampleInput: formData.exampleInput || '',
+					exampleOutput: formData.exampleOutput || '',
+					isPrivate: formData.isPrivate || false,
+					isHidden: formData.isHidden || false,
+					testFiles: formData.testFiles || [],
+				}
+				await modifyProblem(problem_id!, problem)
+				sendToast({
+					severity: "success",
+					summary: "Success!",
+					detail: "Problem modified successfully!",
+					life: 10000,
+				})
 			}
 			setFormData({
 				name: formData.name,
