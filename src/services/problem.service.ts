@@ -1,30 +1,21 @@
 import requests from "../requests"
+import { CreateProblem, ModifyProblem } from "../Models"
 
 
-const createProblem = async (
-	name: string,
-	points: number,
-	description: string,
-	runtimeLimit: number,
-	exampleInput: string,
-	exampleOutput: string,
-	isPrivate: boolean,
-	isHidden: boolean,
-	testFiles?: any[]
-) => {
+const createProblem = async (problem: CreateProblem) => {
 	const formData = new FormData()
 
-	formData.append("name", name)
-	formData.append("num_of_points", points.toString())
-	formData.append("description", description)
-	formData.append("runtime_limit", runtimeLimit.toString())
-	formData.append("example_input", exampleInput)
-	formData.append("example_output", exampleOutput)
-	formData.append("is_private", isPrivate.toString())
-	testFiles?.forEach((file) => {
+	formData.append("name", problem.name)
+	formData.append("num_of_points", problem.points.toString())
+	formData.append("description", problem.description)
+	formData.append("runtime_limit", problem.runtimeLimit.toString())
+	formData.append("example_input", problem.exampleInput)
+	formData.append("example_output", problem.exampleOutput)
+	formData.append("is_private", problem.isPrivate.toString())
+	problem.testFiles?.forEach((file) => {
 		formData.append("test_files", file)
 	})
-	formData.append("is_hidden", isHidden.toString())
+	formData.append("is_hidden", problem.isHidden.toString())
 
 	const response = await requests.post("/problems", formData, {
 		headers: {
@@ -35,31 +26,20 @@ const createProblem = async (
 	return response
 }
 
-const modifyProblem = async (
-	problem_id: string,
-	name: string,
-	description: string,
-	points: number,
-	runtimeLimit: number,
-	exampleInput: string,
-	exampleOutput: string,
-	isPrivate: boolean,
-	isHidden: boolean,
-	testFiles?: any[]
-) => {
+const modifyProblem = async (problem_id: string, problem: ModifyProblem) => {
 	const formData = new FormData()
 
-	formData.append("name", name)
-	formData.append("description", description)
-	formData.append("num_of_points", points.toString())
-	formData.append("runtime_limit", runtimeLimit.toString())
-	formData.append("example_input", exampleInput)
-	formData.append("example_output", exampleOutput)
-	formData.append("is_private", isPrivate.toString())
-	testFiles?.forEach((file) => {
+	formData.append("name", problem.name?.toString() || "")
+	formData.append("description", problem.description?.toString() || "")
+	formData.append("num_of_points", problem.points?.toString() || "")
+	formData.append("runtime_limit", problem.runtimeLimit?.toString() || "")
+	formData.append("example_input", problem.exampleInput?.toString() || "")
+	formData.append("example_output", problem.exampleOutput?.toString() || "")
+	formData.append("is_private", problem.isPrivate?.toString() || "")
+	problem.testFiles?.forEach((file) => {
 		formData.append("test_files", file)
 	})
-	formData.append("is_hidden", isHidden.toString())
+	formData.append("is_hidden", problem.isHidden?.toString() || "")
 
 	const response = await requests.patch(`/problems/${problem_id}`, formData, {
 		headers: {
@@ -72,17 +52,17 @@ const modifyProblem = async (
 
 const getProblem = async (problem_id: string) => {
 	try {
-	  const response = await requests.get(`/problems/${problem_id}`, {
-		params: {
-		  _: Date.now(),
-		},
-	  })
-	  return response.data
+		const response = await requests.get(`/problems/${problem_id}`, {
+			params: {
+				_: Date.now(),
+			},
+		})
+		return response.data
 	} catch (error) {
-	  console.error('Failed to fetch problem:', error)
-	  throw error
+		console.error('Failed to fetch problem:', error)
+		throw error
 	}
-  }
+}
 
 
 export { createProblem, modifyProblem, getProblem }

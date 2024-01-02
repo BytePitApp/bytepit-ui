@@ -12,7 +12,6 @@ import {
 	InputNumber,
 	InputNumberValueChangeEvent,
 } from "primereact/inputnumber"
-import "./Organiser.css"
 
 const CreateProblemPage = () => {
 	const [selectedTestFiles, setSelectedTestFiles] = useState(undefined)
@@ -54,17 +53,24 @@ const CreateProblemPage = () => {
 			if (selectedTestFiles) {
 				files = Array.from(selectedTestFiles)
 			}
-			await createProblem(
-				formData.name,
-				formData.points,
-				formData.description,
-				formData.runtimeLimit,
-				formData.exampleInput,
-				formData.exampleOutput,
-				formData.isPrivate,
-				formData.isHidden,
-				files
-			)
+			const problem: CreateProblem = {
+				name: formData.name,
+				description: formData.description,
+				points: formData.points,
+				runtimeLimit: formData.runtimeLimit,
+				exampleInput: formData.exampleInput,
+				exampleOutput: formData.exampleOutput,
+				isPrivate: formData.isPrivate,
+				isHidden: formData.isHidden,
+				testFiles: files,
+			}
+			await createProblem(problem)
+			sendToast({
+                severity: "success",
+                summary: "Success!",
+                detail: "Problem created successfully!",
+                life: 10000,
+            })
 			setFormData({
 				name: "",
 				description: "",
