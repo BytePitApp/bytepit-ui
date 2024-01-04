@@ -53,7 +53,7 @@ const ProblemBox: React.FC<ProblemProps> = ({
             <Link to={`/organiser/view-problem`} state={{problem : problem}} className={`${isHovered ? 'text-black' : 'text-primary'} hover:text-black transition-colors duration-200`}>
                 View problem
             </Link>
-            <Link to={`/organiser/edit-problem`} state={{problem : problem}} className={`${isHovered ? 'text-black' : 'text-primary'} hover:text-black transition-colors duration-200`}>
+            <Link to={`/organiser/edit-problem/${problem.id}`} state={{problem : problem}} className={`${isHovered ? 'text-black' : 'text-primary'} hover:text-black transition-colors duration-200`}>
                 Edit problem
             </Link>
         </div>
