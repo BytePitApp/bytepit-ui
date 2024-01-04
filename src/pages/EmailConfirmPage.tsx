@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import "./nabla.css"
 import { ProgressSpinner } from "primereact/progressspinner"
 import { confirmEmail } from "../services/login.service"
@@ -9,6 +9,7 @@ const EmailConfirmPage = () => {
     const { id } = useParams()
     const [countdown, setCountdown] = useState(5)
     const [loading, setLoading] = useState(true)
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (!loading) {
@@ -22,7 +23,7 @@ const EmailConfirmPage = () => {
     useEffect(() => {
         if (countdown <= 0) {
             setTimeout(() => {
-                window.location.href = "/login"
+                navigate("/login")
             }, 500)
         }
     }, [countdown])
