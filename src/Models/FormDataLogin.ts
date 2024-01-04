@@ -1,6 +1,4 @@
-interface FormDataLogin {
+export default interface FormDataLogin {
     username: string,
     password: string,
 }
-
-export default FormDataLogin
