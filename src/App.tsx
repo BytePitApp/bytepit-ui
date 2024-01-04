@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom"
-import { AdminHomePage, ContestantHomePage, LandingPage, EmailConfirmPage, LoginPage, OrganiserHomePage, RegisterPage, CreateProblemPage, EditProblemPage } from "./pages"
+import { AdminHomePage, ContestantHomePage, LandingPage, EmailConfirmPage, LoginPage, OrganiserHomePage, RegisterPage, CreateCompetitionPage, OrganiserProblemPage, CreateProblemPage, EditProblemPage } from "./pages"
 import ProtectedRoute from "./components/ProtectedRoute"
 
 import "./global.css"
@@ -12,6 +12,7 @@ import "./App.css"
 import { Role } from "./Models"
 import { Navbar } from "./components"
 import { AuthProvider } from "./context/AuthContext"
+import EditCompetitionPage from "./pages/EditCompetitionPage"
 
 const App = () => {
     return (
@@ -28,6 +29,9 @@ const App = () => {
                     <Route path="organiser/home" element={<OrganiserHomePage></OrganiserHomePage>} />
                     <Route path="organiser/create-problem" element={<CreateProblemPage></CreateProblemPage>} />
                     <Route path="organiser/edit-problem/:problem_id" element={<EditProblemPage></EditProblemPage>} />
+                    <Route path="organiser/view-problem" element={<OrganiserProblemPage></OrganiserProblemPage>} />
+                    <Route path="organiser/create-competition" element={<CreateCompetitionPage></CreateCompetitionPage>} />
+                    <Route path="organiser/edit-competition/:id" element={<EditCompetitionPage></EditCompetitionPage>} />
                 </Route>
                 <Route path="login" element={<LoginPage></LoginPage>} />
                 <Route path="register" element={<RegisterPage></RegisterPage>} />

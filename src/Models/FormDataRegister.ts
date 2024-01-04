@@ -1,6 +1,6 @@
 import { RegisterRole } from "."
 
-interface FormDataRegister {
+export default interface FormDataRegister {
     username: string,
     email: string,
     password: string,
@@ -8,5 +8,3 @@ interface FormDataRegister {
     surname: string,
     role: RegisterRole,
 }
-
-export default FormDataRegister

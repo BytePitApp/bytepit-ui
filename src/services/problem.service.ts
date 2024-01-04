@@ -64,5 +64,9 @@ const getProblem = async (problem_id: string) => {
 	}
 }
 
+const getAllProblems = async () => {
+	const response = await requests.get("/problems")
+	return response
+}
 
-export { createProblem, modifyProblem, getProblem }
+export { createProblem, modifyProblem, getProblem, getAllProblems }
