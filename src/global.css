@@ -29,6 +29,7 @@ body {
     scrollbar-width: none;
 }
 
+
 .transition-bg {
     transition: background-color 1s ease;
 }
