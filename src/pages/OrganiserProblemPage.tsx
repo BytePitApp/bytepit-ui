@@ -9,7 +9,7 @@ const OrganiserProblemPage = () => {
 
 
     const goToEditProblemPage = () => {
-        navigate(`/organiser/edit-problem`);
+        navigate(`/organiser/edit-problem/${problem.id}`);
     }
 
     const goToOrganiserPage = () => {
