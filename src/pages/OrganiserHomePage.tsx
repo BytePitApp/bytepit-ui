@@ -126,7 +126,7 @@ const OrganiserHomePage = () => {
                             </div>
                         </div>
                         <div ref={scrollContainerRef} className="scroll-smooth overflow-x-auto snap-x snap-mandatory scrollbar-hide">
-                            <div className="my-5">
+                            <div className="my-5 ml-[-20px]">
                                 <ProblemList problems={problems} />
                             </div>
                         </div>
