@@ -25,6 +25,7 @@ module.exports = {
                 secondarydark: "#1976D2",
                 graymedium: "#f8f9fa",
                 graydark: "#dee2e6",
+                vsdark: "#1e1e1e",
             },
             dropShadow: {
                 nav: "0 20px 20px rgb(0, 0, 0, 0.05)",

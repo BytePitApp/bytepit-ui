@@ -6,6 +6,7 @@ import RegisterPage from "./RegisterPage"
 import LandingPage from "./LandingPage"
 import EmailConfirmPage from "./EmailConfirmPage"
 import CreateCompetitionPage from "./CreateCompetitionPage"
+import ContestantViewCompetitionPage from "./ContestantViewCompetitionPage"
 
 export {
     AdminHomePage,
@@ -16,4 +17,5 @@ export {
     EmailConfirmPage,
     LandingPage,
     CreateCompetitionPage,
+    ContestantViewCompetitionPage,
 }

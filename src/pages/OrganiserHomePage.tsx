@@ -12,7 +12,7 @@ const OrganiserHomePage = () => {
     const [loading, setLoading] = useState(true)
     const scrollContainerRef = useRef<HTMLDivElement>(null)
     const { auth } = useAuth()
-    
+
     const fetchCompetitions = useCallback(async () => {
         try {
             setLoading(true)
@@ -45,7 +45,7 @@ const OrganiserHomePage = () => {
             console.log(err.response?.data?.detail ?? "Something went wrong")
         }
     }, [])
-    
+
     const handleScroll = (direction: number) => {
         if (scrollContainerRef.current) {
             scrollContainerRef.current.scrollLeft -= scrollContainerRef.current.clientWidth * direction
