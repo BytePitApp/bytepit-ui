@@ -4,6 +4,8 @@ import HoverCard from "./HoverCard"
 import ProblemPicker from "./ProblemPicker"
 import ProblemListItem from "./ProblemListItem"
 import CompetitionCard from "./CompetitionCard"
+import ProblemSolver from "./ProblemSolver"
+import CodeEditor from "./CodeEditor"
 
 export { 
     Navbar,
@@ -12,4 +14,6 @@ export {
     ProblemPicker,
     ProblemListItem,
     CompetitionCard,
+    ProblemSolver,
+    CodeEditor,
 }
