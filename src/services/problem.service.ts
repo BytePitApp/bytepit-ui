@@ -1,7 +1,6 @@
 import requests from "../requests"
 import { CreateProblem, ModifyProblem } from "../Models"
 
-
 const createProblem = async (problem: CreateProblem) => {
 	const formData = new FormData()
 
@@ -22,7 +21,6 @@ const createProblem = async (problem: CreateProblem) => {
 			ContentType: "multipart/form-data",
 		},
 	})
-	console.log(response)
 	return response
 }
 
@@ -51,17 +49,12 @@ const modifyProblem = async (problem_id: string, problem: ModifyProblem) => {
 }
 
 const getProblem = async (problem_id: string) => {
-	try {
-		const response = await requests.get(`/problems/${problem_id}`, {
-			params: {
-				_: Date.now(),
-			},
-		})
-		return response.data
-	} catch (error) {
-		console.error('Failed to fetch problem:', error)
-		throw error
-	}
+	const response = await requests.get(`/problems/${problem_id}`, {
+		params: {
+			_: Date.now(),
+		},
+	})
+	return response.data
 }
 
 const getAllProblems = async () => {
@@ -69,4 +62,9 @@ const getAllProblems = async () => {
 	return response
 }
 
-export { createProblem, modifyProblem, getProblem, getAllProblems }
+const getProblemsForOrganiser = async (id : string | undefined) => {
+    const response = await requests.get(`/problems/problems-by-organiser/${id}`)
+    return response
+}
+
+export { createProblem, modifyProblem, getProblem, getAllProblems, getProblemsForOrganiser }
