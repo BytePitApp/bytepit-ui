@@ -77,7 +77,7 @@ const modifyCompetition = async (id: string, competition: ModifyCompetition, old
 }
 
 const getAllCompetitionsForOrganiser = async (organiserId: string | undefined) => {
-    const response = await requests(`organiser/${organiserId}/competitions`)
+    const response = await requests(`/competitions/competitions-by-organiser/${organiserId}`)
     return response
 }
 
