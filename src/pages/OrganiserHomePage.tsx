@@ -1,18 +1,33 @@
-import { useEffect, useState, useCallback, useRef } from "react"
-import { getAllCompetitionsForOrganiser } from "../services/competition.service"
-import { CompetitionCard, Navbar } from "../components"
-import { Competition } from "../Models"
+import { useState, useEffect, useCallback, useRef } from "react"
+import { Navbar, CompetitionCard, ProblemList } from "../components"
+import { Link } from "react-router-dom"
 import { ProgressSpinner } from "primereact/progressspinner"
 import { FaArrowCircleLeft, FaArrowCircleRight } from "react-icons/fa"
-import { Link } from "react-router-dom"
+import { getAllCompetitionsForOrganiser } from "../services/competition.service"
+import { getProblemsForOrganiser } from "../services/problem.service"
+import { Competition, Problem } from "../Models"
 import useAuth from "../hooks/useAuth"
 
 const OrganiserHomePage = () => {
-    const [competitions, setCompetitions] = useState<Competition[]>([])
     const [loading, setLoading] = useState(true)
-    const scrollContainerRef = useRef<HTMLDivElement>(null)
+    const [problems, setProblems] = useState<Problem[]>([])
+    const scrollCompetitionRef = useRef<HTMLDivElement>(null)
+    const scrollProblemRef = useRef<HTMLDivElement>(null)
+    const [competitions, setCompetitions] = useState<Competition[]>([])
     const { auth } = useAuth()
     
+    const fetchProblems = useCallback(async () => {
+        try {
+            setLoading(true)
+            const response = await getProblemsForOrganiser(auth?.id)
+            const problems: Problem[] = response.data
+            setProblems(problems)
+            setLoading(false)
+        } catch (err: any) {
+            console.log(err.response?.data?.detail ?? "Something went wrong")
+        }
+    }, [])
+
     const fetchCompetitions = useCallback(async () => {
         try {
             setLoading(true)
@@ -45,16 +60,23 @@ const OrganiserHomePage = () => {
             console.log(err.response?.data?.detail ?? "Something went wrong")
         }
     }, [])
-    
-    const handleScroll = (direction: number) => {
-        if (scrollContainerRef.current) {
-            scrollContainerRef.current.scrollLeft -= scrollContainerRef.current.clientWidth * direction
-        }
-    }
 
     useEffect(() => {
+        fetchProblems()
         fetchCompetitions()
     }, [])
+
+    const handleScrollCompetition = (direction: number) => {
+        if (scrollCompetitionRef.current) {
+            scrollCompetitionRef.current.scrollLeft -= scrollCompetitionRef.current.clientWidth * direction
+        }
+    }
+    
+    const handleScrollProblem = (direction: number) => {
+        if (scrollProblemRef.current) {
+            scrollProblemRef.current.scrollLeft -= scrollProblemRef.current.clientWidth * direction
+        }
+    }
 
     return (
         <div className="bg-form bg-cover h-screen">
@@ -66,14 +88,14 @@ const OrganiserHomePage = () => {
             <Navbar />
             <div className="grow m-[5%]">
                 <div className="mb-5 flex flex-col md:flex-row max-md:gap-4 items-center md:justify-between justify-center">
-                    <span className="text-xl md:text-3xl font-bold">Recent competitions</span>
+                    <span className="text-xl md:text-3xl font-bold">Your competitions</span>
                     <div className="flex gap-4 text-lg items-center max-md:justify-between max-md:w-full transition-colors">
                         <Link to="/organiser/create-competition" className="max-md:order-2 hover:text-secondary duration-150 cursor-pointer" replace={true}>New competition</Link>
-                        <FaArrowCircleLeft onClick={() => handleScroll(1)} className="max-md:order-1 fill-secondarydark hover:fill-secondary duration-150 w-auto h-7 cursor-pointer" />
-                        <FaArrowCircleRight onClick={() => handleScroll(-1)} className="max-md:order-3 fill-secondarydark hover:fill-secondary duration-150 w-auto h-7 cursor-pointer" />
+                        <FaArrowCircleLeft onClick={() => handleScrollCompetition(1)} className="max-md:order-1 fill-secondarydark hover:fill-secondary duration-150 w-auto h-7 cursor-pointer" />
+                        <FaArrowCircleRight onClick={() => handleScrollCompetition(-1)} className="max-md:order-3 fill-secondarydark hover:fill-secondary duration-150 w-auto h-7 cursor-pointer" />
                     </div>
                 </div>
-                <div ref={scrollContainerRef} className="scroll-smooth overflow-x-auto snap-x snap-mandatory grid grid-flow-col auto-cols-[100%] xl:auto-cols-[30%] gap-5 scrollbar-hide">
+                <div ref={scrollCompetitionRef} className="mb-10 scroll-smooth overflow-x-auto snap-x snap-mandatory grid grid-flow-col auto-cols-[100%] xl:auto-cols-[30%] gap-5 scrollbar-hide">
                     {competitions.map(competition => (
                         <CompetitionCard
                             key={competition.id}
@@ -87,6 +109,17 @@ const OrganiserHomePage = () => {
                             className="snap-start"
                         />
                     ))}
+                </div>
+                <div className="mb-5 flex flex-col md:flex-row max-md:gap-4 items-center md:justify-between justify-center">
+                    <span className="text-xl md:text-3xl font-bold">Your problems</span>
+                    <div className="flex gap-4 text-lg items-center max-md:justify-between max-md:w-full transition-colors">
+                        <Link to="/organiser/create-problem" className="max-md:order-2 hover:text-secondary duration-150 cursor-pointer" replace={true}>New problem</Link>
+                        <FaArrowCircleLeft onClick={() => handleScrollProblem(1)} className="max-md:order-1 fill-secondarydark hover:fill-secondary duration-150 w-auto h-7 cursor-pointer" />
+                        <FaArrowCircleRight onClick={() => handleScrollProblem(-1)} className="max-md:order-3 fill-secondarydark hover:fill-secondary duration-150 w-auto h-7 cursor-pointer" />
+                    </div>
+                </div>
+                <div ref={scrollProblemRef} className="scroll-smooth overflow-x-auto snap-x snap-mandatory scrollbar-hide ml-[-20px]">
+                    <ProblemList problems={problems} />
                 </div>
             </div>
         </div>
