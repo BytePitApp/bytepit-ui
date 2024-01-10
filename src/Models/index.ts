@@ -13,6 +13,9 @@ import ProblemSolverProps from "./ProblemSolverProps"
 import CodeEditorTheme from "./CodeEditorTheme"
 import CodeEditorLanguages from "./CodeEditorLanguages"
 import CodeEditorProps from "./CodeEditorProps"
+import CreateSubmission from "./CreateSubmission"
+import SubmissionResult from "./SubmissionResult"
+import TimerProps from "./TimerProps"
 
 export {
     Role,
@@ -30,4 +33,7 @@ export {
     CodeEditorTheme,
     CodeEditorLanguages,
     type CodeEditorProps,
+    type CreateSubmission,
+    type SubmissionResult,
+    type TimerProps,
 }

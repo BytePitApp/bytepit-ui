@@ -1,5 +1,17 @@
 import { Routes, Route } from "react-router-dom"
-import { AdminHomePage, ContestantHomePage, LandingPage, EmailConfirmPage, LoginPage, OrganiserHomePage, RegisterPage, CreateCompetitionPage, ContestantViewCompetitionPage } from "./pages"
+import {
+    AdminHomePage,
+    ContestantHomePage,
+    LandingPage,
+    EmailConfirmPage,
+    LoginPage,
+    OrganiserHomePage,
+    RegisterPage,
+    CreateCompetitionPage,
+    ContestantViewCompetitionPage,
+    ContestantProblemPracticePage,
+    ContestantVirtualCompetitionPracticePage,
+} from "./pages"
 import ProtectedRoute from "./components/ProtectedRoute"
 
 import "./global.css"
@@ -25,6 +37,14 @@ const App = () => {
                 <Route element={<ProtectedRoute allowedRoles={[Role.CONTESTANT]}></ProtectedRoute>}>
                     <Route path="contestant/home" element={<ContestantHomePage></ContestantHomePage>} />
                     <Route path="contestant/competition/:id" element={<ContestantViewCompetitionPage></ContestantViewCompetitionPage>} />
+                    <Route
+                        path="contestant/practice/problem/:id"
+                        element={<ContestantProblemPracticePage></ContestantProblemPracticePage>}
+                    />
+                    <Route
+                        path="contestant/virtual-competition/:id"
+                        element={<ContestantVirtualCompetitionPracticePage></ContestantVirtualCompetitionPracticePage>}
+                    />
                 </Route>
                 <Route element={<ProtectedRoute allowedRoles={[Role.ORGANISER]}></ProtectedRoute>}>
                     <Route path="organiser/home" element={<OrganiserHomePage></OrganiserHomePage>} />
