@@ -1,9 +1,10 @@
 import { Editor } from "@monaco-editor/react"
-import { useState, useCallback, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { Dropdown } from "primereact/dropdown"
+import { Button } from "primereact/button"
 import { CodeEditorTheme, CodeEditorLanguages, CodeEditorProps } from "../Models"
 
-const CodeEditor: React.FC<CodeEditorProps> = ({ currentLanguage, currentAnswer, onAnswerChange }) => {
+const CodeEditor: React.FC<CodeEditorProps> = ({ currentLanguage, currentAnswer, onAnswerChange, run }) => {
     const [theme, setTheme] = useState<CodeEditorTheme>(CodeEditorTheme.DARK)
     const [language, setLanguage] = useState<CodeEditorLanguages | null>(null)
     const [code, setCode] = useState<string>("")
@@ -18,6 +19,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ currentLanguage, currentAnswer,
 
     const handleLanguageValueChange = (e: any) => {
         setLanguage(e.value)
+        onAnswerChange(code, e.value)
     }
 
     const themeTemplate = (option: string) => {
@@ -46,10 +48,10 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ currentLanguage, currentAnswer,
     }, [currentAnswer])
 
     return (
-        <div className="h-full ml-4 pt-4">
+        <div className="h-[50rem] lg:ml-4 pt-4">
             <div className="h-[10%] flex justify-between">
-                <div className="flex w-full lg:w-1/5 flex-col items-start justify-center">
-                    <span className="p-float-label w-full text-[2vh] flex justify-center items-center">
+                <div className="flex w-1/2 lg:w-1/5 flex-col items-start justify-center">
+                    <span className="p-float-label w-full text-[1.2rem] flex justify-center items-center">
                         <Dropdown
                             value={theme}
                             onChange={handleThemeValueChange}
@@ -62,8 +64,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ currentLanguage, currentAnswer,
                         <label htmlFor="in">Theme</label>
                     </span>
                 </div>
-                <div className="flex w-full lg:w-1/5 flex-col items-end justify-center">
-                    <span className="p-float-label w-full text-[2vh]">
+                <div className="flex w-1/2 lg:w-1/5 flex-col items-end justify-center">
+                    <span className="p-float-label w-full text-[1.2rem]">
                         <Dropdown
                             value={language}
                             onChange={handleLanguageValueChange}
@@ -87,7 +89,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ currentLanguage, currentAnswer,
             <div
                 className={`${
                     theme === CodeEditorTheme.DARK ? "bg-vsdark border-vsdark" : "bg-white border-white"
-                } p-2 rounded-lg border-2 h-[90%]`}>
+                } p-2 rounded-lg border-2 h-[80%]`}>
                 <Editor
                     height="100%"
                     options={{
@@ -109,6 +111,14 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ currentLanguage, currentAnswer,
                     onChange={(value) => {
                         onAnswerChange(value, language)
                     }}
+                />
+            </div>
+            <div className="h-[10%] flex items-center justify-end lg:m-2">
+                <Button
+                    type="button"
+                    label="RUN"
+                    className="hover:scale-[102%] w-full lg:w-32 transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
+                    onClick={() => run()}
                 />
             </div>
         </div>

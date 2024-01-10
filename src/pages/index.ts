@@ -7,6 +7,8 @@ import LandingPage from "./LandingPage"
 import EmailConfirmPage from "./EmailConfirmPage"
 import CreateCompetitionPage from "./CreateCompetitionPage"
 import ContestantViewCompetitionPage from "./ContestantViewCompetitionPage"
+import ContestantProblemPracticePage from "./ContestantProblemPracticePage"
+import ContestantVirtualCompetitionPracticePage from "./ContestantVirtualCompetitionPracticePage"
 
 export {
     AdminHomePage,
@@ -18,4 +20,6 @@ export {
     LandingPage,
     CreateCompetitionPage,
     ContestantViewCompetitionPage,
+    ContestantProblemPracticePage,
+    ContestantVirtualCompetitionPracticePage,
 }

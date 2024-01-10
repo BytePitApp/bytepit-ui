@@ -16,6 +16,7 @@ module.exports = {
             fontFamily: {
                 "major-mono": ["Major Mono Display"],
                 nabla: ["Nabla"],
+                graduate: ["Graduate"],
             },
             colors: {
                 primary: "#4338CA",

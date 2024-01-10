@@ -6,6 +6,7 @@ import ProblemListItem from "./ProblemListItem"
 import CompetitionCard from "./CompetitionCard"
 import ProblemSolver from "./ProblemSolver"
 import CodeEditor from "./CodeEditor"
+import Timer from "./Timer"
 
 export { 
     Navbar,
@@ -16,4 +17,5 @@ export {
     CompetitionCard,
     ProblemSolver,
     CodeEditor,
+    Timer,
 }
