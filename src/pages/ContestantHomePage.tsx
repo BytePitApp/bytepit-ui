@@ -133,7 +133,7 @@ const ContestantHomePage = () => {
             durationText = `${Math.floor(duration)} s`
         } else {
             let unitIndex = 0
-            while (duration > unitValues[unitIndex] && unitIndex <= units.length - 1) {
+            while (duration >= unitValues[unitIndex] && unitIndex <= units.length - 1) {
                 duration /= unitValues[unitIndex]
                 unitIndex++
             }
@@ -193,12 +193,12 @@ const ContestantHomePage = () => {
                     <Column 
                         field="name"
                         header="Name"
-                        bodyClassName="overflow-y-auto"
+                        bodyClassName="overflow-y-auto max-sm:min-w-[50vw]"
                     />
                     <Column 
                         field="description" 
-                        header="Description" 
-                        bodyClassName="overflow-y-auto"
+                        header="Description"
+                        bodyClassName="overflow-y-auto max-sm:min-w-[50vw]"
                     />
                     <Column
                         header="Available for"
