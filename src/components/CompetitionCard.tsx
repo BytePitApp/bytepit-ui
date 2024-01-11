@@ -1,7 +1,7 @@
 import { FaRegCalendarAlt, FaClock } from "react-icons/fa"
 import { Link } from "react-router-dom"
 
-type CardType = {
+interface CardType {
     competitionId: string,
     name: string,
     description: string,
