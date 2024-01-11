@@ -91,4 +91,22 @@ const getVirtualCompetition = async (competitionId: string) => {
     return response
 }
 
-export { createCompetition, getAllCompetitionsForOrganiser, modifyCompetition, getCompetition, getVirtualCompetition }
+const getActiveCompetitions = async () => {
+    const response = await requests(`/competitions/active`)
+    return response
+}
+
+const getAllCompetitions = async () => {
+    const response = await requests(`/competitions`)
+    return response
+}
+
+export {
+    createCompetition,
+    getAllCompetitionsForOrganiser,
+    modifyCompetition,
+    getCompetition,
+    getVirtualCompetition,
+    getActiveCompetitions,
+    getAllCompetitions,
+}
