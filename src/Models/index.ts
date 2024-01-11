@@ -11,6 +11,13 @@ import ProblemListItemProps from "./ProblemListItemProps"
 import Competition from "./Competition"
 import ModifyCompetition from "./ModifyCompetition"
 import CreateCompetition from "./CreateCompetition"
+import ProblemSolverProps from "./ProblemSolverProps"
+import CodeEditorTheme from "./CodeEditorTheme"
+import CodeEditorLanguages from "./CodeEditorLanguages"
+import CodeEditorProps from "./CodeEditorProps"
+import CreateSubmission from "./CreateSubmission"
+import SubmissionResult from "./SubmissionResult"
+import TimerProps from "./TimerProps"
 
 export {
     Role,
@@ -26,4 +33,11 @@ export {
     type Competition,
     type ModifyCompetition,
     type CreateCompetition,
+    type ProblemSolverProps,
+    CodeEditorTheme,
+    CodeEditorLanguages,
+    type CodeEditorProps,
+    type CreateSubmission,
+    type SubmissionResult,
+    type TimerProps,
 }

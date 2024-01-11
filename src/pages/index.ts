@@ -9,6 +9,9 @@ import EditProblemPage from "./EditProblemPage"
 import OrganiserProblemPage from "./OrganiserProblemPage"
 import EmailConfirmPage from "./EmailConfirmPage"
 import CreateCompetitionPage from "./CreateCompetitionPage"
+import ContestantViewCompetitionPage from "./ContestantViewCompetitionPage"
+import ContestantProblemPracticePage from "./ContestantProblemPracticePage"
+import ContestantVirtualCompetitionPracticePage from "./ContestantVirtualCompetitionPracticePage"
 
 export {
     AdminHomePage,
@@ -22,4 +25,7 @@ export {
     EditProblemPage,
     OrganiserProblemPage,
     CreateCompetitionPage,
+    ContestantViewCompetitionPage,
+    ContestantProblemPracticePage,
+    ContestantVirtualCompetitionPracticePage,
 }
