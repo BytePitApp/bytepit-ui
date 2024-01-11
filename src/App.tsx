@@ -7,7 +7,7 @@ import {
     LoginPage,
     OrganiserHomePage,
     RegisterPage,
-    CreateCompetitionPage,
+    CreateCompetitionPage, OrganiserProblemPage, CreateProblemPage, EditProblemPage,
     ContestantViewCompetitionPage,
     ContestantProblemPracticePage,
     ContestantVirtualCompetitionPracticePage,
@@ -48,6 +48,9 @@ const App = () => {
                 </Route>
                 <Route element={<ProtectedRoute allowedRoles={[Role.ORGANISER]}></ProtectedRoute>}>
                     <Route path="organiser/home" element={<OrganiserHomePage></OrganiserHomePage>} />
+                    <Route path="organiser/create-problem" element={<CreateProblemPage></CreateProblemPage>} />
+                    <Route path="organiser/edit-problem/:problem_id" element={<EditProblemPage></EditProblemPage>} />
+                    <Route path="organiser/view-problem" element={<OrganiserProblemPage></OrganiserProblemPage>} />
                     <Route path="organiser/create-competition" element={<CreateCompetitionPage></CreateCompetitionPage>} />
                     <Route path="organiser/edit-competition/:id" element={<EditCompetitionPage></EditCompetitionPage>} />
                 </Route>
