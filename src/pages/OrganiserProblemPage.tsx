@@ -7,7 +7,6 @@ const OrganiserProblemPage = () => {
     const problem = location.state.problem
     const navigate = useNavigate()
 
-
     const goToEditProblemPage = () => {
         navigate(`/organiser/edit-problem/${problem.id}`);
     }

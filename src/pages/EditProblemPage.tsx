@@ -39,17 +39,17 @@ const EditProblemPage = () => {
 		  if (problem_id) {
 			try {
 			  const response = await getProblem(problem_id)
-			  setProblem(response)
+			  setProblem(response.data)
 			  setFormData({
-				name: response.name,
-				description: response.description,
-				points: response.num_of_points,
-				runtimeLimit: response.runtime_limit,
-				exampleInput: response.example_input,
-				exampleOutput: response.example_output,
-				isPrivate: response.is_private,
-				isHidden: response.is_hidden,
-				testFiles: response.test_files,
+				name: response.data.name,
+				description: response.data.description,
+				points: response.data.num_of_points,
+				runtimeLimit: response.data.runtime_limit,
+				exampleInput: response.data.example_input,
+				exampleOutput: response.data.example_output,
+				isPrivate: response.data.is_private,
+				isHidden: response.data.is_hidden,
+				testFiles: response.data.test_files,
 			  })
 			} catch (error) {
 			  console.error('Failed to fetch problem:', error)
