@@ -86,6 +86,11 @@ const getCompetition = async (competitionId: string) => {
     return response
 }
 
+const getVirtualCompetition = async (competitionId: string) => {
+    const response = await requests(`/competitions/virtual/${competitionId}`)
+    return response
+}
+
 const getActiveCompetitions = async () => {
     const response = await requests(`/competitions/active`)
     return response
@@ -101,6 +106,7 @@ export {
     getAllCompetitionsForOrganiser,
     modifyCompetition,
     getCompetition,
+    getVirtualCompetition,
     getActiveCompetitions,
     getAllCompetitions,
 }
