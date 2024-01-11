@@ -7,6 +7,9 @@ import ViewProblemBox from "./ViewProblemBox"
 import ProblemPicker from "./ProblemPicker"
 import ProblemListItem from "./ProblemListItem"
 import CompetitionCard from "./CompetitionCard"
+import ProblemSolver from "./ProblemSolver"
+import CodeEditor from "./CodeEditor"
+import Timer from "./Timer"
 
 export { 
     Navbar,
@@ -18,4 +21,7 @@ export {
     ProblemPicker,
     ProblemListItem,
     CompetitionCard,
+    ProblemSolver,
+    CodeEditor,
+    Timer,
 }

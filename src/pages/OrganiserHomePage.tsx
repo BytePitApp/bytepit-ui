@@ -61,6 +61,12 @@ const OrganiserHomePage = () => {
         }
     }, [])
 
+    const handleScroll = (direction: number) => {
+        if (scrollContainerRef.current) {
+            scrollContainerRef.current.scrollLeft -= scrollContainerRef.current.clientWidth * direction
+        }
+    }
+
     useEffect(() => {
         fetchProblems()
         fetchCompetitions()
