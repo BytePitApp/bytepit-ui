@@ -49,11 +49,7 @@ const modifyProblem = async (problem_id: string, problem: ModifyProblem) => {
 }
 
 const getProblem = async (problem_id: string) => {
-	const response = await requests.get(`/problems/${problem_id}`, {
-		params: {
-			_: Date.now(),
-		},
-	})
+	const response = await requests.get(`/problems/${problem_id}`)
 	return response.data
 }
 
