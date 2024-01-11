@@ -14,7 +14,7 @@ import "./AdminHomePage.css"
 import { Nullable } from "primereact/ts-helpers"
 import { createEmitAndSemanticDiagnosticsBuilderProgram } from "typescript"
 
-type CompetitionDate = {
+interface CompetitionDate {
     id: string,
     name: string,
     description: string,
