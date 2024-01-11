@@ -214,7 +214,7 @@ const ContestantHomePage = () => {
                         body={startBodyTemplate}
                     />
                 </DataTable>
-                <div className="flex flex-col gap-10 items-center">
+                <div className="flex flex-col gap-10 items-center bg-graymedium py-8 w-fit place-self-center 2xl:py-16 px-16 2xl:px-24 rounded-xl 2xl:rounded-3xl border-graydark border-b-4 drop-shadow-xl">
                     <div className="flex flex-col md:flex-row gap-5 items-center">
                         <p className="text-sm lg:text-2xl">Practice published tasks in playground</p>
                         <Button
