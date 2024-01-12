@@ -7,7 +7,12 @@ import { DataTable } from "primereact/datatable"
 import { Column } from "primereact/column"
 import { Competition } from "../Models"
 import { Calendar } from "primereact/calendar"
-import { createVirtualCompetition,getAllCompetitions, getRandomVirtualCompetition } from "../services/competition.service"
+import { 
+    createVirtualCompetition,
+    getAllCompetitions,
+    getRandomVirtualCompetition,
+    getAllVirtualCompetitions,
+} from "../services/competition.service"
 import { ProgressSpinner } from "primereact/progressspinner"
 import { FaPlayCircle, FaTrophy } from "react-icons/fa";
 import "./AdminHomePage.css"
@@ -96,9 +101,18 @@ const ContestantHomePage = () => {
     const handleCreateVirtualCompetition = async (parentCompetitionId: string) => {
         try {
             setLoading(true)
+            const virtualCompetitions = await getAllVirtualCompetitions()
+            const alreadyCreated = virtualCompetitions.data.find((item: Competition) => item.parent_id === parentCompetitionId)
+            if (alreadyCreated) {
+                console.log("Already created")
+                navigate(`/contestant/virtual-competition/${alreadyCreated.id}`)
+                setLoading(false)
+                return
+            }
+            console.log("Creating virtual competition")
             const response = await createVirtualCompetition(parentCompetitionId)
-            setLoading(false)
             navigate(`/contestant/virtual-competition/${response.data}`)
+            setLoading(false)
         } catch (err: any) {
             console.log(err.response?.data?.detail ?? "Something went wrong")
         }
