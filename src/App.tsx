@@ -7,7 +7,10 @@ import {
     LoginPage,
     OrganiserHomePage,
     RegisterPage,
-    CreateCompetitionPage, OrganiserProblemPage, CreateProblemPage, EditProblemPage,
+    CreateCompetitionPage, 
+    OrganiserProblemPage, 
+    CreateProblemPage, 
+    EditProblemPage,
     ContestantViewCompetitionPage,
     ContestantProblemPracticePage,
     ContestantVirtualCompetitionPracticePage,
@@ -22,7 +25,6 @@ import "primeicons/primeicons.css"
 import "primereact/resources/primereact.css"
 import "./App.css"
 import { Role } from "./Models"
-import { Navbar } from "./components"
 import { AuthProvider } from "./context/AuthContext"
 import EditCompetitionPage from "./pages/EditCompetitionPage"
 
