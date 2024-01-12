@@ -7,12 +7,11 @@ import { DataTable } from "primereact/datatable"
 import { Column } from "primereact/column"
 import { Competition } from "../Models"
 import { Calendar } from "primereact/calendar"
-import { getActiveCompetitions, getAllCompetitions } from "../services/competition.service"
+import { createVirtualCompetition,getAllCompetitions, getRandomVirtualCompetition } from "../services/competition.service"
 import { ProgressSpinner } from "primereact/progressspinner"
 import { FaPlayCircle, FaTrophy } from "react-icons/fa";
 import "./AdminHomePage.css"
 import { Nullable } from "primereact/ts-helpers"
-import { createEmitAndSemanticDiagnosticsBuilderProgram } from "typescript"
 
 interface CompetitionDate {
     id: string,
@@ -54,7 +53,7 @@ const ContestantHomePage = () => {
                 }
             })
             setCompetitions(competitions)
-            setShownCompetitions(competitions.filter(item => 
+            setShownCompetitions(competitions.filter(item =>
                 item.start_time < new Date() && item.end_time > new Date()
             ))
             setLoading(false)
@@ -94,6 +93,29 @@ const ContestantHomePage = () => {
         setLoading(false)
     }
 
+    const handleCreateVirtualCompetition = async (parentCompetitionId: string) => {
+        try {
+            setLoading(true)
+            const response = await createVirtualCompetition(parentCompetitionId)
+            setLoading(false)
+            navigate(`/contestant/virtual-competition/${response.data}`)
+        } catch (err: any) {
+            console.log(err.response?.data?.detail ?? "Something went wrong")
+        }
+    }
+    
+    const handleRandomVirtualCompetition = async () => {
+        try {
+            setLoading(true)
+            const responseRandom = await getRandomVirtualCompetition()
+            const response = await createVirtualCompetition(responseRandom.data.id)
+            setLoading(false)
+            navigate(`/contestant/virtual-competition/${response.data}`)
+        } catch (err: any) {
+            console.log(err.response?.data?.detail ?? "Something went wrong")
+        }
+    }
+
     const renderHeader = () => {
         return (
             <div className="flex justify-between p-2 text-primary">
@@ -103,7 +125,7 @@ const ContestantHomePage = () => {
                         label="Active competitions"
                         className="shadow-darkgray drop-shadow-xl hover:scale-105
                         transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
-                        onClick={() => handleActiveCompetitions()}
+                        onClick={handleActiveCompetitions}
                     />
                     <Calendar
                         panelClassName="shadow-darkgray shadow-xl rounded-xl"
@@ -145,12 +167,12 @@ const ContestantHomePage = () => {
             <div className="min-w-[12rem]">
                 <p className="font-semibold text-base">{durationText}</p>
                 <p className="text-sm">expires: {endDateString}</p>
-                <p className="text-sm">start: {startDateString}</p>
+                <p className="text-sm">starts: {startDateString}</p>
             </div>
         )
     }
 
-    const startBodyTemplate = (rowData: any): React.ReactNode => {
+    const startBodyTemplate = (rowData: CompetitionDate): React.ReactNode => {
         const finished = rowData.end_time <= new Date()
         return (
             <div className="flex justify-center items-center">
@@ -159,6 +181,21 @@ const ContestantHomePage = () => {
                     disabled={rowData.start_time >= new Date()}
                     onClick={() => navigate(`/contestant/competition/${rowData.id}`)}
                     icon={finished ? null : <FaPlayCircle className="mr-1 transition-colors duration-150 ease-in-out" />}
+                    className="py-2 px-3 text-lg text-primary hover:text-graymedium bg-graymedium hover:bg-primary transition-colors ease-in-out duration-150"
+                />
+            </div>
+        )
+    }
+
+    const createVirtualCompetitionBodyTemplate = (rowData: CompetitionDate): React.ReactNode => {
+        const showVirtualButton = rowData.end_time <= new Date()
+        return (
+            <div className="flex justify-center items-center">
+                <Button
+                    label="Virtual"
+                    disabled={!showVirtualButton}
+                    onClick={() => handleCreateVirtualCompetition(rowData.id)}
+                    icon={<FaTrophy className="mr-1 transition-colors duration-150 ease-in-out" />}
                     className="py-2 px-3 text-lg text-primary hover:text-graymedium bg-graymedium hover:bg-primary transition-colors ease-in-out duration-150"
                 />
             </div>
@@ -177,12 +214,12 @@ const ContestantHomePage = () => {
                     paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                     currentPageReportTemplate="{first} to {last} of {totalRecords}"
                     size={"small"}
-                    emptyMessage={renderProgressSpinner()}
+                    emptyMessage={renderProgressSpinner}
                     stripedRows
                     showGridlines={true}
                     sortField="endTime" 
                     sortOrder={1}
-                    header={renderHeader()}
+                    header={renderHeader}
                     scrollable scrollHeight="100%"
                     paginatorClassName="rounded-b-xl"
                     pt={{
@@ -213,10 +250,14 @@ const ContestantHomePage = () => {
                         header="Go!"
                         body={startBodyTemplate}
                     />
+                    <Column
+                        header="Create virutal competition"
+                        body={createVirtualCompetitionBodyTemplate}
+                    />
                 </DataTable>
                 <div className="flex flex-col gap-10 items-center bg-graymedium py-8 w-fit place-self-center 2xl:py-16 px-16 2xl:px-24 rounded-xl 2xl:rounded-3xl border-graydark border-b-4 drop-shadow-xl">
                     <div className="flex flex-col md:flex-row gap-5 items-center">
-                        <p className="text-sm lg:text-2xl">Practice published tasks in playground</p>
+                        <p className="text-sm lg:text-2xl">Practice published tasks in</p>
                         <Button
                             label="Playground"
                             icon={<FaGamepad className="text-sm lg:text-3xl" />}
@@ -225,15 +266,16 @@ const ContestantHomePage = () => {
                             onClick={() => navigate("/contestant/playground")}
                         />
                     </div>
-                    <div className="flex flex-col md:flex-row gap-5 items-center">
-                        <p className="text-sm lg:text-2xl">Create your private virtual competitions</p>
+                    <div className="flex flex-col md:flex-row gap-5 items-center text-center">
+                        <p className="text-sm lg:text-2xl">Create private</p>
                         <Button
                             label="Virtual competition"
                             icon={<FaTrophy className="text-sm lg:text-2xl" />}
                             className="shadow-darkgray drop-shadow-xl hover:scale-105 flex gap-2 text-sm lg:text-2xl
                             transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
-                            onClick={() => navigate("/contestant/virtual-competition")}
+                            onClick={handleRandomVirtualCompetition}
                         />
+                        <p className="text-sm lg:text-2xl">automatically with random problems</p>
                     </div>
                 </div>
             </div>
