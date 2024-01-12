@@ -91,6 +91,11 @@ const getVirtualCompetition = async (competitionId: string) => {
     return response
 }
 
+const getAllVirtualCompetitions = async () => {
+    const response = await requests.get("/competitions/virtual")
+    return response
+}
+
 const createVirtualCompetition = async (competitionId: string) => {
     const response = await requests.post("/competitions/virtual", undefined, {
         params: { parent_competition_id: competitionId }
@@ -123,4 +128,5 @@ export {
     getAllCompetitions,
     createVirtualCompetition,
     getRandomVirtualCompetition,
+    getAllVirtualCompetitions,
 }
