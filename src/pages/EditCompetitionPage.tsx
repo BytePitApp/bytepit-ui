@@ -130,7 +130,7 @@ const EditCompetitionPage = () => {
     const formatDate = (inputedDate: Date): string => {
         const time = inputedDate.toLocaleTimeString("en-US", { hour12: false }).split(":")
         const date = inputedDate.toLocaleDateString("en-US", { hour12: false }).split("/")
-        return `${date[2]}-${date[1].padStart(2, "0")}-${date[0].padStart(2, "0")} ${time[0]}:${time[1]}:00`
+        return `${date[2]}-${date[0].padStart(2, "0")}-${date[1].padStart(2, "0")} ${time[0]}:${time[1]}:00`
     }
 
     const submitForm = async (e: FormEvent) => {
