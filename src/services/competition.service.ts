@@ -1,4 +1,4 @@
-import { ModifyCompetition, CreateCompetition } from "../Models"
+import { ModifyCompetition, CreateCompetition, Competition } from "../Models"
 import requests from "../requests"
 
 const createCompetition = async (competition: CreateCompetition) => {
@@ -77,27 +77,44 @@ const modifyCompetition = async (id: string, competition: ModifyCompetition, old
 }
 
 const getAllCompetitionsForOrganiser = async (organiserId: string | undefined) => {
-    const response = await requests(`/competitions/competitions-by-organiser/${organiserId}`)
+    const response = await requests.get(`/competitions/competitions-by-organiser/${organiserId}`)
     return response
 }
 
 const getCompetition = async (competitionId: string) => {
-    const response = await requests(`/competitions/${competitionId}`)
+    const response = await requests.get(`/competitions/${competitionId}`)
     return response
 }
 
 const getVirtualCompetition = async (competitionId: string) => {
-    const response = await requests(`/competitions/virtual/${competitionId}`)
+    const response = await requests.get(`/competitions/virtual/${competitionId}`)
+    return response
+}
+
+const getAllVirtualCompetitions = async () => {
+    const response = await requests.get("/competitions/virtual")
+    return response
+}
+
+const createVirtualCompetition = async (competitionId: string) => {
+    const response = await requests.post("/competitions/virtual", undefined, {
+        params: { parent_competition_id: competitionId },
+    })
+    return response
+}
+
+const getRandomVirtualCompetition = async () => {
+    const response = await requests.get("/competitions/random")
     return response
 }
 
 const getActiveCompetitions = async () => {
-    const response = await requests(`/competitions/active`)
+    const response = await requests.get("/competitions/active")
     return response
 }
 
 const getAllCompetitions = async () => {
-    const response = await requests(`/competitions`)
+    const response = await requests.get("/competitions")
     return response
 }
 
@@ -114,5 +131,8 @@ export {
     getVirtualCompetition,
     getActiveCompetitions,
     getAllCompetitions,
+    createVirtualCompetition,
+    getRandomVirtualCompetition,
+    getAllVirtualCompetitions,
     getCompetitionResults,
 }
