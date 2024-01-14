@@ -31,8 +31,7 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
         competitionResults?.forEach((competitionResult: CompetitionResult) => {
             const parsedResult: ParsedCompetitionResult = {
                 user_id: competitionResult.user_id,
-                user_name: competitionResult.user_name,
-                user_surname: competitionResult.user_surname,
+                username: competitionResult.username,
                 total_points: competitionResult.total_points,
             }
 
@@ -171,12 +170,12 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
         )
     }
 
-    const nameBodyTemplate = (rowData: any) => {
+    const usernameBodyTemplate = (rowData: any) => {
         return rowData.user_id === auth?.id ? (
             <div className="font-medium text-blue-900 w-full flex justify-between">
                 <div className="w-fit hover:scale-[102%] hover:text-blue-800 transition-all ease-in-out duration-150">
                     <a href={`/profiles/contestant/${rowData.user_id}`}>
-                        {rowData.user_name} {rowData.user_surname}
+                        {rowData.username}
                     </a>
                 </div>
                 <div className="bg-red-400 w-9 rounded-2xl text-center text-gray-700 text-sm flex justify-center items-center select-none">You</div>
@@ -184,7 +183,7 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
         ) : (
             <div className="font-medium text-blue-900 hover:scale-[102%] hover:text-blue-800 transition-all ease-in-out duration-150 max-w-fit">
                 <a href={`/profiles/contestant/${rowData.user_id}`}>
-                    {rowData.user_name} {rowData.user_surname}
+                    {rowData.username}
                 </a>
             </div>
         )
@@ -236,8 +235,8 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
                             className="pl-3 bg-graymedium text-[2vh]"
                             header="User"
                             headerClassName="pl-3 bg-graydark"
-                            style={{ maxWidth: "3.5rem" }}
-                            body={nameBodyTemplate}
+                            style={{ maxWidth: "2.7rem" }}
+                            body={usernameBodyTemplate}
                         />
                         {problemResultColumns}
                         <Column
