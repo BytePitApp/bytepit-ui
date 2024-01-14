@@ -187,7 +187,7 @@ const RegisterPage = () => {
                                     id="image"
                                     className="w-full text-[2vh] rounded-[1vh] file:w-1/2 block text-sm file:rounded-[1vh] file:bg-gray-300 file:hover:bg-gray-200 file:transition-all file:ease-in-out file:duration-300 file:border-none select-none file:cursor-pointer cursor-defualt file:text-gray-800 file:p-3 file:pointer-events-auto pointer-events-none bg-gray-50 text-gray-600"
                                     type="file"
-                                    onClick={(e: any) => setSelectedImage(e.target.files[0])}
+                                    onChange={(e: any) => setSelectedImage(e.target.files[0])}
                                 />
                             </div>
                         </div>
