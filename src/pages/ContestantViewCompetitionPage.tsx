@@ -4,12 +4,14 @@ import { useState, useEffect, useCallback } from "react"
 import { getCompetition } from "../services/competition.service"
 import { Competition } from "../Models"
 import { ProgressSpinner } from "primereact/progressspinner"
+import CompetitionDashboard from "./CompetitionDashboard"
 
 const ContestantViewCompetitionPage = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
     const [competition, setCompetition] = useState<Competition | undefined>(undefined)
     const [remainingTime, setRemainingTime] = useState<number | undefined>(undefined)
+    const [isCompetitionActive, setIsCompetitionActive] = useState<boolean>(false)
     const [submitCode, setSubmitCode] = useState<boolean>(false)
     const { id } = useParams<{ id: string }>()
 
@@ -28,6 +30,7 @@ const ContestantViewCompetitionPage = () => {
                 const competition = await getCompetition(id)
                 setCompetition(competition.data)
                 updateRemainingTime(competition.data.start_time, competition.data.end_time)
+                setIsCompetitionActive(new Date(competition.data.start_time) < new Date() && new Date(competition?.data.end_time) > new Date())
                 setLoading(false)
             } catch (err: any) {
                 console.log(err)
@@ -62,22 +65,13 @@ const ContestantViewCompetitionPage = () => {
                                     <div className="text-[3vh] font-semibold">{competition?.name}</div>
                                     <div className="text-sm">{competition?.description}</div>
                                 </div>
-                                {loading ? null : (
-                                    <Timer
-                                        seconds={remainingTime}
-                                        handleTimerEnd={timerEnded}
-                                    />
-                                )}
+                                {!loading && (isCompetitionActive ? <Timer seconds={remainingTime} handleTimerEnd={timerEnded} /> : <span className="text-xl font-semibold text-gray-700" >Finished</span>)}
                             </div>
-                            {competition?.start_time && competition?.end_time ? (
-                                new Date(competition?.start_time) < new Date() && new Date(competition?.end_time) > new Date() ? (
-                                    <ProblemSolver
-                                        problems={competition?.problems!!}
-                                        competitionId={competition?.id}
-                                        submitCode={submitCode}
-                                    />
-                                ) : null
-                            ) : null}
+                            {isCompetitionActive ? (
+                                <ProblemSolver problems={competition?.problems!!} competitionId={competition?.id} submitCode={submitCode} />
+                            ) : (
+                                <CompetitionDashboard competition={competition}></CompetitionDashboard>
+                            )}
                         </div>
                     </div>
                 ) : null}
