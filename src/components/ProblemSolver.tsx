@@ -55,7 +55,14 @@ const ProblemSolver: React.FC<ProblemSolverProps> = ({ problems, competitionId, 
         }
     }
 
-    const setInitialProblem = useCallback(() => {
+    const formatException = (exception: string): string => {
+        if (exception.includes("\n")) {
+            return exception.replaceAll("\n", "<br/>")
+        }
+        return exception
+    }
+
+    const init = useCallback(() => {
         if (problems) {
             setSelectedProblem(problems[0])
             const initialProblemAnswers: {
@@ -140,7 +147,20 @@ const ProblemSolver: React.FC<ProblemSolverProps> = ({ problems, competitionId, 
                     }
                 })
             } catch (err: any) {
-                console.log(err)
+                const submissionResult: SubmissionResult = {
+                    isCorrect: false,
+                    isRuntimeOk: false,
+                    hasImproved: false,
+                    incorrectOutputs: [],
+                    exception: formatException(err.response?.data?.detail ?? "Something went wrong"),
+                    points: 0,
+                }
+                setSubmissionResults((prev) => {
+                    return {
+                        ...prev,
+                        [selectedProblem.id]: submissionResult,
+                    }
+                })
             }
             setLoading(false)
         } else if (selectedProblem && problemAnswers[selectedProblem.id].language == null) {
@@ -154,50 +174,40 @@ const ProblemSolver: React.FC<ProblemSolverProps> = ({ problems, competitionId, 
     }
 
     const sendSubmissions = async () => {
-        try {
-            for (const problem of problems) {
-                const submission: CreateSubmission = {
-                    problemId: problem.id,
-                    language: problemAnswers[problem.id].language ?? CodeEditorLanguages.PYTHON,
-                    sourceCode: problemAnswers[problem.id].code === "" ? "print('')" : problemAnswers[problem.id].code,
-                    competitionId: competitionId,
-                }
+        for (const problem of problems) {
+            if (problemAnswers[problem.id].code.trim() === "" || problemAnswers[problem.id].language == null) {
+                continue
+            }
+            const submission: CreateSubmission = {
+                problemId: problem.id,
+                language: problemAnswers[problem.id].language!,
+                sourceCode: problemAnswers[problem.id].code,
+                competitionId: competitionId,
+            }
+            try {
                 await createSubmission(submission)
-            }
-            if (competitionId) {
-                for (let i = 0; i < localStorage.length; i++) {
-                    const key = localStorage.key(i)
-                    if (key?.startsWith(`${auth?.id}/${competitionId}`)) {
-                        localStorage.removeItem(key)
-                    }
+            } catch (err: any) {}
+        }
+        if (competitionId) {
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i)
+                if (key?.startsWith(`${auth?.id}/${competitionId}`)) {
+                    localStorage.removeItem(key)
                 }
             }
-            navigate("/contestant/home")
-        } catch (err: any) {
-            console.log(err)
         }
+        navigate("/contestant/home")
     }
 
     const submit = async () => {
         for (const problem of problems) {
-            if (!problemAnswers[problem.id].code) {
+            if (problemAnswers[problem.id].code.trim() !== "" && problemAnswers[problem.id].language == null) {
                 toast.current?.show({
                     severity: "warn",
                     summary: "Warning",
-                    detail: "Please answer all the questions",
+                    detail: "Please select a language",
                     life: 3000,
                 })
-                toggleModal()
-                return
-            }
-            if (!problemAnswers[problem.id].language) {
-                toast.current?.show({
-                    severity: "warn",
-                    summary: "Warning",
-                    detail: "Please select all languages",
-                    life: 3000,
-                })
-                toggleModal()
                 return
             }
         }
@@ -216,8 +226,8 @@ const ProblemSolver: React.FC<ProblemSolverProps> = ({ problems, competitionId, 
     }, [submitCode])
 
     useEffect(() => {
-        setInitialProblem()
-    }, [setInitialProblem])
+        init()
+    }, [init])
 
     const headerTemplate = () => {
         return <div className="text-3xl font-bold">Are you sure?</div>
@@ -356,7 +366,14 @@ const ProblemSolver: React.FC<ProblemSolverProps> = ({ problems, competitionId, 
                                         <div>Wrong answer!</div>
                                         <p className="pi pi-ban text-[2rem] text-red-600"></p>
                                     </div>
-                                    <div className="text-sm mt-2 mr-2">{submissionResults[selectedProblem.id]?.exception}</div>
+                                    <p
+                                        dangerouslySetInnerHTML={{
+                                            __html: formatException(
+                                                submissionResults[selectedProblem.id]?.exception ?? "Something went wrong!"
+                                            ),
+                                        }}
+                                        className="text-sm mt-2 mr-2"
+                                    />
                                 </div>
                             ) : submissionResults[selectedProblem.id]?.incorrectOutputs &&
                               submissionResults[selectedProblem.id]?.incorrectOutputs?.length! > 0 ? (
@@ -367,18 +384,30 @@ const ProblemSolver: React.FC<ProblemSolverProps> = ({ problems, competitionId, 
                                     </div>
                                     <div className="flex mt-2 flex-col gap-y-2">
                                         {submissionResults[selectedProblem.id]?.incorrectOutputs?.map((output, index) => (
-                                            <div key={index} className="text-sm">
-                                                <div className="flex flex-col gap-1">
-                                                    <div className="mx-2">
-                                                        <span className="font-bold text-[1rem]">Test case {index + 1}</span>
+                                            <div
+                                                key={index}
+                                                className="border-2 border-graymedium bg-graymedium rounded-lg p-2 flex flex-row">
+                                                <div className="lg:text-[1.5rem] w-20 flex justify-start items-end">
+                                                    <span className="border-b-2 border-gray-700">Test</span>
+                                                </div>
+                                                <div className="w-full flex flex-row">
+                                                    <div className="h-full w-[1px] bg-gray-700 mx-1"></div>
+                                                    <div className="flex h-full w-1/2 flex-col">
+                                                        <div className="font-semibold leading-4 text-[0.7rem] lg:text-[1rem]">
+                                                            Expected output
+                                                        </div>
+                                                        <div className="mx-1 h-full leading-4 text-[0.8rem] lg:text-[1rem] flex justify-start items-center overflow-x-auto">
+                                                            {output.expectedOutput}
+                                                        </div>
                                                     </div>
-                                                    <div className="mx-2 text-[0.9rem]">
-                                                        <span className="font-semibold">Expected output:</span>
-                                                        <span> {output.expectedOutput}</span>
-                                                    </div>
-                                                    <div className="mx-2 text-[0.9rem]">
-                                                        <span className="font-semibold">Your output:</span>
-                                                        <span> {output.output}</span>
+                                                    <div className="h-full w-[1px] bg-gray-700 mx-1"></div>
+                                                    <div className="flex h-full w-1/2 flex-col">
+                                                        <div className="font-semibold leading-4 text-[0.7rem] lg:text-[1rem]">
+                                                            Your output
+                                                        </div>
+                                                        <div className="mx-1 h-full leading-4 text-[0.8rem] lg:text-[1rem] flex justify-start items-center overflow-x-auto">
+                                                            {output.output}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
