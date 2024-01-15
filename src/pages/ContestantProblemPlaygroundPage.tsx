@@ -5,7 +5,7 @@ import { Navbar, ProblemSolver } from "../components"
 import { Problem } from "../Models"
 import { ProgressSpinner } from "primereact/progressspinner"
 
-const ContestantProblemPracticePage = () => {
+const ContestantProblemPlaygroundPage = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
     const [problem, setProblem] = useState<Problem | undefined>(undefined)
@@ -52,4 +52,4 @@ const ContestantProblemPracticePage = () => {
     )
 }
 
-export default ContestantProblemPracticePage
+export default ContestantProblemPlaygroundPage

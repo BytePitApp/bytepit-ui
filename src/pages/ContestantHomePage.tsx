@@ -31,41 +31,32 @@ interface CompetitionDate {
 }
 
 const ContestantHomePage = () => {
-    const dateTimeOptions: any = {
-        hour12: false,
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-    }
-    const units = ["minute", "hour", "day", "year"]
-    const unitValues = [60, 60, 24, 365]
     const [date, setDate] = useState<Nullable<Date>>(new Date())
     const [loading, setLoading] = useState(true)
-    const [competitions, setCompetitions] = useState<CompetitionDate[]>([])
-    const [shownCompetitions, setShownCompetitions] = useState<CompetitionDate[]>([])
-    const { auth } = useAuth()
+    const [competitions, setCompetitions] = useState<Competition[]>([])
+    const [shownCompetitions, setShownCompetitions] = useState<Competition[]>([])
     const navigate = useNavigate()
+    const { auth } = useAuth()
 
-    const fetchAllCompetitions = async () => {
+    const fetchAllCompetitions = useCallback(async () => {
         try {
             setLoading(true)
             const res = await getAllCompetitions()
-            const competitions: CompetitionDate[] = res.data.map((item: Competition) => {
+            setCompetitions(res.data.map((item: Competition) => {
                 return {
                     ...item,
-                    start_time: new Date(item.start_time),
-                    end_time: new Date(item.end_time),
+                    start_time_date: new Date(item.start_time),
+                    end_time_date: new Date(item.end_time),
                 }
-            })
-            setCompetitions(competitions)
-            setShownCompetitions(competitions.filter((item) => item.start_time < new Date() && item.end_time > new Date()))
+            }))
+            setShownCompetitions(competitions.filter(item => {
+                item.start_time_date!! < new Date() && item.end_time_date!! > new Date()
+            }))
             setLoading(false)
         } catch (err: any) {
             console.log(err.response?.data?.detail ?? "Something went wrong")
         }
-    }
+    }, [])
 
     useEffect(() => {
         fetchAllCompetitions()
@@ -94,13 +85,24 @@ const ContestantHomePage = () => {
         const date = new Date()
         setDate(date)
         setLoading(true)
-        setShownCompetitions(competitions.filter((item) => item.start_time < date && item.end_time > date))
+        setShownCompetitions(competitions.filter(item =>
+            item.start_time_date!! < date && item.end_time_date!! > date
+        ))
         setLoading(false)
     }
 
     const handleCreateVirtualCompetition = async (parentCompetitionId: string) => {
         try {
-            console.log("Creating virtual competition")
+            setLoading(true)
+            const virtualCompetitions = await getAllVirtualCompetitions()
+            const alreadyCreated = virtualCompetitions.data.find((item: Competition) => 
+                item.parent_id === parentCompetitionId && item.organiser_id === auth?.id
+            )
+            if (alreadyCreated) {
+                navigate(`/contestant/virtual-competition/${alreadyCreated.id}`)
+                setLoading(false)
+                return
+            }
             const response = await createVirtualCompetition(parentCompetitionId)
             navigate(`/contestant/virtual-competition/${response.data}`)
             setLoading(false)
@@ -155,8 +157,11 @@ const ContestantHomePage = () => {
         )
     }
 
-    const AvailableForBodyTemplate = (rowData: CompetitionDate): React.ReactNode => {
-        let duration = (rowData.end_time.getTime() - rowData.start_time.getTime()) / 1000
+    const AvailableForBodyTemplate = (rowData: Competition): React.ReactNode => {
+        const dateTimeOptions: any = { hour12: false, year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }
+        const units = ["minute", "hour", "day", "year"]
+        const unitValues = [60, 60, 24, 365]
+        let duration = (rowData.end_time_date!!.getTime() - rowData.start_time_date!!.getTime()) / 1000
         let durationText = ""
         if (duration <= unitValues[0]) {
             durationText = `${Math.floor(duration)} s`
@@ -168,8 +173,8 @@ const ContestantHomePage = () => {
             }
             durationText = `${Math.floor(duration)} ${units[unitIndex - 1]}(s)`
         }
-        const endDateString = rowData.end_time.toLocaleString("en-US", dateTimeOptions)
-        const startDateString = rowData.start_time.toLocaleString("en-US", dateTimeOptions)
+        const endDateString = rowData.end_time_date!!.toLocaleString("en-US", dateTimeOptions)
+        const startDateString = rowData.start_time_date!!.toLocaleString("en-US", dateTimeOptions)
         return (
             <div className="min-w-[12rem]">
                 <p className="font-semibold text-base">{durationText}</p>
@@ -179,13 +184,13 @@ const ContestantHomePage = () => {
         )
     }
 
-    const startBodyTemplate = (rowData: CompetitionDate): React.ReactNode => {
-        const finished = rowData.end_time <= new Date()
+    const startBodyTemplate = (rowData: Competition): React.ReactNode => {
+        const finished = rowData.end_time_date!! <= new Date()
         return (
             <div className="flex justify-center items-center">
                 <Button
                     label={finished ? "Results" : "Start"}
-                    disabled={rowData.start_time >= new Date()}
+                    disabled={rowData.start_time_date!! >= new Date()}
                     onClick={() => navigate(`/contestant/competition/${rowData.id}`)}
                     icon={finished ? null : <FaPlayCircle className="mr-1 transition-colors duration-150 ease-in-out" />}
                     className="py-2 px-3 text-lg text-primary hover:text-graymedium bg-graymedium hover:bg-primary transition-colors ease-in-out duration-150"
@@ -194,8 +199,8 @@ const ContestantHomePage = () => {
         )
     }
 
-    const createVirtualCompetitionBodyTemplate = (rowData: CompetitionDate): React.ReactNode => {
-        const showVirtualButton = rowData.end_time <= new Date()
+    const createVirtualCompetitionBodyTemplate = (rowData: Competition): React.ReactNode => {
+        const showVirtualButton = rowData.end_time_date!! <= new Date()
         return (
             <div className="flex justify-center items-center">
                 <Button
