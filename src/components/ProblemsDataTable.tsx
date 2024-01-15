@@ -138,7 +138,7 @@ const ProblemsDataTable = ({ problems, loading, paginatorLeftFunction }: Props) 
                 header={
                     <p className="px-2 text-2xl text-center text-primary">Problems</p>
                 }
-                paginatorClassName="rounded-b-[0.6rem]"
+                paginatorClassName="rounded-b-xl"
                 pt={{
                     root: { className: "border-graydark border-2 rounded-xl" },
                     header: { className: "rounded-t-[0.6rem]" },
