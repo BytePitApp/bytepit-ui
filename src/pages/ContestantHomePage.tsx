@@ -41,9 +41,17 @@ const ContestantHomePage = () => {
                 })
             )
             setShownCompetitions(
-                competitions.filter((item) => {
-                    item.start_time_date!! < new Date() && item.end_time_date!! > new Date()
-                })
+                res.data
+                    .map((item: Competition) => {
+                        return {
+                            ...item,
+                            start_time_date: new Date(item.start_time),
+                            end_time_date: new Date(item.end_time),
+                        }
+                    })
+                    .filter(
+                        (item: Competition) => item.start_time_date!! < new Date() && item.end_time_date!! > new Date()
+                    )
             )
             setLoading(false)
         } catch (err: any) {
@@ -59,6 +67,17 @@ const ContestantHomePage = () => {
         setDate(date)
         if (date) {
             setLoading(true)
+            setShownCompetitions(
+                competitions.filter((item) => {
+                    const startDateZero = new Date(item.start_time)
+                    startDateZero.setHours(0, 0, 0, 0)
+                    const endDateZero = new Date(item.end_time)
+                    endDateZero.setHours(0, 0, 0, 0)
+                    if (startDateZero <= date && endDateZero >= date) {
+                        return { item }
+                    }
+                })
+            )
             setShownCompetitions(
                 competitions.filter((item) => {
                     const startDateZero = new Date(item.start_time)
