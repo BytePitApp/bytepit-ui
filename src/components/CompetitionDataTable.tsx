@@ -53,7 +53,7 @@ const CompetitionDataTable = ({ competitions, loading, paginatorLeftFunction }: 
     const textBodyTemplate = (text: string): React.ReactNode => {
         return (
             <div onMouseEnter={(e) => {setOverlayText(text); opRef.current?.show(e, null)}}
-                onMouseLeave={(e) => opRef.current?.toggle(e)}>
+                onMouseLeave={() => opRef.current?.hide()}>
                 <p className="line-clamp-2" onMouseEnter={(e) => {setOverlayText(text); opRef.current?.show(e, null)}}>
                     {text}
                 </p>
@@ -96,7 +96,7 @@ const CompetitionDataTable = ({ competitions, loading, paginatorLeftFunction }: 
     return (
         <>
             <OverlayPanel 
-                className="max-w-[40%] bg-graymedium shadow-lg shadow-black/50"
+                className="text-sm lg:text-base max-w-[70%] xl:max-w-[40%] bg-graymedium shadow-lg shadow-black/50"
                 ref={opRef}>
                 {overlayText}
             </OverlayPanel>
@@ -117,7 +117,7 @@ const CompetitionDataTable = ({ competitions, loading, paginatorLeftFunction }: 
                 stripedRows
                 emptyMessage={renderProgressSpinner()}
                 header={ <p className="px-2 text-2xl text-center text-primary">Competitions</p> }
-                paginatorClassName="rounded-b-[0.6rem]"
+                paginatorClassName="rounded-b-xl"
                 pt={{
                     root: { className: "border-graydark border-2 rounded-xl" },
                     header: { className: "rounded-t-[0.6rem]" },

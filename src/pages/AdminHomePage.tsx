@@ -128,7 +128,7 @@ const AdminHomePage = () => {
         <div className="bg-form bg-cover min-h-screen">
             <Navbar />
             <div className="p-[5%]">
-                <div className="grid grid-flow-col gap-20 transition-colors ease-in-out duration-300 mb-10">
+                <div className="grid grid-flow-row lg:grid-flow-col gap-4 lg:gap-20 transition-colors ease-in-out duration-300 mb-4 lg:mb-10">
                     <Button
                         className={`border-2 border-primary hover:bg-primarylight 
                             ${selectedView === AdminViewEnum.USERS
