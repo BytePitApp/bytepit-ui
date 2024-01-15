@@ -18,6 +18,8 @@ import CodeEditorProps from "./CodeEditorProps"
 import CreateSubmission from "./CreateSubmission"
 import SubmissionResult from "./SubmissionResult"
 import TimerProps from "./TimerProps"
+import User from "./User"
+import AdminViewEnum from "./AdminViewEnum"
 
 export {
     Role,
@@ -40,4 +42,6 @@ export {
     type CreateSubmission,
     type SubmissionResult,
     type TimerProps,
+    type User,
+    AdminViewEnum,
 }

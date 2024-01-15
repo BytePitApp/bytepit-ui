@@ -1,24 +1,19 @@
 import { Navbar } from "../components"
-import { DataTable } from "primereact/datatable"
-import { Column } from "primereact/column"
 import { useCallback, useEffect, useState } from "react"
 import { Button } from "primereact/button"
-import { FilterMatchMode } from "primereact/api"
-import { TriStateCheckbox } from "primereact/tristatecheckbox"
-import { classNames } from "primereact/utils"
-import { Dropdown } from "primereact/dropdown"
-import { Avatar } from "primereact/avatar"
-import { ProgressSpinner } from "primereact/progressspinner"
-import "./AdminHomePage.css"
 import { getAllUsers, confirmOrganiser, changeUserRole } from "../services/admin.service"
+import { Competition, Problem, User, AdminViewEnum } from "../Models"
+import { getAllProblems } from "../services/problem.service"
+import { getAllCompetitions } from "../services/competition.service"
+import { ProblemsDataTable, CompetitionDataTable, UsersDataTable } from "../components"
+import "./AdminHomePage.css"
 
 const AdminHomePage = () => {
+    const [selectedView, setSelectedView] = useState<AdminViewEnum>(AdminViewEnum.USERS)
     const [loading, setLoading] = useState(true)
-    const [error, setError] = useState("")
-    const [users, setUsers] = useState<any>([])
-    const filters = {
-        approved_by_admin: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    }
+    const [users, setUsers] = useState<User[]>([])
+    const [competitions, setCompetitions] = useState<Competition[]>([])
+    const [problems, setProblems] = useState<Problem[]>([])
 
     const fetchUsers = useCallback(async () => {
         try {
@@ -27,8 +22,83 @@ const AdminHomePage = () => {
             setUsers(response.data)
             setLoading(false)
         } catch (err: any) {
-            setError(err.response?.data?.detail ?? "Something went wrong")
+            console.log(err.response?.data?.detail ?? "Something went wrong")
         }
+    }, [])
+
+    const fetchProblems = useCallback(async () => {
+        try {
+            setLoading(true)
+            const response = await getAllProblems()
+            setProblems(response.data.map((item: Problem) => {
+                const organiser = users.find(user => user.id === item.organiser_id)
+                return {
+                    ...item,
+                    organiser_username: organiser?.username,
+                    organiser_image: organiser?.image || undefined,
+                    created_on_date: new Date(item.created_on),
+                }
+            }))
+            setLoading(false)
+        } catch (err: any) {
+            console.log(err.response?.data?.detail ?? "Something went wrong")
+        }
+    }, [])
+
+    const fetchCompetitions = useCallback(async () => {
+        try {
+            setLoading(true)
+            const response = await getAllCompetitions()
+            setCompetitions(response.data.map((item: Competition) => {
+                const organiser = users.find(user => user.id === item.organiser_id)
+                return {
+                    ...item,
+                    organiser_username: organiser?.username,
+                    organiser_image: organiser?.image || undefined,
+                    start_time_date: new Date(item.start_time),
+                    end_time_date: new Date(item.end_time),
+                }
+            }))
+            setLoading(false)
+        } catch (err: any) {
+            console.log(err.response?.data?.detail ?? "Something went wrong")
+        }
+    }, [])
+
+    const fetchData = useCallback(async () => {
+        try {
+            setLoading(true)
+            const usersResponse = await getAllUsers()
+            setUsers(usersResponse.data)
+            const competitionsResponse = await getAllCompetitions()
+            setCompetitions(competitionsResponse.data.map((item: Competition) => {
+                const organiser = usersResponse.data.find((user: User) => user.id === item.organiser_id)
+                return {
+                    ...item,
+                    organiser_username: organiser?.username,
+                    organiser_image: organiser?.image || undefined,
+                    start_time_date: new Date(item.start_time),
+                    end_time_date: new Date(item.end_time),
+                }
+            }))
+            const problemsResponse = await getAllProblems()
+            setProblems(problemsResponse.data.map((item: Problem) => {
+                const organiser = usersResponse.data.find((user: User) => user.id === item.organiser_id)
+                return {
+                    ...item,
+                    organiser_username: organiser?.username,
+                    organiser_image: organiser?.image || undefined,
+                    created_on_date: new Date(item.created_on),
+                }
+            }))
+            setLoading(false)
+        } catch (err: any) {
+            console.log(err.response?.data?.detail ?? "Something went wrong")
+        }
+    }, [])
+
+    useEffect(() => {
+        fetchData()
     }, [])
 
     const updateOrganiser = useCallback(async (username: string) => {
@@ -37,12 +107,8 @@ const AdminHomePage = () => {
             const response = await getAllUsers()
             setUsers(response.data)
         } catch (err: any) {
-            setError(err.response?.data?.detail ?? "Something went wrong")
+            console.log(err.response?.data?.detail ?? "Something went wrong")
         }
-    }, [])
-
-    useEffect(() => {
-        fetchUsers()
     }, [])
 
     const changeUserRoleHandler = useCallback(async (username: string, newRole: string) => {
@@ -50,211 +116,64 @@ const AdminHomePage = () => {
             await changeUserRole(username, newRole)
             fetchUsers()
         } catch (err: any) {
-            setError(err.response?.data?.detail ?? "Something went wrong")
+            console.log(err.response?.data?.detail ?? "Something went wrong")
         }
     }, [])
-
-    const approvedFilterTemplate = (options: any) => {
-        return (
-            <div className="flex align-items-center gap-2">
-                <label htmlFor="approved-filter" className="font-bold">
-                    Approved
-                </label>
-                <TriStateCheckbox
-                    id="approved-filter"
-                    value={options.value}
-                    onChange={(e) => options.filterCallback(e.value)}
-                />
-            </div>
-        )
-    }
-    const approvedBodyTemplate = (rowData: any) => {
-        return (
-            <i
-                className={classNames("pi", {
-                    "true-icon pi-check-circle text-green-500": rowData.approved_by_admin,
-                    "false-icon pi-times-circle text-red-400": !rowData.approved_by_admin,
-                })}
-            ></i>
-        )
-    }
-
-    const verifiedBodyTemplate = (rowData: any) => {
-        return (
-            <i
-                className={classNames("pi", {
-                    "true-icon pi-check-circle text-green-500": rowData.is_verified,
-                    "false-icon pi-times-circle text-red-400": !rowData.is_verified,
-                })}
-            ></i>
-        )
-    }
-
-    const approveButtonBodyTemplate = (rowData: any): React.ReactNode => {
-        if (rowData.approved_by_admin) {
-            return (
-                <Button
-                    type="button"
-                    icon="pi pi-check"
-                    className="p-button-success p-0.5 bg-green-200 border-green-200"
-                    disabled
-                />
-            )
-        } else {
-            return (
-                <Button
-                    type="button"
-                    icon="pi pi-check"
-                    className="p-button-success p-0.5 hover:scale-[103%] transition-all ease-in-out duration-300"
-                    onClick={() => {
-                        updateOrganiser(rowData.username)
-                    }}
-                />
-            )
-        }
-    }
-
-    const imageBodyTemplate = (rowData: any): React.ReactNode => {
-        if (rowData.image) {
-            return (
-                <div className="flex flex-col items-center">
-                    <Avatar
-                        className="transition-color ease-in-out duration-300 cursor-pointer hover:scale-105"
-                        image={`data:image/jpeg;base64,${rowData.image}`}
-                        size="normal"
-                        pt={{ image: { className: "rounded-lg object-cover" } }}
-                    />
-                </div>
-            )
-        } else {
-            return (
-                <div className="flex flex-col items-center">
-                    <Avatar
-                        className="bg-secondary text-white hover:scale-105 transition-color ease-in-out duration-300 cursor-pointer"
-                        icon="pi pi-user"
-                        size="normal"
-                    />
-                </div>
-            )
-        }
-    }
-
-    const roleBodyTemplate = (rowData: any): React.ReactNode => {
-        const roles = [
-            { label: "Organiser", value: "organiser" },
-            { label: "Admin", value: "admin" },
-            { label: "Contestant", value: "contestant" },
-        ]
-
-        return (
-            <Dropdown
-                className="h-7 w-full"
-                value={rowData.role}
-                options={roles}
-                onChange={(e) => changeUserRoleHandler(rowData.username, e.value)}
-                pt={{ input: { className: "text-xs p-1.5" }, list: { className: "text-xs" } }}
-            />
-        )
-    }
-
-    const renderHeader = () => {
-        return (
-            <div className="flex justify-content-between px-2">
-                <h2 className="text-2xl text-primary">Users List</h2>
-            </div>
-        )
-    }
-
-    const renderProgressSpinner = () => {
-        return loading ? (
-            <div className="flex justify-center items-center h-56">
-                <ProgressSpinner style={{ width: "50px", height: "50px" }} fill="#dee2e6" strokeWidth="7" />
-            </div>
-        ) : (
-            "No users found."
-        )
-    }
-
-
-    const header = renderHeader()
-    const paginatorLeft = <Button type="button" icon="pi pi-refresh" text onClick={fetchUsers} />
-    const paginatorRight = <Button type="button" className="hidden" />
-    const progressSpinner = renderProgressSpinner()
 
     return (
         <div className="bg-form bg-cover min-h-screen">
             <Navbar />
-            <DataTable
-                className="mt-[5%] mx-[5%] text-[2vh]"
-                value={users}
-                paginator
-                rows={10}
-                size={"small"}
-                paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-                currentPageReportTemplate="{first} to {last} of {totalRecords}"
-                paginatorLeft={paginatorLeft}
-                paginatorRight={paginatorRight}
-                rowsPerPageOptions={[5, 10, 25, 50]}
-                tableStyle={{ minWidth: "50rem" }}
-                filters={filters}
-                filterDisplay="menu"
-                showGridlines={true}
-                stripedRows
-                sortField="name"
-                sortOrder={1}
-                emptyMessage={progressSpinner}
-                header={header}
-                paginatorClassName="rounded-b-[0.6rem] border-graydark"
-                pt={{
-                    root: { className: "border-graydark border-2 rounded-t-xl rounded-b-xl" },
-                    header: { className: "rounded-t-[0.6rem]" },
-                    rowGroupHeader: { className: "text-xs" },
-                    // +: { className: "p-0" },
-                }}
-                cellClassName={(data) => "p-1"}
-            >
-                <Column
-                    field="image"
-                    headerClassName="centered-column-header text-sm"
-                    body={imageBodyTemplate}
-                    style={{ maxWidth: "2.5rem" }}
-                ></Column>
-                <Column field="username" sortable header="Username" headerClassName="text-sm"></Column>
-                <Column field="name" sortable header="Name" headerClassName="text-sm"></Column>
-                <Column field="surname" sortable header="Surname" headerClassName="text-sm"></Column>
-                <Column field="email" sortable header="Email" headerClassName="text-sm"></Column>
-                <Column
-                    field="is_verified"
-                    header="Verified"
-                    body={verifiedBodyTemplate}
-                    style={{ maxWidth: "4rem", textAlign: "center" }}
-                    headerClassName="centered-column-header text-sm"
-                ></Column>
-                <Column
-                    field="role"
-                    header="Role"
-                    dataType="boolean"
-                    body={roleBodyTemplate}
-                    style={{ maxWidth: "8rem" }}
-                ></Column>
-                <Column
-                    field="approved_by_admin"
-                    header="Approved"
-                    filter
-                    body={approvedBodyTemplate}
-                    filterElement={approvedFilterTemplate}
-                    style={{ maxWidth: "5.5rem", textAlign: "center" }}
-                    showFilterMatchModes={false}
-                    headerClassName="centered-column-header text-sm"
-                ></Column>
-                <Column
-                    field="approve"
-                    header="Approve"
-                    body={approveButtonBodyTemplate}
-                    style={{ textAlign: "center", maxWidth: "5rem" }}
-                    headerClassName="centered-column-header text-sm"
-                ></Column>
-            </DataTable>
+            <div className="p-[5%]">
+                <div className="grid grid-flow-row lg:grid-flow-col gap-4 lg:gap-20 transition-colors ease-in-out duration-300 mb-4 lg:mb-10">
+                    <Button
+                        className={`border-2 border-primary hover:bg-primarylight 
+                            ${selectedView === AdminViewEnum.USERS
+                                ? "bg-primary"
+                                : "bg-transparent text-primary hover:text-white"}`}
+                        label="Users"
+                        onClick={() => setSelectedView(AdminViewEnum.USERS)}
+                    />
+                    <Button
+                        className={`border-2 border-primary hover:bg-primarylight
+                            ${selectedView === AdminViewEnum.COMPETITIONS
+                                ? "bg-primary"
+                                : "bg-transparent text-primary hover:text-white"}`}
+                        label="Competitions"
+                        onClick={() => setSelectedView(AdminViewEnum.COMPETITIONS)}
+                    />
+                    <Button
+                        className={`border-2 border-primary hover:bg-primarylight
+                            ${selectedView === AdminViewEnum.PROBLEMS
+                                ? "bg-primary"
+                                : "bg-transparent text-primary hover:text-white"}`}
+                        label="Problems"
+                        onClick={() => setSelectedView(AdminViewEnum.PROBLEMS)}
+                    />
+                </div>
+                {selectedView === AdminViewEnum.USERS &&
+                    <UsersDataTable
+                        users={users}
+                        loading={loading}
+                        paginatorLeftFunction={fetchUsers}
+                        changeUserRoleHandler={changeUserRoleHandler}
+                        updateOrganiser={updateOrganiser}
+                    />
+                }
+                {selectedView === AdminViewEnum.COMPETITIONS &&
+                    <CompetitionDataTable 
+                        competitions={competitions}
+                        loading={loading}
+                        paginatorLeftFunction={fetchCompetitions}
+                    />
+                }
+                {selectedView === AdminViewEnum.PROBLEMS &&
+                    <ProblemsDataTable 
+                        problems={problems}
+                        loading={loading}
+                        paginatorLeftFunction={fetchProblems}
+                    />
+                }
+            </div>
         </div>
     )
 }
