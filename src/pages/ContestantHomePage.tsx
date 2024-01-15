@@ -7,26 +7,27 @@ import { DataTable } from "primereact/datatable"
 import { Column } from "primereact/column"
 import { Competition } from "../Models"
 import { Calendar } from "primereact/calendar"
-import { 
+import {
     createVirtualCompetition,
     getAllCompetitions,
     getRandomVirtualCompetition,
     getAllVirtualCompetitions,
 } from "../services/competition.service"
 import { ProgressSpinner } from "primereact/progressspinner"
-import { FaPlayCircle, FaTrophy } from "react-icons/fa";
+import { FaPlayCircle, FaTrophy } from "react-icons/fa"
 import "./AdminHomePage.css"
 import { Nullable } from "primereact/ts-helpers"
+import useAuth from "../hooks/useAuth"
 
 interface CompetitionDate {
-    id: string,
-    name: string,
-    description: string,
-    start_time: Date,
-    end_time: Date,
-    parent_id: string,
-    problems: any[],
-    trophies?: any[],
+    id: string
+    name: string
+    description: string
+    start_time: Date
+    end_time: Date
+    parent_id: string
+    problems: any[]
+    trophies?: any[]
 }
 
 const ContestantHomePage = () => {
@@ -44,8 +45,9 @@ const ContestantHomePage = () => {
     const [loading, setLoading] = useState(true)
     const [competitions, setCompetitions] = useState<CompetitionDate[]>([])
     const [shownCompetitions, setShownCompetitions] = useState<CompetitionDate[]>([])
+    const { auth } = useAuth()
     const navigate = useNavigate()
-    
+
     const fetchAllCompetitions = async () => {
         try {
             setLoading(true)
@@ -58,9 +60,7 @@ const ContestantHomePage = () => {
                 }
             })
             setCompetitions(competitions)
-            setShownCompetitions(competitions.filter(item =>
-                item.start_time < new Date() && item.end_time > new Date()
-            ))
+            setShownCompetitions(competitions.filter((item) => item.start_time < new Date() && item.end_time > new Date()))
             setLoading(false)
         } catch (err: any) {
             console.log(err.response?.data?.detail ?? "Something went wrong")
@@ -71,44 +71,35 @@ const ContestantHomePage = () => {
         fetchAllCompetitions()
     }, [])
 
-    const handleDateChange = (date:  Nullable<Date>) => {
+    const handleDateChange = (date: Nullable<Date>) => {
         setDate(date)
         if (date) {
             setLoading(true)
-            setShownCompetitions(competitions.filter(item => {
-                const startDateZero = new Date(item.start_time)
-                startDateZero.setHours(0, 0, 0, 0)
-                const endDateZero = new Date(item.end_time)
-                endDateZero.setHours(0, 0, 0, 0)
-                if (startDateZero <= date && endDateZero >= date) {
-                    return { item }
-                }
-            }))
+            setShownCompetitions(
+                competitions.filter((item) => {
+                    const startDateZero = new Date(item.start_time)
+                    startDateZero.setHours(0, 0, 0, 0)
+                    const endDateZero = new Date(item.end_time)
+                    endDateZero.setHours(0, 0, 0, 0)
+                    if (startDateZero <= date && endDateZero >= date) {
+                        return { item }
+                    }
+                })
+            )
             setLoading(false)
         }
     }
-    
+
     const handleActiveCompetitions = () => {
         const date = new Date()
         setDate(date)
         setLoading(true)
-        setShownCompetitions(competitions.filter(item => 
-            item.start_time < date && item.end_time > date
-        ))
+        setShownCompetitions(competitions.filter((item) => item.start_time < date && item.end_time > date))
         setLoading(false)
     }
 
     const handleCreateVirtualCompetition = async (parentCompetitionId: string) => {
         try {
-            setLoading(true)
-            const virtualCompetitions = await getAllVirtualCompetitions()
-            const alreadyCreated = virtualCompetitions.data.find((item: Competition) => item.parent_id === parentCompetitionId)
-            if (alreadyCreated) {
-                console.log("Already created")
-                navigate(`/contestant/virtual-competition/${alreadyCreated.id}`)
-                setLoading(false)
-                return
-            }
             console.log("Creating virtual competition")
             const response = await createVirtualCompetition(parentCompetitionId)
             navigate(`/contestant/virtual-competition/${response.data}`)
@@ -117,7 +108,7 @@ const ContestantHomePage = () => {
             console.log(err.response?.data?.detail ?? "Something went wrong")
         }
     }
-    
+
     const handleRandomVirtualCompetition = async () => {
         try {
             setLoading(true)
@@ -159,7 +150,9 @@ const ContestantHomePage = () => {
             <div className="flex justify-center items-center h-56">
                 <ProgressSpinner style={{ width: "50px", height: "50px" }} fill="#dee2e6" strokeWidth="7" />
             </div>
-        ) : ( "No active competitions found." )
+        ) : (
+            "No active competitions found."
+        )
     }
 
     const AvailableForBodyTemplate = (rowData: CompetitionDate): React.ReactNode => {
@@ -219,7 +212,7 @@ const ContestantHomePage = () => {
     return (
         <div className="bg-form bg-cover min-h-screen">
             <Navbar />
-            <div className="grow p-[5%] flex flex-col gap-y-20">                
+            <div className="grow p-[5%] flex flex-col gap-y-20">
                 <DataTable
                     value={shownCompetitions}
                     paginator
@@ -231,43 +224,27 @@ const ContestantHomePage = () => {
                     emptyMessage={renderProgressSpinner}
                     stripedRows
                     showGridlines={true}
-                    sortField="endTime" 
+                    sortField="endTime"
                     sortOrder={1}
                     header={renderHeader}
-                    scrollable scrollHeight="100%"
+                    scrollable
+                    scrollHeight="100%"
                     paginatorClassName="rounded-b-xl"
                     pt={{
                         root: { className: "border-graydark border-2 rounded-xl shadow-xl shadow-darkgray" },
                         header: { className: "rounded-t-xl" },
                     }}
                     className="text-sm">
-                    <Column 
-                        field="name"
-                        header="Name"
-                        bodyClassName="overflow-y-auto max-sm:min-w-[50vw]"
-                    />
-                    <Column 
-                        field="description" 
-                        header="Description"
-                        bodyClassName="overflow-y-auto max-sm:min-w-[50vw]"
-                    />
-                    <Column
-                        header="Available for"
-                        body={AvailableForBodyTemplate}
-                    />
+                    <Column field="name" header="Name" bodyClassName="overflow-y-auto max-sm:min-w-[50vw]" />
+                    <Column field="description" header="Description" bodyClassName="overflow-y-auto max-sm:min-w-[50vw]" />
+                    <Column header="Available for" body={AvailableForBodyTemplate} />
                     <Column
                         header="problems"
                         bodyClassName="text-center text-xl font-semibold"
                         body={(rowData: any) => rowData.problems.length}
                     />
-                    <Column
-                        header="Go!"
-                        body={startBodyTemplate}
-                    />
-                    <Column
-                        header="Create virutal competition"
-                        body={createVirtualCompetitionBodyTemplate}
-                    />
+                    <Column header="Go!" body={startBodyTemplate} />
+                    <Column header="Create virutal competition" body={createVirtualCompetitionBodyTemplate} />
                 </DataTable>
                 <div className="flex flex-col gap-10 items-center bg-graymedium py-8 w-fit place-self-center 2xl:py-16 px-16 2xl:px-24 rounded-xl 2xl:rounded-3xl border-graydark border-b-4 drop-shadow-xl">
                     <div className="flex flex-col md:flex-row gap-5 items-center">
