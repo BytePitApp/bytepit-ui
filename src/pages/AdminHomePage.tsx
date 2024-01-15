@@ -68,10 +68,8 @@ const AdminHomePage = () => {
     const fetchData = useCallback(async () => {
         try {
             setLoading(true)
-            
             const usersResponse = await getAllUsers()
             setUsers(usersResponse.data)
-
             const competitionsResponse = await getAllCompetitions()
             setCompetitions(competitionsResponse.data.map((item: Competition) => {
                 const organiser = usersResponse.data.find((user: User) => user.id === item.organiser_id)
@@ -83,7 +81,6 @@ const AdminHomePage = () => {
                     end_time_date: new Date(item.end_time),
                 }
             }))
-
             const problemsResponse = await getAllProblems()
             setProblems(problemsResponse.data.map((item: Problem) => {
                 const organiser = usersResponse.data.find((user: User) => user.id === item.organiser_id)
@@ -94,7 +91,6 @@ const AdminHomePage = () => {
                     created_on_date: new Date(item.created_on),
                 }
             }))
-
             setLoading(false)
         } catch (err: any) {
             console.log(err.response?.data?.detail ?? "Something went wrong")
