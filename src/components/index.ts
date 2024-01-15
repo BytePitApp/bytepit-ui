@@ -10,6 +10,9 @@ import CompetitionCard from "./CompetitionCard"
 import ProblemSolver from "./ProblemSolver"
 import CodeEditor from "./CodeEditor"
 import Timer from "./Timer"
+import UsersDataTable from "./UsersDataTable"
+import CompetitionDataTable from "./CompetitionDataTable"
+import ProblemsDataTable from "./ProblemsDataTable"
 
 export { 
     Navbar,
@@ -24,4 +27,7 @@ export {
     ProblemSolver,
     CodeEditor,
     Timer,
+    UsersDataTable,
+    CompetitionDataTable,
+    ProblemsDataTable,
 }
