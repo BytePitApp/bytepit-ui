@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { ProgressSpinner } from "primereact/progressspinner"
 import { getCompetitionResults } from "../services/competition.service"
-import { Column } from "primereact/column"
+import { Column, ColumnFilterClearTemplateOptions } from "primereact/column"
 import { classNames } from "primereact/utils"
 import ProblemResult from "../Models/ProblemResult"
 import CompetitionResult from "../Models/CompetitionResult"
@@ -28,35 +28,58 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
     const parseCompetitionResults = useCallback(async () => {
         const parsedCompetitionResults: ParsedCompetitionResult[] = []
 
+        const problem_ids = competition?.problems.reduce((acc, problem, index) => {
+            acc[index] = problem.id
+            return acc
+        }, [] as string[])
+
         competitionResults?.forEach((competitionResult: CompetitionResult) => {
             const parsedResult: ParsedCompetitionResult = {
                 user_id: competitionResult.user_id,
                 username: competitionResult.username,
                 total_points: competitionResult.total_points,
+                rank_in_competition: competitionResult.rank_in_competition,
             }
 
-            competitionResult.problem_results.forEach((problemResult: ProblemResult, index: number) => {
-                const numOfPointsKey = `num_of_points${index + 1}`
-                const problemResultIdKey = `problem_result_id${index + 1}`
-                parsedResult[numOfPointsKey] = problemResult.num_of_points
-                parsedResult[problemResultIdKey] = problemResult.id
+            competitionResult.problem_results.forEach((problemResult: ProblemResult) => {
+                const problemIndex = problem_ids.indexOf(problemResult.problem_id)
+
+                if (problemIndex !== -1) {
+                    const numOfPointsKey = `num_of_points${problemIndex + 1}`
+                    const maxNumOfPointsKey = `max_num_of_points${problemIndex + 1}`
+                    const problemResultIdKey = `problem_result_id${problemIndex + 1}`
+                    parsedResult[numOfPointsKey] = problemResult.num_of_points
+                    parsedResult[maxNumOfPointsKey] = problemResult.max_num_of_points
+                    parsedResult[problemResultIdKey] = problemResult.id
+                }
             })
+
+            for (let i = 0; i < numOfProblemResults; i++) {
+                const numOfPointsKey = `num_of_points${i + 1}`
+                const maxNumOfPointsKey = `max_num_of_points${i + 1}`
+                const problemResultIdKey = `problem_result_id${i + 1}`
+                if (!parsedResult[numOfPointsKey] && parsedResult[numOfPointsKey] !== 0) {
+                    parsedResult[numOfPointsKey] = -1
+                    parsedResult[maxNumOfPointsKey] = -1
+                    parsedResult[problemResultIdKey] = "null"
+                }
+            }
 
             parsedCompetitionResults.push(parsedResult)
         })
-
+        // console.log(parsedCompetitionResults)
         setParsedCompetitionResults(parsedCompetitionResults)
-    }, [competitionResults])
+    }, [competitionResults, competition])
 
     useEffect(() => {
         parseCompetitionResults()
-        console.log(parsedCompetitionResults)
     }, [parseCompetitionResults])
 
     const getCompetitionResultsData = useCallback(async () => {
         try {
             const competitionResults = await getCompetitionResults(id ?? "")
             setCompetitionResults(competitionResults.data)
+            console.log(competitionResults.data)
             setLoading(false)
             setNumOfProblemResults(competitionResults.data[0].problem_results.length)
             parseCompetitionResults()
@@ -118,28 +141,28 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
             columns.push(
                 <Column
                     className="bg-purple-100 text-[2vh]"
-                    key={`problem_result_id${i}`}
-                    field={`problem_result_id${i}`}
-                    header={`${i}. Problem`}
-                    style={{ maxWidth: "2rem", textAlign: "center" }}
-                    headerClassName="centered-column-header bg-purple-200 text-[2vh]"
-                    body={(rowData) => (
-                        <Button
-                            className="p-button-rounded p-button-text"
-                            size="small"
-                            label="Solution"
-                            icon="pi pi-external-link"
-                            onClick={() => openDialog(rowData[`problem_result_id${i}`])}
-                        />
-                    )}
-                />,
-                <Column
-                    className="bg-purple-100"
+                    sortable
                     key={`num_of_points${i}`}
                     field={`num_of_points${i}`}
-                    header="Points"
+                    header={`${i}. Problem`}
+                    style={{ maxWidth: "0.5rem", textAlign: "center" }}
                     headerClassName="centered-column-header bg-purple-200 text-[2vh]"
-                    style={{ maxWidth: "1.4rem", textAlign: "center" }}
+                    body={(rowData) =>
+                        rowData[`problem_result_id${i}`] !== "null" ? (
+                            <div className="w-full flex justify-center items-center relative">
+                                <span className="text-[1.8vh] font-medium w-full">
+                                    {rowData[`num_of_points${i}`]}/{rowData[`max_num_of_points${i}`]}
+                                </span>
+                                <Button
+                                    className="p-button-rounded p-button-text rounded-xl w-[1.5rem] h-[1.5rem] absolute right-0"
+                                    icon="pi pi-external-link text-xs"
+                                    onClick={() => (rowData[`problem_result_id${i}`] ? openDialog(rowData[`problem_result_id${i}`]) : null)}
+                                />
+                            </div>
+                        ) : (
+                            <i className="pi false-icon pi-times-circle text-red-400" />
+                        )
+                    }
                 />
             )
         }
@@ -151,20 +174,22 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
         return (
             <Column
                 className={"bg-graydark"}
-                key="row_number"
+                field="rank_in_competition"
                 header="#"
-                body={(rowData, { rowIndex }) =>
-                    hasTrophies && rowIndex < 3 ? (
+                body={(rowData) =>
+                    hasTrophies && rowData.rank_in_competition <= 3 ? (
                         <img
-                            src={`data:image/png;base64,${(competition?.trophies as any[])[rowIndex]?.icon?.toString("base64")}`}
-                            alt={`Trophy ${rowIndex + 1}`}
+                            src={`data:image/png;base64,${(competition?.trophies as any[])[rowData.rank_in_competition - 1]?.icon?.toString(
+                                "base64"
+                            )}`}
+                            alt={`Trophy ${rowData.rank_in_competition - 1}`}
                             style={{ maxWidth: "1.5rem", display: "block", margin: "auto" }}
                         />
                     ) : (
-                        rowIndex + 1 + "."
+                        rowData.rank_in_competition + "."
                     )
                 }
-                style={{ maxWidth: "1.5rem", textAlign: "center" }}
+                style={{ maxWidth: "1rem", textAlign: "center" }}
                 headerClassName={"centered-column-header bg-graydark"}
             />
         )
@@ -172,19 +197,17 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
 
     const usernameBodyTemplate = (rowData: any) => {
         return rowData.user_id === auth?.id ? (
-            <div className="font-medium text-blue-900 w-full flex justify-between">
+            <div className="font-medium text-blue-900 w-full flex gap-2">
                 <div className="w-fit hover:scale-[102%] hover:text-blue-800 transition-all ease-in-out duration-150">
-                    <a href={`/profiles/contestant/${rowData.user_id}`}>
-                        {rowData.username}
-                    </a>
+                    <a href={`/profiles/contestant/${rowData.user_id}`}>{rowData.username}</a>
                 </div>
-                <div className="bg-red-400 w-9 rounded-2xl text-center text-gray-700 text-sm flex justify-center items-center select-none">You</div>
+                <div className="bg-primary w-9 rounded-2xl text-center text-white text-sm font-normal flex justify-center items-center select-none">
+                    You
+                </div>
             </div>
         ) : (
             <div className="font-medium text-blue-900 hover:scale-[102%] hover:text-blue-800 transition-all ease-in-out duration-150 max-w-fit">
-                <a href={`/profiles/contestant/${rowData.user_id}`}>
-                    {rowData.username}
-                </a>
+                <a href={`/profiles/contestant/${rowData.user_id}`}>{rowData.username}</a>
             </div>
         )
     }
@@ -217,11 +240,11 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
                         rowsPerPageOptions={[5, 10, 25, 50]}
                         tableStyle={{ minWidth: "50rem" }}
                         filterDisplay="menu"
+                        removableSort
                         showGridlines={true}
                         loading={loading}
                         stripedRows
-                        sortField="name"
-                        sortOrder={1}
+                        emptyMessage={progressSpinner}
                         header={header}
                         paginatorClassName="rounded-b-[0.6rem] border-graydark"
                         pt={{
@@ -235,7 +258,7 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
                             className="pl-3 bg-graymedium text-[2vh]"
                             header="User"
                             headerClassName="pl-3 bg-graydark"
-                            style={{ maxWidth: "2.7rem" }}
+                            style={{ maxWidth: "2rem" }}
                             body={usernameBodyTemplate}
                         />
                         {problemResultColumns}

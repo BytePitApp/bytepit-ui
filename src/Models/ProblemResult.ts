@@ -6,6 +6,7 @@ export default interface ProblemResult {
     average_runtime: number
     is_correct: boolean
     num_of_points: number
+    max_num_of_points: number
     source_code: string
     language: string
 }
