@@ -79,6 +79,11 @@ const getProblemsForOrganiser = async (id: string | undefined) => {
     return response
 }
 
+const getAvailableProblems = async () => {
+    const response = await requests.get("/problems/available")
+    return response
+}
+
 export { 
     getAllProblems, 
     createSubmission,
@@ -86,4 +91,5 @@ export {
     createProblem, 
     modifyProblem, 
     getProblemsForOrganiser,
+    getAvailableProblems,
 }
