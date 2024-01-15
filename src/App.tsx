@@ -12,8 +12,9 @@ import {
     CreateProblemPage, 
     EditProblemPage,
     ContestantViewCompetitionPage,
-    ContestantProblemPracticePage,
+    ContestantProblemPlaygroundPage,
     ContestantVirtualCompetitionPracticePage,
+    ContestantPlaygroundPage,
 } from "./pages"
 import ProtectedRoute from "./components/ProtectedRoute"
 
@@ -40,8 +41,12 @@ const App = () => {
                     <Route path="contestant/home" element={<ContestantHomePage></ContestantHomePage>} />
                     <Route path="contestant/competition/:id" element={<ContestantViewCompetitionPage></ContestantViewCompetitionPage>} />
                     <Route
-                        path="contestant/practice/problem/:id"
-                        element={<ContestantProblemPracticePage></ContestantProblemPracticePage>}
+                        path="contestant/playground"
+                        element={<ContestantPlaygroundPage></ContestantPlaygroundPage>}
+                    />
+                    <Route
+                        path="contestant/playground/problem/:id"
+                        element={<ContestantProblemPlaygroundPage></ContestantProblemPlaygroundPage>}
                     />
                     <Route
                         path="contestant/virtual-competition/:id"
