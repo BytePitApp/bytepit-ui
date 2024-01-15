@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, FormEvent } from "react"
 import { Button } from "primereact/button"
 import { ProgressSpinner } from "primereact/progressspinner"
 import { Link, useNavigate } from "react-router-dom"
@@ -38,7 +38,8 @@ const LoginPage = () => {
         toast.current?.show(toastMessage)
     }
 
-    const submitForm = async () => {
+    const submitForm = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
         setLoading(true)
         try {
             await login(formData.username, formData.password)
@@ -75,7 +76,9 @@ const LoginPage = () => {
                 <Toast ref={toast} />
             </div>
             <div className="bg-form bg-cover grow flex flex-row justify-center items-center">
-                <div className="m-[5%] w-full lg:w-[60%] h-[60%] flex flex-row justify-center items-center drop-shadow-xl">
+                <form
+                    onSubmit={submitForm}
+                    className="m-[5%] w-full lg:w-[60%] h-[60%] flex flex-row justify-center items-center drop-shadow-xl">
                     <div className="p-[5%] py-[10%] flex flex-col h-full gap-[2vh] w-full bg-graymedium rounded-[3%] lg:rounded-r-none  border-graydark border-b-4">
                         <div className="flex flex-col gap-2">
                             <span className="text-[4vh] text-center font-bold text-primary">Login</span>
@@ -103,12 +106,10 @@ const LoginPage = () => {
                                 inputClassName="w-full text-[2vh] rounded-[1vh]"
                                 pt={{
                                     showIcon: {
-                                        className:
-                                            "mb-2 hover:cursor-pointer hover:scale-[108%] transition-all ease-in-out duration-300",
+                                        className: "mb-2 hover:cursor-pointer hover:scale-[108%] transition-all ease-in-out duration-300",
                                     },
                                     hideIcon: {
-                                        className:
-                                            "mb-2 hover:cursor-pointer hover:scale-[108%] transition-all ease-in-out duration-300",
+                                        className: "mb-2 hover:cursor-pointer hover:scale-[108%] transition-all ease-in-out duration-300",
                                     },
                                 }}
                             />
@@ -118,7 +119,7 @@ const LoginPage = () => {
                             <Button
                                 className="text-[2vh] rounded-[1vh] h-[6vh] hover:scale-[102%] transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
                                 label="Submit"
-                                onClick={submitForm}
+                                type="submit"
                             />
                         </div>
                     </div>
@@ -131,13 +132,12 @@ const LoginPage = () => {
                             <Button
                                 className="font-semibold text-[2vh] bg-graydark rounded-full text-primary mt-[1%] hover:bg-white hover:scale-[102%] transition-all ease-in-out duration-300"
                                 size="small"
-                                text
-                            >
+                                text>
                                 No account yet? Register now!
                             </Button>
                         </Link>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     )
