@@ -1,5 +1,5 @@
-import Competition from "./Competition";
+import Competition from "./Competition"
 
 export interface CompetitionDashboardProps {
-    competition?: Competition;
+    competition?: Competition
 }
