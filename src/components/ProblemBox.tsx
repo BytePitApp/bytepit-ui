@@ -35,7 +35,7 @@ const ProblemBox: React.FC<ProblemProps> = ({ problem }) => {
     return (
         <Link
             className={`transition-bg border border-gray-300 rounded-lg shadow-lg overflow-hidden relative flex flex-col group bg-white`}
-            to={`/organiser/view-problem`}
+            to={`/organiser/edit-problem/${problem.id}`}
             state={{ problem: problem }}
         >
             <div className={`p-4 bg-gray-200 transition-bg`}>
