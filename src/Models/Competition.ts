@@ -8,7 +8,6 @@ export default interface Competition {
     organiser_id: string
     problems: any[]
     trophies?: any[]
-
     organiser_username?: string
     organiser_image?: any
     start_time_date?: Date
