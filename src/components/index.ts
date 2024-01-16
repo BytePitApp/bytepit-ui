@@ -13,8 +13,9 @@ import Timer from "./Timer"
 import UsersDataTable from "./UsersDataTable"
 import CompetitionDataTable from "./CompetitionDataTable"
 import ProblemsDataTable from "./ProblemsDataTable"
+import ProfileLink from "./ProfileLink"
 
-export { 
+export {
     Navbar,
     Footer,
     HoverCard,
@@ -30,4 +31,5 @@ export {
     UsersDataTable,
     CompetitionDataTable,
     ProblemsDataTable,
+    ProfileLink,
 }
