@@ -137,9 +137,13 @@ const EditCompetitionPage = () => {
         e.preventDefault()
         setLoading(true)
         try {
-            if (formDataModified.startTime === "" || formDataModified.endTime === ""
-                || formDataModified.name === "" || formDataModified.description === ""
-                || formDataModified.problems.length === 0) {
+            if (
+                formDataModified.startTime === "" ||
+                formDataModified.endTime === "" ||
+                formDataModified.name === "" ||
+                formDataModified.description === "" ||
+                formDataModified.problems.length === 0
+            ) {
                 sendToast({
                     severity: "error",
                     summary: "Error!",
@@ -206,10 +210,13 @@ const EditCompetitionPage = () => {
             <div className="bg-form bg-cover grow flex flex-row justify-center items-center">
                 <form
                     onSubmit={submitForm}
-                    className="mx-[5%] rounded-xl px-[5%] bg-graymedium drop-shadow-xl rounded-t-xl border-graydark border-b-4">
+                    className="mx-[5%] rounded-xl px-[5%] bg-graymedium drop-shadow-xl rounded-t-xl border-graydark border-b-4"
+                >
                     <div className="flex flex-col gap-[3vh] h-[85vh] py-10 overflow-auto scrollbar-hide items-center">
-                        <div className="m-[5%] flex flex-col gap-2 pt-20">                        
-                            <span className="text-[4vh] text-center font-semibold text-primary">Modify Competition</span>
+                        <div className="m-[5%] flex flex-col gap-2 pt-20">
+                            <span className="text-[4vh] text-center font-semibold text-primary">
+                                Modify Competition
+                            </span>
                             <span className="text-[2vh] text-center text-slate-950 mb-0">
                                 Please fill in the form fields that you wish to change.
                             </span>
@@ -246,7 +253,8 @@ const EditCompetitionPage = () => {
                         <div className="relative pointer-events-none">
                             <label
                                 htmlFor="firstPlaceTrophyImage"
-                                className="text-xs text-gray-800 text-center absolute top-1/2 -translate-y-1/2 left-0 w-1/2 flex items-center justify-center">
+                                className="text-xs text-gray-800 text-center absolute top-1/2 -translate-y-1/2 left-0 w-1/2 flex items-center justify-center"
+                            >
                                 First Place Trophy Image...
                             </label>
                             <input
@@ -271,7 +279,8 @@ const EditCompetitionPage = () => {
                         <div className="relative pointer-events-none">
                             <label
                                 htmlFor="secondPlaceTrophyImage"
-                                className="text-xs text-gray-800 text-center absolute top-1/2 -translate-y-1/2 left-0 w-1/2 flex items-center justify-center">
+                                className="text-xs text-gray-800 text-center absolute top-1/2 -translate-y-1/2 left-0 w-1/2 flex items-center justify-center"
+                            >
                                 Second Place Trophy Image...
                             </label>
                             <input
@@ -296,7 +305,8 @@ const EditCompetitionPage = () => {
                         <div className="relative pointer-events-none">
                             <label
                                 htmlFor="thirdPlaceTrophyImage"
-                                className="text-xs text-gray-800 text-center absolute top-1/2 -translate-y-1/2 left-0 w-1/2 flex items-center justify-center">
+                                className="text-xs text-gray-800 text-center absolute top-1/2 -translate-y-1/2 left-0 w-1/2 flex items-center justify-center"
+                            >
                                 Third Place Trophy Image...
                             </label>
                             <input
@@ -357,9 +367,9 @@ const EditCompetitionPage = () => {
                                     selectedProblems={formDataModified.problems}
                                 />
                             )}
-                            {(formDataModified.problems.length > 0 && problems.length > 0) ? (
-                                <div className="bg-secondarylight rounded-lg border-secondarylight border-2 my-4">
-                                    <div className="py-2 text-xl p-2 justify-center items-center flex bg-secondarylight text-white font-semibold">
+                            {formDataModified.problems.length > 0 && problems.length > 0 ? (
+                                <div className="bg-white border-primary rounded-lg border p-2 my-4">
+                                    <div className="py-2 text-xl p-2 justify-center items-center flex bg-white rounded-lg text-primary font-semibold">
                                         Selected Problems
                                     </div>
                                     {formDataModified.problems.map((problemId: string) => {
@@ -368,7 +378,7 @@ const EditCompetitionPage = () => {
                                             <ProblemListItem
                                                 key={problemId}
                                                 problem={problem!!}
-                                                selectedProblems={formDataModified.problems}
+                                                isSelected={formDataModified.problems.includes(problemId)}
                                                 addProblem={addProblem}
                                                 removeProblem={removeProblem}
                                             />

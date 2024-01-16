@@ -8,6 +8,7 @@ import { ProgressSpinner } from "primereact/progressspinner"
 import { Avatar } from "primereact/avatar"
 import { useNavigate } from "react-router-dom"
 import "../pages/AdminHomePage.css"
+import { ProfileLink } from "../components"
 
 interface Props {
     competitions: Competition[]
@@ -21,13 +22,7 @@ const CompetitionDataTable = ({ competitions, loading, paginatorLeftFunction }: 
     const [overlayText, setOverlayText] = useState<string>("")
 
     const paginatorLeft = () => {
-        return (
-            <Button
-                icon="pi pi-refresh"
-                text={true}
-                onClick={paginatorLeftFunction}
-            />
-        )
+        return <Button icon="pi pi-refresh" text={true} onClick={paginatorLeftFunction} />
     }
 
     const renderProgressSpinner = () => {
@@ -44,7 +39,12 @@ const CompetitionDataTable = ({ competitions, loading, paginatorLeftFunction }: 
         return (
             <p>
                 {date.toLocaleString("en-US", {
-                    hour12: false, year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit"
+                    hour12: false,
+                    year: "numeric",
+                    month: "numeric",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
                 })}
             </p>
         )
@@ -52,9 +52,20 @@ const CompetitionDataTable = ({ competitions, loading, paginatorLeftFunction }: 
 
     const textBodyTemplate = (text: string): React.ReactNode => {
         return (
-            <div onMouseEnter={(e) => {setOverlayText(text); opRef.current?.show(e, null)}}
-                onMouseLeave={() => opRef.current?.hide()}>
-                <p className="line-clamp-2" onMouseEnter={(e) => {setOverlayText(text); opRef.current?.show(e, null)}}>
+            <div
+                onMouseEnter={(e) => {
+                    setOverlayText(text)
+                    opRef.current?.show(e, null)
+                }}
+                onMouseLeave={() => opRef.current?.hide()}
+            >
+                <p
+                    className="line-clamp-2"
+                    onMouseEnter={(e) => {
+                        setOverlayText(text)
+                        opRef.current?.show(e, null)
+                    }}
+                >
                     {text}
                 </p>
             </div>
@@ -64,20 +75,23 @@ const CompetitionDataTable = ({ competitions, loading, paginatorLeftFunction }: 
     const organiserBodyTemplate = (rowData: Competition): React.ReactNode => {
         return (
             <div className="flex items-center gap-1 px-2 py-1">
-                {rowData?.organiser_image ?
+                {rowData?.organiser_image ? (
                     <Avatar
                         className="transition-transform ease-in-out duration-200 cursor-pointer hover:scale-105"
                         image={`data:image/jpeg;base64,${rowData.organiser_image}`}
                         size="normal"
                     />
-                :
+                ) : (
                     <Avatar
                         className="bg-secondary text-white transition-transform ease-in-out duration-200 cursor-pointer hover:scale-105"
                         icon="pi pi-user"
                         size="normal"
                     />
-                }
-                <p>{rowData.organiser_username}</p>
+                )}
+                <ProfileLink
+                    profileUrl={`/profiles/organiser/${rowData.organiser_username}`}
+                    username={rowData.organiser_username as string}
+                />
             </div>
         )
     }
@@ -95,9 +109,10 @@ const CompetitionDataTable = ({ competitions, loading, paginatorLeftFunction }: 
 
     return (
         <>
-            <OverlayPanel 
+            <OverlayPanel
                 className="text-sm lg:text-base max-w-[70%] xl:max-w-[40%] bg-graymedium shadow-lg shadow-black/50"
-                ref={opRef}>
+                ref={opRef}
+            >
                 {overlayText}
             </OverlayPanel>
             <DataTable
@@ -109,21 +124,22 @@ const CompetitionDataTable = ({ competitions, loading, paginatorLeftFunction }: 
                 paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                 currentPageReportTemplate="{first} to {last} of {totalRecords}"
                 paginatorLeft={paginatorLeft()}
-                paginatorRight={ <div></div> }
+                paginatorRight={<div></div>}
                 rowsPerPageOptions={[5, 10, 25, 50]}
                 filterDisplay="menu"
                 tableStyle={{ minWidth: "50rem" }}
                 showGridlines={true}
                 stripedRows
                 emptyMessage={renderProgressSpinner()}
-                header={ <p className="px-2 text-2xl text-center text-primary">Competitions</p> }
+                header={<p className="px-2 text-2xl text-center text-primary">Competitions</p>}
                 paginatorClassName="rounded-b-xl"
                 pt={{
                     root: { className: "border-graydark border-2 rounded-xl" },
                     header: { className: "rounded-t-[0.6rem]" },
                     rowGroupHeader: { className: "text-xs" },
                 }}
-                cellClassName={() => "p-1"}>
+                cellClassName={() => "p-1"}
+            >
                 <Column
                     field="name"
                     header="Title"

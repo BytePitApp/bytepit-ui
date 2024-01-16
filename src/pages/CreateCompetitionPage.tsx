@@ -153,21 +153,9 @@ const CreateCompetitionPage = () => {
                 detail: "Competition created successfully!",
                 life: 10000,
             })
-            setFormData({
-                name: "",
-                description: "",
-                startTime: "",
-                endTime: "",
-                problems: [],
-            })
-            setDateTime(null)
-            setShowProblems(false)
-            setFirstPlaceTrophyImage(undefined)
-            setSecondPlaceTrophyImage(undefined)
-            setThirdPlaceTrophyImage(undefined)
-            firstPlaceTrophyImageRef.current!.value = ""
-            secondPlaceTrophyImageRef.current!.value = ""
-            thirdPlaceTrophyImageRef.current!.value = ""
+            setTimeout(() => {
+                navigateToHome()
+            }, 1000)
         } catch (err: any) {
             if (Array.isArray(err.response.data.detail)) {
                 for (const error of err.response.data.detail) {
@@ -198,8 +186,7 @@ const CreateCompetitionPage = () => {
                     onClick={clearCalendar}
                 />
                 <Button
-                    label="Close"
-                    icon="pi pi-home"
+                    label="Save"
                     className="hover:scale-[102%] transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
                     onClick={closeCalendar}
                 />
@@ -221,12 +208,12 @@ const CreateCompetitionPage = () => {
             <div className="bg-form bg-cover grow flex flex-row justify-center items-center">
                 <form
                     onSubmit={submitForm}
-                    className="mx-[5%] rounded-xl px-[5%] bg-graymedium drop-shadow-xl rounded-t-xl border-graydark border-b-4">
+                    className="mx-[5%] rounded-xl px-[5%] bg-graymedium drop-shadow-xl rounded-t-xl border-graydark border-b-4"
+                >
                     <div className="flex flex-col gap-[3vh] h-[85vh] overflow-auto scrollbar-hide items-center">
                         <div className="m-[5%] flex flex-col gap-2 pt-20">
-                            <span className="text-[4vh] text-center font-semibold text-primary mb-2">Create Competition</span>
-                            <span className="text-[2vh] text-center text-slate-950">
-                                Please fill in the form below to create a competition.
+                            <span className="text-[4vh] text-center font-semibold text-primary mb-2">
+                                New Competition
                             </span>
                         </div>
                         <span className="p-float-label">
@@ -255,7 +242,8 @@ const CreateCompetitionPage = () => {
                             <div className="relative pointer-events-none">
                                 <label
                                     htmlFor="firstPlaceTrophyImage"
-                                    className="text-xs text-gray-800 text-center absolute top-1/2 -translate-y-1/2 left-0 w-1/2 flex items-center justify-center">
+                                    className="text-xs text-gray-800 text-center absolute top-1/2 -translate-y-1/2 left-0 w-1/2 flex items-center justify-center"
+                                >
                                     First Place Trophy Image...
                                 </label>
                                 <input
@@ -269,7 +257,8 @@ const CreateCompetitionPage = () => {
                             <div className="relative pointer-events-none">
                                 <label
                                     htmlFor="secondPlaceTrophyImage"
-                                    className="text-xs text-gray-800 text-center absolute top-1/2 -translate-y-1/2 left-0 w-1/2 flex items-center justify-center">
+                                    className="text-xs text-gray-800 text-center absolute top-1/2 -translate-y-1/2 left-0 w-1/2 flex items-center justify-center"
+                                >
                                     Second Place Trophy Image...
                                 </label>
                                 <input
@@ -283,7 +272,8 @@ const CreateCompetitionPage = () => {
                             <div className="relative pointer-events-none">
                                 <label
                                     htmlFor="thirdPlaceTrophyImage"
-                                    className="text-xs text-gray-800 text-center absolute top-1/2 -translate-y-1/2 left-0 w-1/2 flex items-center justify-center">
+                                    className="text-xs text-gray-800 text-center absolute top-1/2 -translate-y-1/2 left-0 w-1/2 flex items-center justify-center"
+                                >
                                     Third Place Trophy Image...
                                 </label>
                                 <input
@@ -342,19 +332,19 @@ const CreateCompetitionPage = () => {
                                 />
                             ) : null}
                             {formData.problems.length > 0 === true ? (
-                                <div className="bg-secondarylight rounded-lg border-secondarylight border-2 my-4">
-                                    <div className="py-2 text-xl p-2 justify-center items-center flex bg-secondarylight text-white font-semibold">
+                                <div className="bg-white border-primary rounded-lg border p-2 my-4">
+                                    <div className="py-2 text-xl p-2 justify-center items-center flex bg-white rounded-lg text-primary font-semibold">
                                         Selected Problems
                                     </div>
                                     {formData.problems.map((problemId: string) => {
                                         const problem = problems.find((p: Problem) => p.id === problemId)
                                         return (
                                             <ProblemListItem
-                                                key={problem?.id}
+                                                key={problemId}
                                                 problem={problem!!}
-                                                selectedProblems={formData.problems}
-                                                removeProblem={removeProblem}
+                                                isSelected={formData.problems.includes(problemId)}
                                                 addProblem={addProblem}
+                                                removeProblem={removeProblem}
                                             />
                                         )
                                     })}
