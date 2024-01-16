@@ -19,6 +19,17 @@ import "./AdminHomePage.css"
 import { Nullable } from "primereact/ts-helpers"
 import useAuth from "../hooks/useAuth"
 
+interface CompetitionDate {
+    id: string
+    name: string
+    description: string
+    start_time: Date
+    end_time: Date
+    parent_id: string
+    problems: any[]
+    trophies?: any[]
+}
+
 const ContestantHomePage = () => {
     const [date, setDate] = useState<Nullable<Date>>(new Date())
     const [loading, setLoading] = useState(true)
@@ -194,7 +205,10 @@ const ContestantHomePage = () => {
         return (
             <div className="min-w-[12rem]">
                 <p className="font-semibold text-base">{durationText}</p>
-                <p className="text-sm">expires: {endDateString}</p>
+                <p className="text-sm">
+                    {rowData?.end_time_date && rowData?.end_time_date < new Date() ? "expired" : "expires"}:{" "}
+                    {endDateString}
+                </p>
                 <p className="text-sm">starts: {startDateString}</p>
             </div>
         )
@@ -221,13 +235,17 @@ const ContestantHomePage = () => {
         const showVirtualButton = rowData.end_time_date!! <= new Date()
         return (
             <div className="flex justify-center items-center">
-                <Button
-                    label="Virtual"
-                    disabled={!showVirtualButton}
-                    onClick={() => handleCreateVirtualCompetition(rowData.id)}
-                    icon={<FaTrophy className="mr-1 transition-colors duration-150 ease-in-out" />}
-                    className="py-2 px-3 text-lg text-primary hover:text-graymedium bg-graymedium hover:bg-primary transition-colors ease-in-out duration-150"
-                />
+                {rowData.parent_id !== null ? (
+                    <p className="self-center font-semibold">Already virtual</p>
+                ) : (
+                    <Button
+                        label="Virtual"
+                        disabled={!showVirtualButton}
+                        onClick={() => handleCreateVirtualCompetition(rowData.id)}
+                        icon={<FaTrophy className="mr-1 transition-colors duration-150 ease-in-out" />}
+                        className="py-2 px-3 text-lg text-primary hover:text-graymedium bg-graymedium hover:bg-primary transition-colors ease-in-out duration-150"
+                    />
+                )}
             </div>
         )
     }
@@ -250,8 +268,16 @@ const ContestantHomePage = () => {
                     sortField="endTime"
                     sortOrder={1}
                     header={renderHeader}
+                    showHeaders={false}
                     scrollable
+                    loading={loading}
                     scrollHeight="100%"
+                    rowClassName={(rowData: Competition) => {
+                        const endedClass =
+                            rowData.end_time_date && rowData.end_time_date < new Date() ? "bg-gray-100" : ""
+                        const parentClass = rowData.parent_id ? (rowData.parent_id !== null ? "bg-purple-100" : "") : ""
+                        return `${endedClass} ${parentClass}`
+                    }}
                     paginatorClassName="rounded-b-xl"
                     pt={{
                         root: { className: "border-graydark border-2 rounded-xl shadow-xl shadow-darkgray" },
@@ -259,20 +285,21 @@ const ContestantHomePage = () => {
                     }}
                     className="text-sm"
                 >
-                    <Column field="name" header="Name" bodyClassName="overflow-y-auto max-sm:min-w-[50vw]" />
+                    <Column field="name" body={(rowData: Competition) => rowData.name} />
+                    <Column field="description" bodyClassName="overflow-y-auto max-sm:min-w-[50vw]" />
+                    <Column body={AvailableForBodyTemplate} />
                     <Column
-                        field="description"
-                        header="Description"
-                        bodyClassName="overflow-y-auto max-sm:min-w-[50vw]"
+                        bodyClassName="text-center text-md font-semibold"
+                        body={(rowData: any) => {
+                            return (
+                                <>
+                                    <p className="text-lg">{rowData.problems.length}</p> problems
+                                </>
+                            )
+                        }}
                     />
-                    <Column header="Available for" body={AvailableForBodyTemplate} />
-                    <Column
-                        header="problems"
-                        bodyClassName="text-center text-xl font-semibold"
-                        body={(rowData: any) => rowData.problems.length}
-                    />
-                    <Column header="Go!" body={startBodyTemplate} />
-                    <Column header="Create virutal competition" body={createVirtualCompetitionBodyTemplate} />
+                    <Column body={startBodyTemplate} />
+                    <Column body={createVirtualCompetitionBodyTemplate} />
                 </DataTable>
             </div>
         </div>
