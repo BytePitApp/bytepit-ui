@@ -3,8 +3,8 @@ import { DataTable } from "primereact/datatable"
 import { useCallback, useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { ProgressSpinner } from "primereact/progressspinner"
-import { getCompetitionResults } from "../services/competition.service"
-import { Column, ColumnFilterClearTemplateOptions } from "primereact/column"
+import { getCompetitionResults, getVirtualCompetitionResults } from "../services/competition.service"
+import { Column } from "primereact/column"
 import { classNames } from "primereact/utils"
 import ProblemResult from "../Models/ProblemResult"
 import CompetitionResult from "../Models/CompetitionResult"
@@ -18,15 +18,16 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
     const { auth } = useAuth()
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState("")
-    const [competitionResults, setCompetitionResults] = useState<CompetitionResult[]>()
+    const [competitionResults, setCompetitionResults] = useState<CompetitionResult[] | null>([])
     const [parsedCompetitionResults, setParsedCompetitionResults] = useState<ParsedCompetitionResult[]>([])
     const [numOfProblemResults, setNumOfProblemResults] = useState<number>(0)
     const [visibleDialog, setVisibleDialog] = useState<boolean>(false)
     const [selectedProblemResult, setSelectedProblemResult] = useState<ProblemResult | null>(null)
     const { id } = useParams<{ id: string }>()
 
-    const parseCompetitionResults = useCallback(async () => {
-        const parsedCompetitionResults: ParsedCompetitionResult[] = []
+    const parseCompetitionResults = () => {
+        console.log(competitionResults)
+        const newParsedCompetitionResults: ParsedCompetitionResult[] = []
 
         const problem_ids = competition?.problems.reduce((acc, problem, index) => {
             acc[index] = problem.id
@@ -53,7 +54,7 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
                     parsedResult[problemResultIdKey] = problemResult.id
                 }
             })
-
+            console.log(numOfProblemResults)
             for (let i = 0; i < numOfProblemResults; i++) {
                 const numOfPointsKey = `num_of_points${i + 1}`
                 const maxNumOfPointsKey = `max_num_of_points${i + 1}`
@@ -65,24 +66,27 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
                 }
             }
 
-            parsedCompetitionResults.push(parsedResult)
+            newParsedCompetitionResults.push(parsedResult)
         })
-        // console.log(parsedCompetitionResults)
-        setParsedCompetitionResults(parsedCompetitionResults)
-    }, [competitionResults, competition])
+        console.log(newParsedCompetitionResults)
+        setParsedCompetitionResults(newParsedCompetitionResults)
+    }
 
     useEffect(() => {
         parseCompetitionResults()
-    }, [parseCompetitionResults])
+    }, [competitionResults, numOfProblemResults])
 
     const getCompetitionResultsData = useCallback(async () => {
         try {
-            const competitionResults = await getCompetitionResults(id ?? "")
-            setCompetitionResults(competitionResults.data)
-            console.log(competitionResults.data)
-            setLoading(false)
-            setNumOfProblemResults(competitionResults.data[0].problem_results.length)
-            parseCompetitionResults()
+            let response
+            if (competition?.parent_id) {
+                response = await getVirtualCompetitionResults(id ?? "")
+            } else {
+                response = await getCompetitionResults(id ?? "")
+            }
+            let competitionResults: CompetitionResult[] | null = response.data
+            setCompetitionResults(competitionResults)
+            setNumOfProblemResults(competition?.problems.length ?? 0)
         } catch (err: any) {
             console.log(err)
             setError(err.response?.data?.detail ?? "Something went wrong")
@@ -130,7 +134,9 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
     const renderHeader = () => {
         return (
             <div className="flex justify-content-between px-2">
-                <h2 className="text-xl text-primary">Competition Results</h2>
+                <h2 className="text-xl text-primary">
+                    {competition?.parent_id ? <>Virtual Competition Results</> : <> Competition Results</>}
+                </h2>
             </div>
         )
     }
@@ -168,6 +174,10 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
         }
         return columns
     }
+
+    useEffect(() => {
+        setLoading(false)
+    }, [parseCompetitionResults])
 
     const renderRowNumberColumn = () => {
         const hasTrophies = competition?.trophies && competition.trophies.length == 3

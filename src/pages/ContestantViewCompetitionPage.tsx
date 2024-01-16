@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react"
 import { getCompetition } from "../services/competition.service"
 import { Competition } from "../Models"
 import { ProgressSpinner } from "primereact/progressspinner"
-import CompetitionDashboard from "./CompetitionDashboard"
+import CompetitionDashboard from "../components/CompetitionDashboard"
 
 const ContestantViewCompetitionPage = () => {
     const [loading, setLoading] = useState(true)
@@ -30,7 +30,9 @@ const ContestantViewCompetitionPage = () => {
                 const competition = await getCompetition(id)
                 setCompetition(competition.data)
                 updateRemainingTime(competition.data.start_time, competition.data.end_time)
-                setIsCompetitionActive(new Date(competition.data.start_time) < new Date() && new Date(competition?.data.end_time) > new Date())
+                setIsCompetitionActive(
+                    new Date(competition.data.start_time) < new Date() && new Date(competition?.data.end_time) > new Date()
+                )
                 setLoading(false)
             } catch (err: any) {
                 console.log(err)
@@ -39,13 +41,13 @@ const ContestantViewCompetitionPage = () => {
         }
     }, [id])
 
-    const timerEnded = () => {
-        setSubmitCode(true)
-    }
-
     useEffect(() => {
         getCompetitionData()
     }, [getCompetitionData])
+
+    const timerEnded = () => {
+        setSubmitCode(true)
+    }
 
     return (
         <div className="flex flex-col h-screen justify-center">
@@ -62,16 +64,33 @@ const ContestantViewCompetitionPage = () => {
                         <div className="flex flex-col gap-[3vh] py-4 h-[85vh] w-[90vw] overflow-auto scrollbar-hide items-center">
                             <div className="w-full flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 lg:justify-between">
                                 <div className="text-left w-full flex flex-col gap-2 text-gray-700">
-                                    <div className="text-[3vh] font-semibold">{competition?.name}</div>
+                                    <div className="text-[3vh] font-semibold flex gap-3 items-center">
+                                        {competition?.name}
+                                        {competition?.parent_id && (
+                                            <div className="bg-primary w-[8vh] h-[4vh] rounded-3xl text-center text-white text-sm font-semibold flex justify-center items-center select-none">
+                                                Virtual
+                                            </div>
+                                        )}
+                                    </div>
                                     <div className="text-sm">{competition?.description}</div>
                                 </div>
-                                {!loading && (isCompetitionActive ? <Timer seconds={remainingTime} handleTimerEnd={timerEnded} /> : <span className="text-xl font-semibold text-gray-700" >Finished</span>)}
+                                {!loading &&
+                                    (isCompetitionActive ? (
+                                        <Timer seconds={remainingTime} handleTimerEnd={timerEnded} />
+                                    ) : (
+                                        <span className="text-xl font-semibold text-gray-700">Finished</span>
+                                    ))}
                             </div>
-                            {isCompetitionActive ? (
-                                <ProblemSolver problems={competition?.problems!!} competitionId={competition?.id} submitCode={submitCode} />
-                            ) : (
-                                <CompetitionDashboard competition={competition}></CompetitionDashboard>
-                            )}
+                            {competition &&
+                                (isCompetitionActive ? (
+                                    <ProblemSolver
+                                        problems={competition?.problems!!}
+                                        competitionId={competition?.id}
+                                        submitCode={submitCode}
+                                    />
+                                ) : (
+                                    <CompetitionDashboard competition={competition}></CompetitionDashboard>
+                                ))}
                         </div>
                     </div>
                 ) : null}
