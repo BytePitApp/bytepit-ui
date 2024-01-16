@@ -12,6 +12,8 @@ import CreateCompetitionPage from "./CreateCompetitionPage"
 import ContestantViewCompetitionPage from "./ContestantViewCompetitionPage"
 import ContestantProblemPracticePage from "./ContestantProblemPracticePage"
 import ContestantVirtualCompetitionPracticePage from "./ContestantVirtualCompetitionPracticePage"
+import ContestantProfilePage from "./ContestantProfilePage"
+import OrganiserProfilePage from "./OrganiserProfilePage"
 
 export {
     AdminHomePage,
@@ -28,4 +30,6 @@ export {
     ContestantViewCompetitionPage,
     ContestantProblemPracticePage,
     ContestantVirtualCompetitionPracticePage,
+    ContestantProfilePage,
+    OrganiserProfilePage,
 }

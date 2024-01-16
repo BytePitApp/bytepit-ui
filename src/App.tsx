@@ -14,6 +14,8 @@ import {
     ContestantViewCompetitionPage,
     ContestantProblemPracticePage,
     ContestantVirtualCompetitionPracticePage,
+    ContestantProfilePage,
+    OrganiserProfilePage
 } from "./pages"
 import ProtectedRoute from "./components/ProtectedRoute"
 
@@ -47,6 +49,7 @@ const App = () => {
                         path="contestant/virtual-competition/:id"
                         element={<ContestantVirtualCompetitionPracticePage></ContestantVirtualCompetitionPracticePage>}
                     />
+                    <Route path="contestant/profile/:id" element={<ContestantProfilePage></ContestantProfilePage>} />
                 </Route>
                 <Route element={<ProtectedRoute allowedRoles={[Role.ORGANISER]}></ProtectedRoute>}>
                     <Route path="organiser/home" element={<OrganiserHomePage></OrganiserHomePage>} />
@@ -55,6 +58,7 @@ const App = () => {
                     <Route path="organiser/view-problem" element={<OrganiserProblemPage></OrganiserProblemPage>} />
                     <Route path="organiser/create-competition" element={<CreateCompetitionPage></CreateCompetitionPage>} />
                     <Route path="organiser/edit-competition/:id" element={<EditCompetitionPage></EditCompetitionPage>} />
+                    <Route path="organiser/profile/:id" element={<OrganiserProfilePage></OrganiserProfilePage>} />
                 </Route>
                 <Route path="login" element={<LoginPage></LoginPage>} />
                 <Route path="register" element={<RegisterPage></RegisterPage>} />
