@@ -6,8 +6,9 @@ import { Button } from "primereact/button"
 import { ProgressSpinner } from "primereact/progressspinner"
 import { OverlayPanel } from "primereact/overlaypanel"
 import { Avatar } from "primereact/avatar"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import "../pages/AdminHomePage.css"
+import { ProfileLink } from "../components"
 
 interface Props {
     problems: Problem[]
@@ -21,13 +22,7 @@ const ProblemsDataTable = ({ problems, loading, paginatorLeftFunction }: Props) 
     const opRef = useRef<OverlayPanel>(null)
 
     const paginatorLeft = () => {
-        return (
-            <Button
-                icon="pi pi-refresh"
-                text={true}
-                onClick={paginatorLeftFunction}
-            />
-        )
+        return <Button icon="pi pi-refresh" text={true} onClick={paginatorLeftFunction} />
     }
 
     const renderProgressSpinner = () => {
@@ -56,38 +51,49 @@ const ProblemsDataTable = ({ problems, loading, paginatorLeftFunction }: Props) 
     const organiserBodyTemplate = (rowData: Problem): React.ReactNode => {
         return (
             <div className="flex items-center gap-1 px-2 py-1">
-                {rowData.organiser_image ?
+                {rowData.organiser_image ? (
                     <Avatar
                         className="transition-transform ease-in-out duration-200 cursor-pointer hover:scale-105"
                         image={`data:image/jpeg;base64,${rowData.organiser_image}`}
                         size="normal"
                     />
-                :
+                ) : (
                     <Avatar
                         className="bg-secondary text-white transition-transform ease-in-out duration-200 cursor-pointer hover:scale-105"
                         icon="pi pi-user"
                         size="normal"
                     />
-                }
-                <p>{rowData.organiser_username}</p>
+                )}
+                <ProfileLink
+                    profileUrl={`/profiles/organiser/${rowData.organiser_username}`}
+                    username={rowData.organiser_username as string}
+                />
             </div>
         )
     }
 
     const booleanBodyTemplate = (bool: boolean) => {
         return (
-            <i className={bool
-                ? "text-2xl align-middle pi true-icon pi-check-circle text-green-500"
-                : "text-2xl align-middle pi false-icon pi-times-circle text-red-400"
-            }></i>
+            <i
+                className={
+                    bool
+                        ? "text-2xl align-middle pi true-icon pi-check-circle text-green-500"
+                        : "text-2xl align-middle pi false-icon pi-times-circle text-red-400"
+                }
+            ></i>
         )
     }
 
     const createdOnBodyTemplate = (rowData: Problem): React.ReactNode => {
-        const dateTimeOptions: any = { hour12: false, year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }
-        return (
-            <p>{rowData.created_on_date?.toLocaleString("en-US", dateTimeOptions)}</p>
-        )
+        const dateTimeOptions: any = {
+            hour12: false,
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+        }
+        return <p>{rowData.created_on_date?.toLocaleString("en-US", dateTimeOptions)}</p>
     }
 
     const editProblemBodyTemplate = (rowData: Problem): React.ReactNode => {
@@ -103,9 +109,20 @@ const ProblemsDataTable = ({ problems, loading, paginatorLeftFunction }: Props) 
 
     const textBodyTemplate = (text: string): React.ReactNode => {
         return (
-            <div onMouseEnter={(e) => {setOverlayText(text); opRef.current?.show(e, null)}}
-                onMouseLeave={(e) => opRef.current?.toggle(e)}>
-                <p className="line-clamp-2" onMouseEnter={(e) => {setOverlayText(text); opRef.current?.show(e, null)}}>
+            <div
+                onMouseEnter={(e) => {
+                    setOverlayText(text)
+                    opRef.current?.show(e, null)
+                }}
+                onMouseLeave={(e) => opRef.current?.toggle(e)}
+            >
+                <p
+                    className="line-clamp-2"
+                    onMouseEnter={(e) => {
+                        setOverlayText(text)
+                        opRef.current?.show(e, null)
+                    }}
+                >
                     {text}
                 </p>
             </div>
@@ -114,9 +131,7 @@ const ProblemsDataTable = ({ problems, loading, paginatorLeftFunction }: Props) 
 
     return (
         <>
-            <OverlayPanel 
-                className="max-w-[40%] bg-graymedium shadow-lg shadow-black/50"
-                ref={opRef}>
+            <OverlayPanel className="max-w-[40%] bg-graymedium shadow-lg shadow-black/50" ref={opRef}>
                 {overlayText}
             </OverlayPanel>
             <DataTable
@@ -135,16 +150,15 @@ const ProblemsDataTable = ({ problems, loading, paginatorLeftFunction }: Props) 
                 tableStyle={{ minWidth: "50rem" }}
                 stripedRows
                 emptyMessage={renderProgressSpinner()}
-                header={
-                    <p className="px-2 text-2xl text-center text-primary">Problems</p>
-                }
+                header={<p className="px-2 text-2xl text-center text-primary">Problems</p>}
                 paginatorClassName="rounded-b-xl"
                 pt={{
                     root: { className: "border-graydark border-2 rounded-xl" },
                     header: { className: "rounded-t-[0.6rem]" },
                     rowGroupHeader: { className: "text-xs" },
                 }}
-                cellClassName={() => "p-1"}>
+                cellClassName={() => "p-1"}
+            >
                 <Column
                     sortable
                     field="name"
@@ -152,9 +166,9 @@ const ProblemsDataTable = ({ problems, loading, paginatorLeftFunction }: Props) 
                     body={(rowData: Problem) => textBodyTemplate(rowData.name)}
                     headerClassName="text-sm"
                 />
-                <Column 
-                    sortable 
-                    field="description" 
+                <Column
+                    sortable
+                    field="description"
                     header="Description"
                     body={(rowData: Problem) => textBodyTemplate(rowData.description)}
                     headerClassName="text-sm"
@@ -180,7 +194,7 @@ const ProblemsDataTable = ({ problems, loading, paginatorLeftFunction }: Props) 
                     header="Organiser"
                     headerClassName="text-sm"
                 />
-                <Column 
+                <Column
                     sortable={true}
                     field="is_hidden"
                     header="Hidden"
