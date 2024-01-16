@@ -24,7 +24,7 @@ const Navbar = () => {
     return (
         <nav
             className="bg-graymedium border-b-4 border-graydark w-full flex md:flex-row
-            justify-between items-center rounded-b-lg px-32 drop-shadow-nav sticky top-0 z-50"
+            justify-between items-center rounded-b-lg px-32 drop-shadow-nav sticky top-0 z-10"
         >
             <Link
                 className="bg-gray-30 text-primary font-major-mono text-[6vh] max-md:flex max-md:items-center max-md:justify-between max-md:w-full cursor-pointer hover:scale-[103%] transition-all ease-in-out duration-300"
