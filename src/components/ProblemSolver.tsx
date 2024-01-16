@@ -116,7 +116,11 @@ const ProblemSolver: React.FC<ProblemSolverProps> = ({ problems, competitionId, 
     }
 
     const run = async () => {
-        if (selectedProblem && problemAnswers[selectedProblem.id] && problemAnswers[selectedProblem.id].language != null) {
+        if (
+            selectedProblem &&
+            problemAnswers[selectedProblem.id] &&
+            problemAnswers[selectedProblem.id].language != null
+        ) {
             setLoading(true)
             try {
                 const submission: CreateSubmission = {
@@ -266,12 +270,13 @@ const ProblemSolver: React.FC<ProblemSolverProps> = ({ problems, competitionId, 
                             selectedProblem?.id === problem.id
                                 ? "bg-secondarylight border-secondarylight"
                                 : "cursor-pointer bg-gray-600 border-gray-600 hover:bg-gray-600/90 hover:border-gray-600/0"
-                        }`}>
+                        }`}
+                    >
                         {index + 1}
                     </div>
                 ))}
             </div>
-            <div className="lg:flex w-full h-[120rem] rounded-2xl scrollbar-hide px-6 py-4 bg-gray-300/90">
+            <div className="lg:flex w-full h-[90%] rounded-2xl scrollbar-hide px-6 py-4 bg-gray-300/90">
                 <div className="lg:w-1/3 text-gray-700 overflow-y-auto scrollbar-hide">
                     <div className="flex overflow-x-auto scrollbar-hide flex-col gap-8">
                         <div className="text-left w-full flex flex-col gap-2">
@@ -289,14 +294,20 @@ const ProblemSolver: React.FC<ProblemSolverProps> = ({ problems, competitionId, 
                         <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-8 lg:gap-0">
                             <div className="text-[1rem]">
                                 <span className="font-semibold mr-2">Runetime Limit:</span>
-                                <span className="text-[0.9rem]">{formatRuntimeLimit(selectedProblem?.runtime_limit)}</span>
+                                <span className="text-[0.9rem]">
+                                    {formatRuntimeLimit(selectedProblem?.runtime_limit)}
+                                </span>
                             </div>
                             <div className="text-[1rem]">
                                 <span className="font-semibold mr-2">Available Points:</span>
                                 <span className="text-[0.9rem]">{selectedProblem?.num_of_points}</span>
                             </div>
                         </div>
-                        <div className={`flex ${competitionId ? "justify-between gap-2 lg:gap-0" : "justify-end"} lg:m-2 items-center`}>
+                        <div
+                            className={`flex ${
+                                competitionId ? "justify-between gap-2 lg:gap-0" : "justify-end"
+                            } lg:m-2 items-center`}
+                        >
                             {competitionId ? (
                                 <Button
                                     type="button"
@@ -318,13 +329,16 @@ const ProblemSolver: React.FC<ProblemSolverProps> = ({ problems, competitionId, 
                                 onHide={toggleModal}
                                 draggable={false}
                                 header={headerTemplate}
-                                footer={footerTemplate}>
+                                footer={footerTemplate}
+                            >
                                 <span className="m-0">
-                                    By clicking submit, all of your answers will be submitted and you will be redirected to the home page.
+                                    By clicking submit, all of your answers will be submitted and you will be redirected
+                                    to the home page.
                                 </span>
                                 <span className="m-0 font-semibold">
                                     {" "}
-                                    Note that you will be able to change your answers until the deadline, but answers will not be saved.
+                                    Note that you will be able to change your answers until the deadline, but answers
+                                    will not be saved.
                                 </span>
                             </Dialog>
                         </div>
@@ -347,7 +361,10 @@ const ProblemSolver: React.FC<ProblemSolverProps> = ({ problems, competitionId, 
                                             </div>
                                             <div className="text-sm mt-2">
                                                 <span>It is correct but not your best attempt.</span>
-                                                <span className="font-semibold"> Note that only the best attempt will be evaluated!</span>
+                                                <span className="font-semibold">
+                                                    {" "}
+                                                    Note that only the best attempt will be evaluated!
+                                                </span>
                                             </div>
                                         </div>
                                     )
@@ -357,7 +374,9 @@ const ProblemSolver: React.FC<ProblemSolverProps> = ({ problems, competitionId, 
                                             <div>Not good enough!</div>
                                             <p className="pi pi-ban text-[2rem] text-red-600"></p>
                                         </div>
-                                        <div className="text-sm mt-2">It is correct but it exceeds the runtime limit!</div>
+                                        <div className="text-sm mt-2">
+                                            It is correct but it exceeds the runtime limit!
+                                        </div>
                                     </div>
                                 )
                             ) : submissionResults[selectedProblem.id]?.exception ? (
@@ -369,7 +388,8 @@ const ProblemSolver: React.FC<ProblemSolverProps> = ({ problems, competitionId, 
                                     <p
                                         dangerouslySetInnerHTML={{
                                             __html: formatException(
-                                                submissionResults[selectedProblem.id]?.exception ?? "Something went wrong!"
+                                                submissionResults[selectedProblem.id]?.exception ??
+                                                    "Something went wrong!"
                                             ),
                                         }}
                                         className="text-sm mt-2 mr-2"
@@ -383,35 +403,38 @@ const ProblemSolver: React.FC<ProblemSolverProps> = ({ problems, competitionId, 
                                         <p className="pi pi-ban text-[2rem] text-red-600"></p>
                                     </div>
                                     <div className="flex mt-2 flex-col gap-y-2">
-                                        {submissionResults[selectedProblem.id]?.incorrectOutputs?.map((output, index) => (
-                                            <div
-                                                key={index}
-                                                className="border-2 border-graymedium bg-graymedium rounded-lg p-2 flex flex-row">
-                                                <div className="lg:text-[1.5rem] w-20 flex justify-start items-end">
-                                                    <span className="border-b-2 border-gray-700">Test</span>
-                                                </div>
-                                                <div className="w-full flex flex-row">
-                                                    <div className="h-full w-[1px] bg-gray-700 mx-1"></div>
-                                                    <div className="flex h-full w-1/2 flex-col">
-                                                        <div className="font-semibold leading-4 text-[0.7rem] lg:text-[1rem]">
-                                                            Expected output
+                                        {submissionResults[selectedProblem.id]?.incorrectOutputs?.map(
+                                            (output, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="border-2 border-graymedium bg-graymedium rounded-lg p-2 flex flex-row"
+                                                >
+                                                    <div className="lg:text-[1.5rem] w-20 flex justify-start items-end">
+                                                        <span className="border-b-2 border-gray-700">Test</span>
+                                                    </div>
+                                                    <div className="w-full flex flex-row">
+                                                        <div className="h-full w-[1px] bg-gray-700 mx-1"></div>
+                                                        <div className="flex h-full w-1/2 flex-col">
+                                                            <div className="font-semibold leading-4 text-[0.7rem] lg:text-[1rem]">
+                                                                Expected output
+                                                            </div>
+                                                            <div className="mx-1 h-full leading-4 text-[0.8rem] lg:text-[1rem] flex justify-start items-center overflow-x-auto">
+                                                                {output.expectedOutput}
+                                                            </div>
                                                         </div>
-                                                        <div className="mx-1 h-full leading-4 text-[0.8rem] lg:text-[1rem] flex justify-start items-center overflow-x-auto">
-                                                            {output.expectedOutput}
+                                                        <div className="h-full w-[1px] bg-gray-700 mx-1"></div>
+                                                        <div className="flex h-full w-1/2 flex-col">
+                                                            <div className="font-semibold leading-4 text-[0.7rem] lg:text-[1rem]">
+                                                                Your output
+                                                            </div>
+                                                            <div className="mx-1 h-full leading-4 text-[0.8rem] lg:text-[1rem] flex justify-start items-center overflow-x-auto">
+                                                                {output.output}
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div className="h-full w-[1px] bg-gray-700 mx-1"></div>
-                                                    <div className="flex h-full w-1/2 flex-col">
-                                                        <div className="font-semibold leading-4 text-[0.7rem] lg:text-[1rem]">
-                                                            Your output
-                                                        </div>
-                                                        <div className="mx-1 h-full leading-4 text-[0.8rem] lg:text-[1rem] flex justify-start items-center overflow-x-auto">
-                                                            {output.output}
-                                                        </div>
-                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            )
+                                        )}
                                     </div>
                                 </div>
                             ) : (
@@ -433,9 +456,15 @@ const ProblemSolver: React.FC<ProblemSolverProps> = ({ problems, competitionId, 
                         </div>
                     ) : null}
                     <CodeEditor
-                        currentAnswer={selectedProblem && problemAnswers[selectedProblem.id] ? problemAnswers[selectedProblem.id].code : ""}
+                        currentAnswer={
+                            selectedProblem && problemAnswers[selectedProblem.id]
+                                ? problemAnswers[selectedProblem.id].code
+                                : ""
+                        }
                         currentLanguage={
-                            selectedProblem && problemAnswers[selectedProblem.id] ? problemAnswers[selectedProblem.id].language : null
+                            selectedProblem && problemAnswers[selectedProblem.id]
+                                ? problemAnswers[selectedProblem.id].language
+                                : null
                         }
                         onAnswerChange={handleAnswerChange}
                         run={run}
