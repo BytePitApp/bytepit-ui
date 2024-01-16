@@ -40,7 +40,9 @@ const ContestantHomePage = () => {
             })
             setCompetitions(competitionsData)
             setShownCompetitions(
-                competitionsData.filter((item: Competition) => item.start_time_date!! < new Date() && item.end_time_date!! > new Date())
+                competitionsData.filter(
+                    (item: Competition) => item.start_time_date!! < new Date() && item.end_time_date!! > new Date()
+                )
             )
             setLoading(false)
         } catch (err: any) {
@@ -75,7 +77,9 @@ const ContestantHomePage = () => {
         const date = new Date()
         setDate(date)
         setLoading(true)
-        setShownCompetitions(competitions.filter((item) => item.start_time_date!! < date && item.end_time_date!! > date))
+        setShownCompetitions(
+            competitions.filter((item) => item.start_time_date!! < date && item.end_time_date!! > date)
+        )
         setLoading(false)
     }
 
@@ -114,7 +118,24 @@ const ContestantHomePage = () => {
     const renderHeader = () => {
         return (
             <div className="flex justify-between p-2 text-primary">
-                <p className="max-md:hidden text-2xl flex items-center">Available competitions</p>
+                <div className="flex flex-col md:flex-row gap-5 items-center text-center">
+                    <p className="max-md:hidden text-2xl flex items-center">Available competitions</p>
+
+                    <Button
+                        label="Start a virtual competition"
+                        icon={<FaTrophy className="text-sm lg:text-2xl" />}
+                        className="shadow-darkgray drop-shadow-xl hover:scale-105 flex gap-2 text-sm 
+                            transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
+                        onClick={handleRandomVirtualCompetition}
+                    />
+                    <Button
+                        label="Playground"
+                        icon={<FaGamepad className="text-sm lg:text-2xl" />}
+                        className="shadow-darkgray drop-shadow-xl hover:scale-105 flex gap-2 text-sm 
+                        transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
+                        onClick={() => navigate("/contestant/playground")}
+                    />
+                </div>
                 <div className="flex gap-4">
                     <Button
                         label="Active competitions"
@@ -187,7 +208,9 @@ const ContestantHomePage = () => {
                     label={finished ? "Results" : "Start"}
                     disabled={rowData.start_time_date!! >= new Date()}
                     onClick={() => navigate(`/contestant/competition/${rowData.id}`)}
-                    icon={finished ? null : <FaPlayCircle className="mr-1 transition-colors duration-150 ease-in-out" />}
+                    icon={
+                        finished ? null : <FaPlayCircle className="mr-1 transition-colors duration-150 ease-in-out" />
+                    }
                     className="py-2 px-3 text-lg text-primary hover:text-graymedium bg-graymedium hover:bg-primary transition-colors ease-in-out duration-150"
                 />
             </div>
@@ -234,9 +257,14 @@ const ContestantHomePage = () => {
                         root: { className: "border-graydark border-2 rounded-xl shadow-xl shadow-darkgray" },
                         header: { className: "rounded-t-xl" },
                     }}
-                    className="text-sm">
+                    className="text-sm"
+                >
                     <Column field="name" header="Name" bodyClassName="overflow-y-auto max-sm:min-w-[50vw]" />
-                    <Column field="description" header="Description" bodyClassName="overflow-y-auto max-sm:min-w-[50vw]" />
+                    <Column
+                        field="description"
+                        header="Description"
+                        bodyClassName="overflow-y-auto max-sm:min-w-[50vw]"
+                    />
                     <Column header="Available for" body={AvailableForBodyTemplate} />
                     <Column
                         header="problems"
@@ -246,29 +274,6 @@ const ContestantHomePage = () => {
                     <Column header="Go!" body={startBodyTemplate} />
                     <Column header="Create virutal competition" body={createVirtualCompetitionBodyTemplate} />
                 </DataTable>
-                <div className="flex flex-col gap-10 items-center bg-graymedium py-8 w-fit place-self-center 2xl:py-16 px-16 2xl:px-24 rounded-xl 2xl:rounded-3xl border-graydark border-b-4 drop-shadow-xl">
-                    <div className="flex flex-col md:flex-row gap-5 items-center">
-                        <p className="text-sm lg:text-2xl">Practice published tasks in</p>
-                        <Button
-                            label="Playground"
-                            icon={<FaGamepad className="text-sm lg:text-3xl" />}
-                            className="shadow-darkgray drop-shadow-xl hover:scale-105 flex gap-2 text-sm lg:text-2xl
-                            transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
-                            onClick={() => navigate("/contestant/playground")}
-                        />
-                    </div>
-                    <div className="flex flex-col md:flex-row gap-5 items-center text-center">
-                        <p className="text-sm lg:text-2xl">Create private</p>
-                        <Button
-                            label="Virtual competition"
-                            icon={<FaTrophy className="text-sm lg:text-2xl" />}
-                            className="shadow-darkgray drop-shadow-xl hover:scale-105 flex gap-2 text-sm lg:text-2xl
-                            transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
-                            onClick={handleRandomVirtualCompetition}
-                        />
-                        <p className="text-sm lg:text-2xl">automatically with random problems</p>
-                    </div>
-                </div>
             </div>
         </div>
     )
