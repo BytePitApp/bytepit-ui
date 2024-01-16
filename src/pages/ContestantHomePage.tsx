@@ -42,16 +42,20 @@ const ContestantHomePage = () => {
         try {
             setLoading(true)
             const res = await getAllCompetitions()
-            setCompetitions(res.data.map((item: Competition) => {
-                return {
-                    ...item,
-                    start_time_date: new Date(item.start_time),
-                    end_time_date: new Date(item.end_time),
-                }
-            }))
-            setShownCompetitions(competitions.filter(item => {
-                item.start_time_date!! < new Date() && item.end_time_date!! > new Date()
-            }))
+            setCompetitions(
+                res.data.map((item: Competition) => {
+                    return {
+                        ...item,
+                        start_time_date: new Date(item.start_time),
+                        end_time_date: new Date(item.end_time),
+                    }
+                })
+            )
+            setShownCompetitions(
+                competitions.filter((item) => {
+                    item.start_time_date!! < new Date() && item.end_time_date!! > new Date()
+                })
+            )
             setLoading(false)
         } catch (err: any) {
             console.log(err.response?.data?.detail ?? "Something went wrong")
@@ -85,24 +89,13 @@ const ContestantHomePage = () => {
         const date = new Date()
         setDate(date)
         setLoading(true)
-        setShownCompetitions(competitions.filter(item =>
-            item.start_time_date!! < date && item.end_time_date!! > date
-        ))
+        setShownCompetitions(competitions.filter((item) => item.start_time_date!! < date && item.end_time_date!! > date))
         setLoading(false)
     }
 
     const handleCreateVirtualCompetition = async (parentCompetitionId: string) => {
         try {
             setLoading(true)
-            const virtualCompetitions = await getAllVirtualCompetitions()
-            const alreadyCreated = virtualCompetitions.data.find((item: Competition) => 
-                item.parent_id === parentCompetitionId && item.organiser_id === auth?.id
-            )
-            if (alreadyCreated) {
-                navigate(`/contestant/virtual-competition/${alreadyCreated.id}`)
-                setLoading(false)
-                return
-            }
             const response = await createVirtualCompetition(parentCompetitionId)
             navigate(`/contestant/virtual-competition/${response.data}`)
             setLoading(false)
@@ -158,7 +151,14 @@ const ContestantHomePage = () => {
     }
 
     const AvailableForBodyTemplate = (rowData: Competition): React.ReactNode => {
-        const dateTimeOptions: any = { hour12: false, year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }
+        const dateTimeOptions: any = {
+            hour12: false,
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+        }
         const units = ["minute", "hour", "day", "year"]
         const unitValues = [60, 60, 24, 365]
         let duration = (rowData.end_time_date!!.getTime() - rowData.start_time_date!!.getTime()) / 1000
@@ -178,7 +178,9 @@ const ContestantHomePage = () => {
         return (
             <div className="min-w-[12rem]">
                 <p className="font-semibold text-base">{durationText}</p>
-                <p className="text-sm">expires: {endDateString}</p>
+                <p className="text-sm">
+                    {rowData?.end_time_date && rowData?.end_time_date < new Date() ? "expired" : "expires"}: {endDateString}
+                </p>
                 <p className="text-sm">starts: {startDateString}</p>
             </div>
         )
@@ -203,13 +205,17 @@ const ContestantHomePage = () => {
         const showVirtualButton = rowData.end_time_date!! <= new Date()
         return (
             <div className="flex justify-center items-center">
-                <Button
-                    label="Virtual"
-                    disabled={!showVirtualButton}
-                    onClick={() => handleCreateVirtualCompetition(rowData.id)}
-                    icon={<FaTrophy className="mr-1 transition-colors duration-150 ease-in-out" />}
-                    className="py-2 px-3 text-lg text-primary hover:text-graymedium bg-graymedium hover:bg-primary transition-colors ease-in-out duration-150"
-                />
+                {rowData.parent_id !== null ? (
+                    <p className="self-center font-semibold">Already virtual</p>
+                ) : (
+                    <Button
+                        label="Virtual"
+                        disabled={!showVirtualButton}
+                        onClick={() => handleCreateVirtualCompetition(rowData.id)}
+                        icon={<FaTrophy className="mr-1 transition-colors duration-150 ease-in-out" />}
+                        className="py-2 px-3 text-lg text-primary hover:text-graymedium bg-graymedium hover:bg-primary transition-colors ease-in-out duration-150"
+                    />
+                )}
             </div>
         )
     }
@@ -232,24 +238,36 @@ const ContestantHomePage = () => {
                     sortField="endTime"
                     sortOrder={1}
                     header={renderHeader}
+                    showHeaders={false}
                     scrollable
+                    loading={loading}
                     scrollHeight="100%"
+                    rowClassName={(rowData: Competition) => {
+                        const endedClass = rowData.end_time_date && rowData.end_time_date < new Date() ? "bg-gray-100" : ""
+                        const parentClass = rowData.parent_id ? (rowData.parent_id !== null ? "bg-purple-100" : "") : ""
+                        return `${endedClass} ${parentClass}`
+                    }}
                     paginatorClassName="rounded-b-xl"
                     pt={{
                         root: { className: "border-graydark border-2 rounded-xl shadow-xl shadow-darkgray" },
                         header: { className: "rounded-t-xl" },
                     }}
                     className="text-sm">
-                    <Column field="name" header="Name" bodyClassName="overflow-y-auto max-sm:min-w-[50vw]" />
-                    <Column field="description" header="Description" bodyClassName="overflow-y-auto max-sm:min-w-[50vw]" />
-                    <Column header="Available for" body={AvailableForBodyTemplate} />
+                    <Column field="name" body={(rowData: Competition) => rowData.name} />
+                    <Column field="description" bodyClassName="overflow-y-auto max-sm:min-w-[50vw]" />
+                    <Column body={AvailableForBodyTemplate} />
                     <Column
-                        header="problems"
-                        bodyClassName="text-center text-xl font-semibold"
-                        body={(rowData: any) => rowData.problems.length}
+                        bodyClassName="text-center text-md font-semibold"
+                        body={(rowData: any) => {
+                            return (
+                                <>
+                                    <p className="text-lg">{rowData.problems.length}</p> problems
+                                </>
+                            )
+                        }}
                     />
-                    <Column header="Go!" body={startBodyTemplate} />
-                    <Column header="Create virutal competition" body={createVirtualCompetitionBodyTemplate} />
+                    <Column body={startBodyTemplate} />
+                    <Column body={createVirtualCompetitionBodyTemplate} />
                 </DataTable>
                 <div className="flex flex-col gap-10 items-center bg-graymedium py-8 w-fit place-self-center 2xl:py-16 px-16 2xl:px-24 rounded-xl 2xl:rounded-3xl border-graydark border-b-4 drop-shadow-xl">
                     <div className="flex flex-col md:flex-row gap-5 items-center">

@@ -123,6 +123,11 @@ const getCompetitionResults = async (competitionId: string) => {
     return response
 }
 
+const getVirtualCompetitionResults = async (competitionId: string) => {
+    const response = await requests(`/competitions/virtual/${competitionId}/results`)
+    return response
+}
+
 export {
     createCompetition,
     getAllCompetitionsForOrganiser,
@@ -135,4 +140,5 @@ export {
     getRandomVirtualCompetition,
     getAllVirtualCompetitions,
     getCompetitionResults,
+    getVirtualCompetitionResults,
 }
