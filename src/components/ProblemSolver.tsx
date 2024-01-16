@@ -293,7 +293,7 @@ const ProblemSolver: React.FC<ProblemSolverProps> = ({ problems, competitionId, 
                         </div>
                         <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-8 lg:gap-0">
                             <div className="text-[1rem]">
-                                <span className="font-semibold mr-2">Runetime Limit:</span>
+                                <span className="font-semibold mr-2">Runtime Limit:</span>
                                 <span className="text-[0.9rem]">
                                     {formatRuntimeLimit(selectedProblem?.runtime_limit)}
                                 </span>
