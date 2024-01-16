@@ -6,7 +6,6 @@ import RegisterPage from "./RegisterPage"
 import LandingPage from "./LandingPage"
 import CreateProblemPage from "./CreateProblemPage"
 import EditProblemPage from "./EditProblemPage"
-import OrganiserProblemPage from "./OrganiserProblemPage"
 import EmailConfirmPage from "./EmailConfirmPage"
 import CreateCompetitionPage from "./CreateCompetitionPage"
 import ContestantViewCompetitionPage from "./ContestantViewCompetitionPage"
@@ -24,7 +23,6 @@ export {
     LandingPage,
     CreateProblemPage,
     EditProblemPage,
-    OrganiserProblemPage,
     CreateCompetitionPage,
     ContestantViewCompetitionPage,
     ContestantProblemPlaygroundPage,
