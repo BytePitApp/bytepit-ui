@@ -7,7 +7,7 @@ import { DataTable } from "primereact/datatable"
 import { Column } from "primereact/column"
 import { Competition } from "../Models"
 import { Calendar } from "primereact/calendar"
-import { 
+import {
     createVirtualCompetition,
     getAllCompetitions,
     getRandomVirtualCompetition,
@@ -31,16 +31,20 @@ const ContestantHomePage = () => {
         try {
             setLoading(true)
             const res = await getAllCompetitions()
-            setCompetitions(res.data.map((item: Competition) => {
-                return {
-                    ...item,
-                    start_time_date: new Date(item.start_time),
-                    end_time_date: new Date(item.end_time),
-                }
-            }))
-            setShownCompetitions(competitions.filter(item => {
-                item.start_time_date!! < new Date() && item.end_time_date!! > new Date()
-            }))
+            setCompetitions(
+                res.data.map((item: Competition) => {
+                    return {
+                        ...item,
+                        start_time_date: new Date(item.start_time),
+                        end_time_date: new Date(item.end_time),
+                    }
+                })
+            )
+            setShownCompetitions(
+                competitions.filter((item) => {
+                    item.start_time_date!! < new Date() && item.end_time_date!! > new Date()
+                })
+            )
             setLoading(false)
         } catch (err: any) {
             console.log(err.response?.data?.detail ?? "Something went wrong")
@@ -51,30 +55,32 @@ const ContestantHomePage = () => {
         fetchAllCompetitions()
     }, [])
 
-    const handleDateChange = (date:  Nullable<Date>) => {
+    const handleDateChange = (date: Nullable<Date>) => {
         setDate(date)
         if (date) {
             setLoading(true)
-            setShownCompetitions(competitions.filter(item => {
-                const startDateZero = new Date(item.start_time)
-                startDateZero.setHours(0, 0, 0, 0)
-                const endDateZero = new Date(item.end_time)
-                endDateZero.setHours(0, 0, 0, 0)
-                if (startDateZero <= date && endDateZero >= date) {
-                    return { item }
-                }
-            }))
+            setShownCompetitions(
+                competitions.filter((item) => {
+                    const startDateZero = new Date(item.start_time)
+                    startDateZero.setHours(0, 0, 0, 0)
+                    const endDateZero = new Date(item.end_time)
+                    endDateZero.setHours(0, 0, 0, 0)
+                    if (startDateZero <= date && endDateZero >= date) {
+                        return { item }
+                    }
+                })
+            )
             setLoading(false)
         }
     }
-    
+
     const handleActiveCompetitions = () => {
         const date = new Date()
         setDate(date)
         setLoading(true)
-        setShownCompetitions(competitions.filter(item =>
-            item.start_time_date!! < date && item.end_time_date!! > date
-        ))
+        setShownCompetitions(
+            competitions.filter((item) => item.start_time_date!! < date && item.end_time_date!! > date)
+        )
         setLoading(false)
     }
 
@@ -82,8 +88,8 @@ const ContestantHomePage = () => {
         try {
             setLoading(true)
             const virtualCompetitions = await getAllVirtualCompetitions()
-            const alreadyCreated = virtualCompetitions.data.find((item: Competition) => 
-                item.parent_id === parentCompetitionId && item.organiser_id === auth?.id
+            const alreadyCreated = virtualCompetitions.data.find(
+                (item: Competition) => item.parent_id === parentCompetitionId && item.organiser_id === auth?.id
             )
             if (alreadyCreated) {
                 navigate(`/contestant/virtual-competition/${alreadyCreated.id}`)
@@ -97,7 +103,7 @@ const ContestantHomePage = () => {
             console.log(err.response?.data?.detail ?? "Something went wrong")
         }
     }
-    
+
     const handleRandomVirtualCompetition = async () => {
         try {
             setLoading(true)
@@ -113,7 +119,24 @@ const ContestantHomePage = () => {
     const renderHeader = () => {
         return (
             <div className="flex justify-between p-2 text-primary">
-                <p className="max-md:hidden text-2xl flex items-center">Available competitions</p>
+                <div className="flex flex-col md:flex-row gap-5 items-center text-center">
+                    <p className="max-md:hidden text-2xl flex items-center">Available competitions</p>
+
+                    <Button
+                        label="Start a virtual competition"
+                        icon={<FaTrophy className="text-sm lg:text-2xl" />}
+                        className="shadow-darkgray drop-shadow-xl hover:scale-105 flex gap-2 text-sm 
+                            transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
+                        onClick={handleRandomVirtualCompetition}
+                    />
+                    <Button
+                        label="Playground"
+                        icon={<FaGamepad className="text-sm lg:text-2xl" />}
+                        className="shadow-darkgray drop-shadow-xl hover:scale-105 flex gap-2 text-sm 
+                        transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
+                        onClick={() => navigate("/contestant/playground")}
+                    />
+                </div>
                 <div className="flex gap-4">
                     <Button
                         label="Active competitions"
@@ -139,11 +162,20 @@ const ContestantHomePage = () => {
             <div className="flex justify-center items-center h-56">
                 <ProgressSpinner style={{ width: "50px", height: "50px" }} fill="#dee2e6" strokeWidth="7" />
             </div>
-        ) : ( "No active competitions found." )
+        ) : (
+            "No active competitions found."
+        )
     }
 
     const AvailableForBodyTemplate = (rowData: Competition): React.ReactNode => {
-        const dateTimeOptions: any = { hour12: false, year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }
+        const dateTimeOptions: any = {
+            hour12: false,
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+        }
         const units = ["minute", "hour", "day", "year"]
         const unitValues = [60, 60, 24, 365]
         let duration = (rowData.end_time_date!!.getTime() - rowData.start_time_date!!.getTime()) / 1000
@@ -177,7 +209,9 @@ const ContestantHomePage = () => {
                     label={finished ? "Results" : "Start"}
                     disabled={rowData.start_time_date!! >= new Date()}
                     onClick={() => navigate(`/contestant/competition/${rowData.id}`)}
-                    icon={finished ? null : <FaPlayCircle className="mr-1 transition-colors duration-150 ease-in-out" />}
+                    icon={
+                        finished ? null : <FaPlayCircle className="mr-1 transition-colors duration-150 ease-in-out" />
+                    }
                     className="py-2 px-3 text-lg text-primary hover:text-graymedium bg-graymedium hover:bg-primary transition-colors ease-in-out duration-150"
                 />
             </div>
@@ -202,7 +236,7 @@ const ContestantHomePage = () => {
     return (
         <div className="bg-form bg-cover min-h-screen">
             <Navbar />
-            <div className="grow p-[5%] flex flex-col gap-y-20">                
+            <div className="grow p-[5%] flex flex-col gap-y-20">
                 <DataTable
                     value={shownCompetitions}
                     paginator
@@ -214,67 +248,33 @@ const ContestantHomePage = () => {
                     emptyMessage={renderProgressSpinner}
                     stripedRows
                     showGridlines={true}
-                    sortField="endTime" 
+                    sortField="endTime"
                     sortOrder={1}
                     header={renderHeader}
-                    scrollable scrollHeight="100%"
+                    scrollable
+                    scrollHeight="100%"
                     paginatorClassName="rounded-b-xl"
                     pt={{
                         root: { className: "border-graydark border-2 rounded-xl shadow-xl shadow-darkgray" },
                         header: { className: "rounded-t-xl" },
                     }}
-                    className="text-sm">
-                    <Column 
-                        field="name"
-                        header="Name"
-                        bodyClassName="overflow-y-auto max-sm:min-w-[50vw]"
-                    />
-                    <Column 
-                        field="description" 
+                    className="text-sm"
+                >
+                    <Column field="name" header="Name" bodyClassName="overflow-y-auto max-sm:min-w-[50vw]" />
+                    <Column
+                        field="description"
                         header="Description"
                         bodyClassName="overflow-y-auto max-sm:min-w-[50vw]"
                     />
-                    <Column
-                        header="Available for"
-                        body={AvailableForBodyTemplate}
-                    />
+                    <Column header="Available for" body={AvailableForBodyTemplate} />
                     <Column
                         header="problems"
                         bodyClassName="text-center text-xl font-semibold"
                         body={(rowData: any) => rowData.problems.length}
                     />
-                    <Column
-                        header="Go!"
-                        body={startBodyTemplate}
-                    />
-                    <Column
-                        header="Create virutal competition"
-                        body={createVirtualCompetitionBodyTemplate}
-                    />
+                    <Column header="Go!" body={startBodyTemplate} />
+                    <Column header="Create virutal competition" body={createVirtualCompetitionBodyTemplate} />
                 </DataTable>
-                <div className="flex flex-col gap-10 items-center bg-graymedium py-8 w-fit place-self-center 2xl:py-16 px-16 2xl:px-24 rounded-xl 2xl:rounded-3xl border-graydark border-b-4 drop-shadow-xl">
-                    <div className="flex flex-col md:flex-row gap-5 items-center">
-                        <p className="text-sm lg:text-2xl">Practice published tasks in</p>
-                        <Button
-                            label="Playground"
-                            icon={<FaGamepad className="text-sm lg:text-3xl" />}
-                            className="shadow-darkgray drop-shadow-xl hover:scale-105 flex gap-2 text-sm lg:text-2xl
-                            transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
-                            onClick={() => navigate("/contestant/playground")}
-                        />
-                    </div>
-                    <div className="flex flex-col md:flex-row gap-5 items-center text-center">
-                        <p className="text-sm lg:text-2xl">Create private</p>
-                        <Button
-                            label="Virtual competition"
-                            icon={<FaTrophy className="text-sm lg:text-2xl" />}
-                            className="shadow-darkgray drop-shadow-xl hover:scale-105 flex gap-2 text-sm lg:text-2xl
-                            transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
-                            onClick={handleRandomVirtualCompetition}
-                        />
-                        <p className="text-sm lg:text-2xl">automatically with random problems</p>
-                    </div>
-                </div>
             </div>
         </div>
     )
