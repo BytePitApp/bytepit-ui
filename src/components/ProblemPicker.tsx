@@ -34,36 +34,45 @@ const ProblemPicker: React.FC<ProblemPickerProps> = ({ problems, selectedProblem
     }
 
     return (
-        <div className="grid grid-cols-2 my-4">
+        <div className="grid grid-cols-2 my-4 border border-primary rounded-lg">
             <div
                 className={`${
-                    showOption === "your" ? "bg-primarylight" : "bg-secondarylight hover:bg-secondarydark cursor-pointer"
-                } flex justify-center items-center text-white px-2 py-4 rounded-tl-lg font-semibold text-lg`}
-                onClick={() => setProblemsToShow("your")}>
+                    showOption === "your"
+                        ? "text-white bg-primary"
+                        : "text-black bg-white hover:bg-graydark cursor-pointer"
+                } flex justify-center items-center px-2 py-4 rounded-tl-lg font-semibold text-lg`}
+                onClick={() => setProblemsToShow("your")}
+            >
                 Your Problems
             </div>
             <div
                 className={`${
-                    showOption === "other" ? "bg-primarylight" : " bg-secondarylight hover:bg-secondarydark cursor-pointer"
-                } flex justify-center items-center text-white px-2 py-4 rounded-tr-lg font-semibold text-lg`}
-                onClick={() => setProblemsToShow("other")}>
+                    showOption === "other"
+                        ? "text-white bg-primary"
+                        : "text-black bg-white hover:bg-graydark cursor-pointer"
+                } flex justify-center items-center px-2 py-4 rounded-tr-lg font-semibold text-lg`}
+                onClick={() => setProblemsToShow("other")}
+            >
                 Other Problems
             </div>
-            <div className="col-span-2 border-b-2 border-x-2 border-secondarylight bg-secondarylight rounded-b-lg">
+            <div className="col-span-2 border-t border-primary bg-white rounded-b-lg">
                 <div>
                     {showOption === "your" ? (
                         <>
                             {problems.find((p: Problem) => p.organiser_id === auth?.id) ? (
                                 <div>
                                     {problems
-                                        .filter((p: Problem) => p.organiser_id === auth?.id)
+                                        .filter(
+                                            (p: Problem) =>
+                                                p.organiser_id === auth?.id && !selectedProblems.includes(p.id)
+                                        )
                                         .slice((currentPage - 1) * 10, currentPage * 10)
                                         .map((problem: Problem) => {
                                             return (
                                                 <ProblemListItem
                                                     key={problem.id}
                                                     problem={problem}
-                                                    selectedProblems={selectedProblems}
+                                                    isSelected={selectedProblems.includes(problem.id)}
                                                     removeProblem={removeProblem}
                                                     addProblem={addProblem}
                                                 />
@@ -84,14 +93,18 @@ const ProblemPicker: React.FC<ProblemPickerProps> = ({ problems, selectedProblem
                             {problems.find((p: Problem) => p.organiser_id !== auth?.id) ? (
                                 <>
                                     {problems
-                                        .filter((p: Problem) => p.organiser_id !== auth?.id)
+
+                                        .filter(
+                                            (p: Problem) =>
+                                                p.organiser_id !== auth?.id && !selectedProblems.includes(p.id)
+                                        )
                                         .slice((currentPage - 1) * 10, currentPage * 10)
                                         .map((problem: Problem) => {
                                             return (
                                                 <ProblemListItem
                                                     key={problem.id}
                                                     problem={problem}
-                                                    selectedProblems={selectedProblems}
+                                                    isSelected={selectedProblems.includes(problem.id)}
                                                     removeProblem={removeProblem}
                                                     addProblem={addProblem}
                                                 />
@@ -125,11 +138,15 @@ const ProblemPickerFooter: React.FC<ProblemPickerFooterProps> = ({ currentPage, 
         <div className="flex p-2 justify-center items-center gap-8">
             <div
                 className="pi pi-chevron-left text-xl bg-primarylight text-white p-2 rounded-3xl cursor-pointer"
-                onClick={decrementPage}></div>
-            <div className="text-2xl w-14 text-white font-semibold flex justify-center items-center select-none">{currentPage}</div>
+                onClick={decrementPage}
+            ></div>
+            <div className="text-2xl w-14 text-white font-semibold flex justify-center items-center select-none">
+                {currentPage}
+            </div>
             <div
                 className="pi pi-chevron-right text-xl bg-primarylight text-white p-2 rounded-3xl cursor-pointer"
-                onClick={incrementPage}></div>
+                onClick={incrementPage}
+            ></div>
         </div>
     )
 }
