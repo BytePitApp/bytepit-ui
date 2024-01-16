@@ -26,7 +26,6 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
     const { id } = useParams<{ id: string }>()
 
     const parseCompetitionResults = () => {
-        console.log(competitionResults)
         const newParsedCompetitionResults: ParsedCompetitionResult[] = []
 
         const problem_ids = competition?.problems.reduce((acc, problem, index) => {
@@ -54,7 +53,6 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
                     parsedResult[problemResultIdKey] = problemResult.id
                 }
             })
-            console.log(numOfProblemResults)
             for (let i = 0; i < numOfProblemResults; i++) {
                 const numOfPointsKey = `num_of_points${i + 1}`
                 const maxNumOfPointsKey = `max_num_of_points${i + 1}`
@@ -68,7 +66,6 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
 
             newParsedCompetitionResults.push(parsedResult)
         })
-        console.log(newParsedCompetitionResults)
         setParsedCompetitionResults(newParsedCompetitionResults)
     }
 
