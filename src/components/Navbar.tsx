@@ -3,6 +3,7 @@ import useAuth from "../hooks/useAuth"
 import { Link, useNavigate } from "react-router-dom"
 import { Avatar } from "primereact/avatar"
 import { logout } from "../services/login.service"
+import { ProfileLink } from "../components"
 
 const Navbar = () => {
     const navigate = useNavigate()
@@ -52,7 +53,7 @@ const Navbar = () => {
                         )}
                         {/* <img src={`data:image/jpeg;base64,${auth?.image}`}></img> */}
                         <li className="flex flex-col">
-                            <span className="text-lg">{auth["username"]}</span>
+                            <ProfileLink profileUrl={`/${auth.role}/home`} username={auth.username} />
                         </li>
                         <VerticalLine />
                         <Button
@@ -64,7 +65,7 @@ const Navbar = () => {
                 ) : (
                     <li className="flex flex-row items-center gap-2">
                         <Button
-                            label="Login" 
+                            label="Login"
                             className="text-white text-center font-bold h-[5vh] text-[2vh] rounded-[0.5vh]
                             hover:scale-[103%] bg-primary hover:bg-primarylight transition-all ease-in-out duration-300"
                             onClick={() => navigate("/login")}
