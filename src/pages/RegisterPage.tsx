@@ -1,4 +1,4 @@
-import React, { useState, useRef, FormEvent } from "react"
+import { useState, useRef, FormEvent } from "react"
 import { FormDataRegister, RegisterRole } from "../Models"
 import { Link, useNavigate } from "react-router-dom"
 import { InputText } from "primereact/inputtext"
@@ -28,6 +28,7 @@ const RegisterPage = () => {
         role: RegisterRole.CONTESTANT,
     })
     const [loading, setLoading] = useState<boolean>(false)
+    const [success, setSuccess] = useState<boolean>(false)
     const toast = useRef<Toast>(null)
 
     const handleValueChange = (e: any) => {
@@ -66,14 +67,10 @@ const RegisterPage = () => {
                 detail: "Check your email for confirmation!",
                 life: 10000,
             })
-            setFormData({
-                username: "",
-                password: "",
-                email: "",
-                name: "",
-                surname: "",
-                role: RegisterRole.CONTESTANT,
-            })
+            setSuccess(true)
+            setTimeout(() => {
+                navigate("/login")
+            }, 5000)
         } catch (err: any) {
             if (Array.isArray(err.response.data.detail)) {
                 for (const error of err.response.data.detail) {
@@ -102,6 +99,111 @@ const RegisterPage = () => {
         return <div className="text-semibold">{setFirstLetterToUpperCase(option)}</div>
     }
 
+    const renderForm = () => {
+        return (
+            <form
+                onSubmit={submitForm}
+                className="mx-[5%] mt-[40vh] mb-[10vh] lg:my-0 gap-[2vh] flex flex-col rounded-xl p-[5%] bg-graymedium drop-shadow-xl rounded-t-xl border-graydark border-b-4"
+            >
+                <div className="m-[5%] flex flex-col gap-2">
+                    <span className="text-[4vh] text-center font-semibold text-primary mb-2">Welcome to BytePit</span>
+                    <span className="text-[2vh] text-center text-slate-950">
+                        Please fill in the form below to create your account.
+                    </span>
+                </div>
+                <div className="flex flex-col items-center w-full justify-center">
+                    <span className="p-float-label text-[2vh] w-full lg:w-1/2">
+                        <Dropdown
+                            id="role"
+                            name="role"
+                            value={formData.role}
+                            onChange={handleValueChange}
+                            options={[RegisterRole.CONTESTANT, RegisterRole.ORGANISER]}
+                            placeholder="Select a Role"
+                            className="w-full text-[2vh] rounded-[1vh]"
+                            itemTemplate={roleTemplate}
+                            valueTemplate={selectedRoleTemplate}
+                        />
+                        <label htmlFor="in">Role</label>
+                    </span>
+                </div>
+                <div className="flex flex-col lg:flex-row gap-6">
+                    <div className="flex flex-col gap-6 w-full">
+                        <TextInput name="email" value={formData.email} label="Email" onUpdate={handleValueChange} />
+                        <TextInput
+                            name="username"
+                            value={formData.username}
+                            label="Username"
+                            onUpdate={handleValueChange}
+                        />
+                        <span className="p-float-label text-2vh">
+                            <Password
+                                name="password"
+                                toggleMask
+                                value={formData.password}
+                                onChange={handleValueChange}
+                                feedback
+                                className="text-[2vh] rounded-[1vh]"
+                                inputClassName="text-[2vh] rounded-[1vh]"
+                                pt={{
+                                    showIcon: {
+                                        className:
+                                            "mb-2 hover:cursor-pointer hover:scale-[108%] transition-all ease-in-out duration-300",
+                                    },
+                                    hideIcon: {
+                                        className:
+                                            "mb-2 hover:cursor-pointer hover:scale-[108%] transition-all ease-in-out duration-300",
+                                    },
+                                }}
+                            />
+                            <label htmlFor="in">Password</label>
+                        </span>
+                    </div>
+                    <div className="flex flex-col gap-6 w-full">
+                        <TextInput name="name" value={formData.name} label="Name" onUpdate={handleValueChange} />
+                        <TextInput
+                            name="surname"
+                            value={formData.surname}
+                            label="Surname"
+                            onUpdate={handleValueChange}
+                        />
+                        <div>
+                            <input
+                                id="image"
+                                className="w-full text-[2vh] rounded-[1vh] file:w-1/2 block text-sm file:rounded-[1vh] file:bg-gray-300 file:hover:bg-gray-200 file:transition-all file:ease-in-out file:duration-300 file:border-none select-none file:cursor-pointer cursor-defualt file:text-gray-800 file:p-3 file:pointer-events-auto pointer-events-none bg-gray-50 text-gray-600"
+                                type="file"
+                                onChange={(e: any) => setSelectedImage(e.target.files[0])}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex flex-col gap-[4vh] justify-center items-center">
+                    <Button
+                        className="w-full hover:scale-[102%] transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
+                        label="Submit"
+                        type="submit"
+                    />
+                    <span className="text-[2vh] text-center text-slate-950">
+                        Already have an account on BytePit?{" "}
+                        <Link to="/login" className="text-primary font-semibold">
+                            Login
+                        </Link>
+                    </span>
+                </div>
+            </form>
+        )
+    }
+
+    const renderSuccessMessage = () => {
+        return (
+            <div className="text-center">
+                <h5 className="font-bold text-[4vh] text-black">Registration successful!</h5>
+                <p className="font-semibold text-[1.5vh]">Please check your email for confirmation!</p>
+            </div>
+        )
+    }
+
     return (
         <div className="flex flex-col h-screen justify-center">
             {loading && (
@@ -114,99 +216,7 @@ const RegisterPage = () => {
                 <Toast ref={toast} />
             </div>
             <div className="bg-form bg-cover grow flex flex-row justify-center items-center">
-                <form
-                    onSubmit={submitForm}
-                    className="mx-[5%] mt-[40vh] mb-[10vh] lg:my-0 gap-[2vh] flex flex-col rounded-xl p-[5%] bg-graymedium drop-shadow-xl rounded-t-xl border-graydark border-b-4"
-                >
-                    <div className="m-[5%] flex flex-col gap-2">
-                        <span className="text-[4vh] text-center font-semibold text-primary mb-2">
-                            Welcome to BytePit
-                        </span>
-                        <span className="text-[2vh] text-center text-slate-950">
-                            Please fill in the form below to create your account.
-                        </span>
-                    </div>
-                    <div className="flex flex-col items-center w-full justify-center">
-                        <span className="p-float-label text-[2vh] w-full lg:w-1/2">
-                            <Dropdown
-                                id="role"
-                                name="role"
-                                value={formData.role}
-                                onChange={handleValueChange}
-                                options={[RegisterRole.CONTESTANT, RegisterRole.ORGANISER]}
-                                placeholder="Select a Role"
-                                className="w-full text-[2vh] rounded-[1vh]"
-                                itemTemplate={roleTemplate}
-                                valueTemplate={selectedRoleTemplate}
-                            />
-                            <label htmlFor="in">Role</label>
-                        </span>
-                    </div>
-                    <div className="flex flex-col lg:flex-row gap-6">
-                        <div className="flex flex-col gap-6 w-full">
-                            <TextInput name="email" value={formData.email} label="Email" onUpdate={handleValueChange} />
-                            <TextInput
-                                name="username"
-                                value={formData.username}
-                                label="Username"
-                                onUpdate={handleValueChange}
-                            />
-                            <span className="p-float-label text-2vh">
-                                <Password
-                                    name="password"
-                                    toggleMask
-                                    value={formData.password}
-                                    onChange={handleValueChange}
-                                    feedback
-                                    className="text-[2vh] rounded-[1vh]"
-                                    inputClassName="text-[2vh] rounded-[1vh]"
-                                    pt={{
-                                        showIcon: {
-                                            className:
-                                                "mb-2 hover:cursor-pointer hover:scale-[108%] transition-all ease-in-out duration-300",
-                                        },
-                                        hideIcon: {
-                                            className:
-                                                "mb-2 hover:cursor-pointer hover:scale-[108%] transition-all ease-in-out duration-300",
-                                        },
-                                    }}
-                                />
-                                <label htmlFor="in">Password</label>
-                            </span>
-                        </div>
-                        <div className="flex flex-col gap-6 w-full">
-                            <TextInput name="name" value={formData.name} label="Name" onUpdate={handleValueChange} />
-                            <TextInput
-                                name="surname"
-                                value={formData.surname}
-                                label="Surname"
-                                onUpdate={handleValueChange}
-                            />
-                            <div>
-                                <input
-                                    id="image"
-                                    className="w-full text-[2vh] rounded-[1vh] file:w-1/2 block text-sm file:rounded-[1vh] file:bg-gray-300 file:hover:bg-gray-200 file:transition-all file:ease-in-out file:duration-300 file:border-none select-none file:cursor-pointer cursor-defualt file:text-gray-800 file:p-3 file:pointer-events-auto pointer-events-none bg-gray-50 text-gray-600"
-                                    type="file"
-                                    onChange={(e: any) => setSelectedImage(e.target.files[0])}
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col gap-[4vh] justify-center items-center">
-                        <Button
-                            className="w-full hover:scale-[102%] transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
-                            label="Submit"
-                            type="submit"
-                        />
-                        <span className="text-[2vh] text-center text-slate-950">
-                            Already have an account on BytePit?{" "}
-                            <Link to="/login" className="text-primary font-semibold">
-                                Login
-                            </Link>
-                        </span>
-                    </div>
-                </form>
+                {success ? renderSuccessMessage() : renderForm()}
             </div>
         </div>
     )
