@@ -2,7 +2,7 @@ import { Problem } from "./"
 
 export default interface ProblemListItemProps {
     problem: Problem
-    selectedProblems: string[]
+    isSelected: boolean
     addProblem: (problemId: string) => void
     removeProblem: (problemId: string) => void
 }
