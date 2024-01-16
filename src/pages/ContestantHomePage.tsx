@@ -69,17 +69,6 @@ const ContestantHomePage = () => {
                     }
                 })
             )
-            setShownCompetitions(
-                competitions.filter((item) => {
-                    const startDateZero = new Date(item.start_time)
-                    startDateZero.setHours(0, 0, 0, 0)
-                    const endDateZero = new Date(item.end_time)
-                    endDateZero.setHours(0, 0, 0, 0)
-                    if (startDateZero <= date && endDateZero >= date) {
-                        return { item }
-                    }
-                })
-            )
             setLoading(false)
         }
     }
