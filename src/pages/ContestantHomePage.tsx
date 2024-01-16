@@ -40,17 +40,9 @@ const ContestantHomePage = () => {
             })
             setCompetitions(competitionsData)
             setShownCompetitions(
-                res.data
-                    .map((item: Competition) => {
-                        return {
-                            ...item,
-                            start_time_date: new Date(item.start_time),
-                            end_time_date: new Date(item.end_time),
-                        }
-                    })
-                    .filter(
-                        (item: Competition) => item.start_time_date!! < new Date() && item.end_time_date!! > new Date()
-                    )
+                competitionsData.filter(
+                    (item: Competition) => item.start_time_date!! < new Date() && item.end_time_date!! > new Date()
+                )
             )
             setLoading(false)
         } catch (err: any) {
