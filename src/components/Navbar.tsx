@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom"
 import { Avatar } from "primereact/avatar"
 import { logout } from "../services/login.service"
 import { ProfileLink } from "../components"
+import { Role } from "../Models"
+import { FaGamepad } from "react-icons/fa"
 
 const Navbar = () => {
     const navigate = useNavigate()
@@ -51,10 +53,12 @@ const Navbar = () => {
                                 size="large"
                             />
                         )}
+
                         {/* <img src={`data:image/jpeg;base64,${auth?.image}`}></img> */}
                         <li className="flex flex-col">
                             <ProfileLink profileUrl={`/${auth.role}/home`} username={auth.username} />
                         </li>
+
                         <VerticalLine />
                         <Button
                             label="Logout"
