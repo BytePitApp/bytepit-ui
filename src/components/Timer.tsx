@@ -36,13 +36,13 @@ const Timer: React.FC<TimerProps> = ({ seconds, handleTimerEnd }) => {
                     className={`${
                         time > 59 ? "text-gray-700" : "text-red-700"
                     } font-graduate bg-gray-300/90 rounded-xl flex flex-row justify-center items-center`}>
-                    {time > 86400 ? (
+                    {time > 86399 ? (
                         <div className="flex flex-col items-center justify-center w-28">
                             <div className="text-[3vh]">{pad(Math.floor(time / 86400 < 100 ? time / 86400 : 99))}</div>
                             <div className="text-[1rem] leading-6">days</div>
                         </div>
                     ) : null}
-                    {time > 3600 ? (
+                    {time > 3599 ? (
                         <div className="flex flex-col items-center justify-center w-28">
                             <div className="text-[3vh]">{pad(Math.floor(((time ?? 0) % 86400) / 3600))}</div>
                             <div className="text-[1rem] leading-6 lg:text-lg">hours</div>

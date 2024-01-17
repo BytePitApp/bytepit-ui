@@ -3,7 +3,6 @@ import Footer from "./Footer"
 import HoverCard from "./HoverCard"
 import ProblemList from "./ProblemList"
 import ProblemBox from "./ProblemBox"
-import ViewProblemBox from "./ViewProblemBox"
 import ProblemPicker from "./ProblemPicker"
 import ProblemListItem from "./ProblemListItem"
 import CompetitionCard from "./CompetitionCard"
@@ -16,14 +15,17 @@ import RankBarChart from "./BarChart"
 import UserTrophies from "./UserTrophies"
 import ProblemsTable from "./ProblemsTable"
 import CompetitionsTable from "./CompetitionsTable"
+import UsersDataTable from "./UsersDataTable"
+import CompetitionDataTable from "./CompetitionDataTable"
+import ProblemsDataTable from "./ProblemsDataTable"
+import ProfileLink from "./ProfileLink"
 
-export { 
+export {
     Navbar,
     Footer,
     HoverCard,
     ProblemList,
     ProblemBox,
-    ViewProblemBox,
     ProblemPicker,
     ProblemListItem,
     CompetitionCard,
@@ -36,4 +38,8 @@ export {
     UserTrophies,
     ProblemsTable,
     CompetitionsTable,
+    UsersDataTable,
+    CompetitionDataTable,
+    ProblemsDataTable,
+    ProfileLink,
 }
