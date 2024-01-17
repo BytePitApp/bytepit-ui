@@ -6,14 +6,14 @@ import RegisterPage from "./RegisterPage"
 import LandingPage from "./LandingPage"
 import CreateProblemPage from "./CreateProblemPage"
 import EditProblemPage from "./EditProblemPage"
-import OrganiserProblemPage from "./OrganiserProblemPage"
 import EmailConfirmPage from "./EmailConfirmPage"
 import CreateCompetitionPage from "./CreateCompetitionPage"
 import ContestantViewCompetitionPage from "./ContestantViewCompetitionPage"
-import ContestantProblemPracticePage from "./ContestantProblemPracticePage"
+import ContestantProblemPlaygroundPage from "./ContestantProblemPlaygroundPage"
 import ContestantVirtualCompetitionPracticePage from "./ContestantVirtualCompetitionPracticePage"
 import ContestantProfilePage from "./ContestantProfilePage"
 import OrganiserProfilePage from "./OrganiserProfilePage"
+import ContestantPlaygroundPage from "./ContestantPlaygroundPage"
 
 export {
     AdminHomePage,
@@ -25,11 +25,11 @@ export {
     LandingPage,
     CreateProblemPage,
     EditProblemPage,
-    OrganiserProblemPage,
     CreateCompetitionPage,
     ContestantViewCompetitionPage,
-    ContestantProblemPracticePage,
+    ContestantProblemPlaygroundPage,
     ContestantVirtualCompetitionPracticePage,
     ContestantProfilePage,
     OrganiserProfilePage,
+    ContestantPlaygroundPage,
 }

@@ -7,15 +7,15 @@ import {
     LoginPage,
     OrganiserHomePage,
     RegisterPage,
-    CreateCompetitionPage, 
-    OrganiserProblemPage, 
-    CreateProblemPage, 
+    CreateCompetitionPage,
+    CreateProblemPage,
     EditProblemPage,
     ContestantViewCompetitionPage,
-    ContestantProblemPracticePage,
+    ContestantProblemPlaygroundPage,
     ContestantVirtualCompetitionPracticePage,
     ContestantProfilePage,
-    OrganiserProfilePage
+    OrganiserProfilePage,
+    ContestantPlaygroundPage,
 } from "./pages"
 import ProtectedRoute from "./components/ProtectedRoute"
 
@@ -37,13 +37,22 @@ const App = () => {
                 <Route path="/" element={<LandingPage />} />
                 <Route element={<ProtectedRoute allowedRoles={[Role.ADMIN]}></ProtectedRoute>}>
                     <Route path="admin/home" element={<AdminHomePage></AdminHomePage>} />
+                    <Route path="admin/edit-competition/:id" element={<EditCompetitionPage></EditCompetitionPage>} />
+                    <Route path="admin/edit-problem/:id" element={<EditProblemPage></EditProblemPage>} />
                 </Route>
                 <Route element={<ProtectedRoute allowedRoles={[Role.CONTESTANT]}></ProtectedRoute>}>
                     <Route path="contestant/home" element={<ContestantHomePage></ContestantHomePage>} />
-                    <Route path="contestant/competition/:id" element={<ContestantViewCompetitionPage></ContestantViewCompetitionPage>} />
                     <Route
-                        path="contestant/practice/problem/:id"
-                        element={<ContestantProblemPracticePage></ContestantProblemPracticePage>}
+                        path="contestant/competition/:id"
+                        element={<ContestantViewCompetitionPage></ContestantViewCompetitionPage>}
+                    />
+                    <Route
+                        path="contestant/playground"
+                        element={<ContestantPlaygroundPage></ContestantPlaygroundPage>}
+                    />
+                    <Route
+                        path="contestant/playground/problem/:id"
+                        element={<ContestantProblemPlaygroundPage></ContestantProblemPlaygroundPage>}
                     />
                     <Route
                         path="contestant/virtual-competition/:id"
@@ -55,10 +64,18 @@ const App = () => {
                     <Route path="organiser/home" element={<OrganiserHomePage></OrganiserHomePage>} />
                     <Route path="organiser/create-problem" element={<CreateProblemPage></CreateProblemPage>} />
                     <Route path="organiser/edit-problem/:problem_id" element={<EditProblemPage></EditProblemPage>} />
-                    <Route path="organiser/view-problem" element={<OrganiserProblemPage></OrganiserProblemPage>} />
                     <Route path="organiser/create-competition" element={<CreateCompetitionPage></CreateCompetitionPage>} />
                     <Route path="organiser/edit-competition/:id" element={<EditCompetitionPage></EditCompetitionPage>} />
                     <Route path="organiser/profile/:id" element={<OrganiserProfilePage></OrganiserProfilePage>} />
+                    <Route path="organiser/edit-problem/:id" element={<EditProblemPage></EditProblemPage>} />
+                    <Route
+                        path="organiser/create-competition"
+                        element={<CreateCompetitionPage></CreateCompetitionPage>}
+                    />
+                    <Route
+                        path="organiser/edit-competition/:id"
+                        element={<EditCompetitionPage></EditCompetitionPage>}
+                    />
                 </Route>
                 <Route path="login" element={<LoginPage></LoginPage>} />
                 <Route path="register" element={<RegisterPage></RegisterPage>} />

@@ -1,4 +1,4 @@
-interface CreateProblem {
+export default interface CreateProblem {
     name: string,
     points: number,
     description: string,
@@ -9,5 +9,3 @@ interface CreateProblem {
     isHidden: boolean,
     testFiles?: any[],
 }
-
-export default CreateProblem

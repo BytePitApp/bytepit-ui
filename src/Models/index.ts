@@ -20,6 +20,8 @@ import SubmissionResult from "./SubmissionResult"
 import TimerProps from "./TimerProps"
 import UserTrophies from "./UserTrophies"
 import UserStatistics from "./UserStatistics"
+import User from "./User"
+import AdminViewEnum from "./AdminViewEnum"
 
 export {
     Role,
@@ -43,5 +45,7 @@ export {
     type SubmissionResult,
     type TimerProps,
     type UserTrophies,
-    type UserStatistics
+    type UserStatistics,
+    type User,
+    AdminViewEnum,
 }

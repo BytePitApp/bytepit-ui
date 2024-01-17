@@ -1,4 +1,4 @@
-interface ModifyProblem {
+export default interface ModifyProblem {
     name: string | undefined,
     description: string | undefined,
     points: number | undefined,
@@ -10,4 +10,3 @@ interface ModifyProblem {
     testFiles?: any[],
 }
 
-export default ModifyProblem

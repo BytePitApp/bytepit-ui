@@ -10,4 +10,8 @@ export default interface Problem {
     organiser_id: string
     is_private: boolean
     created_on: string
+
+    organiser_username?: string
+    organiser_image?: any
+    created_on_date?: Date
 }
