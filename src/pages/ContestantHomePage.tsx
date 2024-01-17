@@ -102,12 +102,12 @@ const ContestantHomePage = () => {
                 (item: Competition) => item.parent_id === parentCompetitionId && item.organiser_id === auth?.id
             )
             if (alreadyCreated) {
-                navigate(`/contestant/virtual-competition/${alreadyCreated.id}`)
+                navigate(`/contestant/competition/${alreadyCreated.id}`)
                 setLoading(false)
                 return
             }
             const response = await createVirtualCompetition(parentCompetitionId)
-            navigate(`/contestant/virtual-competition/${response.data}`)
+            navigate(`/contestant/competition/${response.data}`)
             setLoading(false)
         } catch (err: any) {
             console.log(err.response?.data?.detail ?? "Something went wrong")
@@ -120,7 +120,7 @@ const ContestantHomePage = () => {
             const responseRandom = await getRandomVirtualCompetition()
             const response = await createVirtualCompetition(responseRandom.data.id)
             setLoading(false)
-            navigate(`/contestant/virtual-competition/${response.data}`)
+            navigate(`/contestant/competition/${response.data}`)
         } catch (err: any) {
             console.log(err.response?.data?.detail ?? "Something went wrong")
         }
