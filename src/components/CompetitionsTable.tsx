@@ -32,9 +32,7 @@ const CompetitionsTable = () => {
             <div className="flex justify-center items-center h-56">
                 <ProgressSpinner style={{ width: "50px", height: "50px" }} fill="#dee2e6" strokeWidth="7" />
             </div>
-        ) : (
-            "No users found."
-        )
+        ) : null;
     }
 
   const activeCompetitions = competitions.filter((competition: any) => {
@@ -46,34 +44,35 @@ const CompetitionsTable = () => {
   const progressSpinner = renderProgressSpinner();
 
   return (
-      <>
-        {progressSpinner}
-        {!loading && (
-          <DataTable 
-            className="problems-table" 
-            value={showActive ? activeCompetitions : competitions} 
-            paginator 
-            rows={10} 
-            sortField="name" 
-            sortOrder={1}
-            footer={
-              <div className="p-d-flex p-jc-end">
-                <Button 
-                  className={`${showActive ? 'button-active' : 'button-inactive'}`} 
-                  label="Show Active Competitions" 
-                  onClick={() => setShowActive(!showActive)} 
-                />
-              </div>
-            }
-          >
-            <Column field="name" header="Name" sortable></Column>
-            <Column field="description" header="Description"></Column>
-            <Column field="start_time" header="Start Time" sortable></Column>
-            <Column field="end_time" header="End Time" sortable></Column>
-          </DataTable>
-        )}
-      </>
-    );
+  <>
+    {progressSpinner}
+    {!loading && (
+      <DataTable 
+        className="problems-table" 
+        style={{ width: '1100px', borderRadius: '20px', backgroundColor: 'white' }}
+        value={showActive ? activeCompetitions : competitions} 
+        paginator 
+        rows={10} 
+        sortField="name" 
+        sortOrder={1}
+        footer={
+          <div className="flex justify-center gap-[10px]">
+            <Button 
+              className={`${showActive ? 'button-active' : 'button-inactive'}`} 
+              label="Show Active Competitions" 
+              onClick={() => setShowActive(!showActive)} 
+            />
+          </div>
+        }
+      >
+        <Column field="name" header="Name" sortable></Column>
+        <Column field="description" header="Description"></Column>
+        <Column field="start_time" header="Start Time" sortable></Column>
+        <Column field="end_time" header="End Time" sortable></Column>
+      </DataTable>
+    )}
+  </>
+);
 };
 
 export default CompetitionsTable;

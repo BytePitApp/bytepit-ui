@@ -60,27 +60,27 @@ const ContestantProfilePage = () => {
     const progressSpinner = renderProgressSpinner()
 
     return (
-    <>
+    <div className="bg-form bg-cover min-h-screen">
       <Navbar />
       <UserInfo auth={auth} />
-      <div className="flex h-[570px] justify-around p-[10px]">
+      <div className="flex h-[570px] justify-center p-[30px]">
           {loading ? progressSpinner : (
               <>
-                  <div style={{ flexBasis: '48%', borderRadius: '20px' }} className="bg-white flex text-[25px] justify-center items-center">
-                      <StatisticsChart statistics={statistics} />
-                  </div>
-                  <div style={{ flexBasis: '48%', borderRadius: '20px' }} className="bg-white flex text-[25px] justify-center items-center flex-col">
-                      <RankBarChart data={rankCounts} />
-                  </div>
-              </>
+  <div style={{ flexBasis: '30%', borderRadius: '20px', marginRight: '20px' }} className="bg-white flex text-[25px] justify-center items-center">
+      <StatisticsChart statistics={statistics} />
+  </div>
+  <div style={{ flexBasis: '30%', borderRadius: '20px', marginLeft: '20px' }} className="bg-white flex text-[25px] justify-center items-center flex-col">
+      <RankBarChart data={rankCounts} />
+  </div>
+</>
           )}
       </div>
       <div className="flex flex-wrap justify-center">
       </div>
-      <div className="p-[10px] flex justify-center">
+      <div className="p-[10px] flex justify-center pb-[30px]">
           {loading ? progressSpinner : <UserTrophies trophies={statistics?.trophies ?? []} />}
       </div>
-    </>
+    </div>
   );
 }
 
