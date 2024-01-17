@@ -28,12 +28,18 @@ const ProblemsTable = () => {
   const hiddenProblems = problems.filter((problem: any) => problem.is_hidden);
   const privateProblems = problems.filter((problem: any) => problem.is_private);
 
+  const descriptionBodyTemplate = (rowData: any) => {
+      const description = rowData.description;
+      return description.length > 100 ? description.substring(0, 100) + "..." : description;
+  }
+
   return (
-      <DataTable 
+    <DataTable 
         className="problems-table" 
+        style={{ width: '1100px', borderRadius: '20px', backgroundColor: 'white' }}
         value={(showHidden ? hiddenProblems : showPrivate ? privateProblems : problems)} 
         paginator 
-        rows={10} 
+        rows={7} 
         sortField="name" 
         sortOrder={1}
         footer={
@@ -60,13 +66,13 @@ const ProblemsTable = () => {
             />
           </div>
         }
-      >
-        <Column field="name" header="Name" sortable></Column>
-        <Column field="description" header="Description"></Column>
-        <Column field="num_of_points" header="Points" sortable></Column>
-        <Column field="created_on" header="Created Date" sortable></Column>
-      </DataTable>
-    );
+    >
+        <Column field="name" header="Name" sortable headerClassName="header-cell"></Column>
+        <Column field="description" header="Description" body={descriptionBodyTemplate} headerClassName="header-cell"></Column>
+        <Column field="num_of_points" header="Points" sortable headerClassName="header-cell"></Column>
+        <Column field="created_on" header="Created Date" sortable headerClassName="header-cell"></Column>
+    </DataTable>
+);
 };
 
 export default ProblemsTable;

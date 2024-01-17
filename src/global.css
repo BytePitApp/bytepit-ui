@@ -36,7 +36,7 @@ body {
 }
 
 .table-container {
-    width: 100%;
+    width: auto;
     padding: 20px;
     box-sizing: border-box;
 }
@@ -65,4 +65,10 @@ body {
     background-color: #f3f3f3;
     /* Light grey */
     color: black;
+}
+
+.header-cell {
+    background-color: #f5f5f5;
+    color: #333;
+    font-weight: bold;
 }

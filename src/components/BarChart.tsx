@@ -12,8 +12,8 @@ interface RankBarChartProps {
 const RankBarChart: React.FC<RankBarChartProps> = ({ data }) => {
   return (
     <>
-      <h2 className="">Competition Placements</h2>
-      <div className="" style={{ height: '500px', width: '700px' }}>
+      <h2 className="font-bold pb-[30px]">Competition Placements</h2>
+      <div className="" style={{ height: '300px', width: '500px' }}>
         <ResponsiveContainer>
           <BarChart data={data}>
             <XAxis dataKey="name" />

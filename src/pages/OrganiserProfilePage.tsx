@@ -42,17 +42,23 @@ const OrganiserProfilePage = () => {
     }, [])
 
     return(
-        <>
-            <Navbar />
-            <UserInfo auth={auth}/>
-            <div className="table-container">
+    <div className="bg-form bg-cover min-h-screen flex flex-col items-center">
+        <Navbar />
+        <UserInfo auth={auth}/>
+        <div className="table-container justify-center bg-white inline-block rounded">
+            <h2 className="text-center text-[20px] font-bold">Problems Table</h2>
+            <div style={{ padding: '30px' }}>
                 <ProblemsTable/>
             </div>
-            <div className="table-container">
-            <CompetitionsTable/>
+        </div>
+        <div className="table-container justify-center bg-white inline-block rounded m-[30px]">
+            <h2 className="text-center text-[20px] font-bold">Competitions Table</h2>
+            <div style={{ padding: '30px' }}>
+                <CompetitionsTable/>
             </div>
-        </>
-    )
+        </div>
+    </div>
+)
 }
 
 export default OrganiserProfilePage;
