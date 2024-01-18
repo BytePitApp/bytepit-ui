@@ -1,19 +1,20 @@
-import { UserInfo, Navbar, ProblemsTable, CompetitionsTable } from "../components";
-import  useAuth  from "../hooks/useAuth";
-import { useEffect, useState } from "react";
-import { Competition, Problem } from "../Models";
-import {getProblemsForOrganiser}  from "../services/problem.service";
-import { useCallback } from "react";
-import { getAllCompetitionsForOrganiser } from "../services/competition.service";
+import { UserInfo, Navbar, ProblemsTable, CompetitionsTable } from "../components"
+import useAuth from "../hooks/useAuth"
+import { useEffect, useState } from "react"
+import { Competition, Problem } from "../Models"
+import { getProblemsForOrganiser } from "../services/problem.service"
+import { useCallback } from "react"
+import { getAllCompetitionsForOrganiser } from "../services/competition.service"
+import { ProgressSpinner } from "primereact/progressspinner"
 
 const OrganiserProfilePage = () => {
-    const[loading, setLoading] = useState(true)
-    const[problems, setProblems] = useState<Problem[]>([])
-    const[competitions, setCompetitions] = useState<Competition[]>([])
+    const [loading, setLoading] = useState(true)
+    const [problems, setProblems] = useState<Problem[]>([])
+    const [competitions, setCompetitions] = useState<Competition[]>([])
     const { auth } = useAuth()
 
     const fetchProblems = useCallback(async (): Promise<void> => {
-        try{
+        try {
             setLoading(true)
             const response = await getProblemsForOrganiser(auth?.id)
             const problems: Problem[] = response.data
@@ -25,7 +26,7 @@ const OrganiserProfilePage = () => {
     }, [])
 
     const fetchCompetitions = useCallback(async (): Promise<void> => {
-        try{
+        try {
             setLoading(true)
             const response = await getAllCompetitionsForOrganiser(auth?.id)
             const competitions: Competition[] = response.data
@@ -41,24 +42,21 @@ const OrganiserProfilePage = () => {
         fetchCompetitions()
     }, [])
 
-    return(
-    <div className="bg-form bg-cover min-h-screen flex flex-col items-center">
-        <Navbar />
-        <UserInfo auth={auth}/>
-        <div className="table-container justify-center bg-white inline-block rounded">
-            <h2 className="text-center text-[20px] font-bold">Problems Table</h2>
-            <div style={{ padding: '30px' }}>
-                <ProblemsTable/>
+    return (
+        <div className="bg-form bg-cover min-h-screen pb-4">
+            {loading && (
+                <div className="z-50 absolute top-1.5 left-[50%]">
+                    <ProgressSpinner style={{ width: "50px", height: "50px" }} fill="#dee2e6" strokeWidth="7" />
+                </div>
+            )}
+            <Navbar />
+            <div className="m-10 bg-graymedium px-[5%] rounded-xl flex flex-col py-8 border-b-4 border-graydark">
+                <UserInfo auth={auth} />
+                <ProblemsTable />
+                <CompetitionsTable />
             </div>
         </div>
-        <div className="table-container justify-center bg-white inline-block rounded m-[30px]">
-            <h2 className="text-center text-[20px] font-bold">Competitions Table</h2>
-            <div style={{ padding: '30px' }}>
-                <CompetitionsTable/>
-            </div>
-        </div>
-    </div>
-)
+    )
 }
 
-export default OrganiserProfilePage;
+export default OrganiserProfilePage

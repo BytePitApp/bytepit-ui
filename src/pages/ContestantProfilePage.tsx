@@ -1,22 +1,22 @@
-import { Navbar, UserInfo } from "../components";
-import useAuth from "../hooks/useAuth";
-import { Avatar } from "primereact/avatar";
-import { getCurrentUsersStatistics } from "../services/users.service";
-import { useEffect, useState } from "react";
-import { UserStatistics } from "../Models";
-import { useCallback } from "react";
-import { StatisticsChart } from "../components";
-import { RankBarChart } from "../components";
-import {UserTrophies} from "../components";
-import { ProgressSpinner } from "primereact/progressspinner";
+import { Navbar, UserInfo } from "../components"
+import useAuth from "../hooks/useAuth"
+import { getCurrentUsersStatistics, getUserById } from "../services/users.service"
+import { useEffect, useState } from "react"
+import { User, UserStatistics } from "../Models"
+import { useCallback } from "react"
+import { StatisticsChart } from "../components"
+import { RankBarChart } from "../components"
+import { UserTrophies } from "../components"
+import { ProgressSpinner } from "primereact/progressspinner"
 
 const ContestantProfilePage = () => {
     const { auth } = useAuth()
-    const[loading, setLoading] = useState(true)
-    const[statistics, setStatistics] = useState<UserStatistics>();
+    const [loading, setLoading] = useState(true)
+    const [statistics, setStatistics] = useState<UserStatistics>()
+    const [user, setUser] = useState<User>()
 
     const fetchStatistics = useCallback(async () => {
-        try{
+        try {
             setLoading(true)
             const response = await getCurrentUsersStatistics(auth?.id)
             const statistics: UserStatistics = response.data
@@ -31,21 +31,40 @@ const ContestantProfilePage = () => {
         fetchStatistics()
     }, [fetchStatistics])
 
-    const rankCounts = statistics?.trophies.reduce((counts, trophy) => {
-      const rank = trophy.rank_in_competition;
-      if (rank >= 1 && rank <= 3) {
-        counts[3 - rank].count += 1;
-      }
-      return counts;
-    }, [
-      { name: '3rd places', count: 0 },
-      { name: '2nd places', count: 0 },
-      { name: '1st places', count: 0 },
-    ]) || [
-      { name: '3rd places', count: 0 },
-      { name: '2nd places', count: 0 },
-      { name: '1st places', count: 0 },
-    ];
+    const fetchUser = useCallback(async () => {
+        try {
+            setLoading(true)
+            const response = await getUserById(auth?.id)
+            console.log(response.data)
+            setUser(response.data)
+            setLoading(false)
+        } catch (err: any) {
+            console.log(err.response?.data?.detail ?? "Something went wrong")
+        }
+    }, [auth])
+
+    useEffect(() => {
+        fetchUser()
+    }, [fetchUser])
+
+    const rankCounts = statistics?.trophies.reduce(
+        (counts, trophy) => {
+            const rank = trophy.rank_in_competition
+            if (rank >= 1 && rank <= 3) {
+                counts[3 - rank].count += 1
+            }
+            return counts
+        },
+        [
+            { name: "3rd places", count: 0 },
+            { name: "2nd places", count: 0 },
+            { name: "1st places", count: 0 },
+        ]
+    ) || [
+        { name: "3rd places", count: 0 },
+        { name: "2nd places", count: 0 },
+        { name: "1st places", count: 0 },
+    ]
 
     const renderProgressSpinner = () => {
         return loading ? (
@@ -60,28 +79,23 @@ const ContestantProfilePage = () => {
     const progressSpinner = renderProgressSpinner()
 
     return (
-    <div className="bg-form bg-cover min-h-screen">
-      <Navbar />
-      <UserInfo auth={auth} />
-      <div className="flex h-[570px] justify-center p-[30px]">
-          {loading ? progressSpinner : (
-              <>
-  <div style={{ flexBasis: '30%', borderRadius: '20px', marginRight: '20px' }} className="bg-white flex text-[25px] justify-center items-center">
-      <StatisticsChart statistics={statistics} />
-  </div>
-  <div style={{ flexBasis: '30%', borderRadius: '20px', marginLeft: '20px' }} className="bg-white flex text-[25px] justify-center items-center flex-col">
-      <RankBarChart data={rankCounts} />
-  </div>
-</>
-          )}
-      </div>
-      <div className="flex flex-wrap justify-center">
-      </div>
-      <div className="p-[10px] flex justify-center pb-[30px]">
-          {loading ? progressSpinner : <UserTrophies trophies={statistics?.trophies ?? []} />}
-      </div>
-    </div>
-  );
+        <div className="bg-form bg-cover min-h-screen pb-4">
+            <Navbar />
+            {loading && (
+                <div className="z-50 absolute top-1.5 left-[50%]">
+                    <ProgressSpinner style={{ width: "50px", height: "50px" }} fill="#dee2e6" strokeWidth="7" />
+                </div>
+            )}
+            <div className="m-10 bg-graymedium px-[5%] rounded-xl flex flex-col py-8 border-b-4 border-graydark">
+                <UserInfo auth={auth} user={user} />
+                <div className="flex justify-center gap-10">
+                    <StatisticsChart statistics={statistics} />
+                    <RankBarChart data={rankCounts} />
+                    <UserTrophies trophies={statistics?.trophies ?? []} />
+                </div>
+            </div>
+        </div>
+    )
 }
 
-export default ContestantProfilePage;
+export default ContestantProfilePage
