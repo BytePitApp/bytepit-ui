@@ -231,28 +231,30 @@ const EditProblemPage = () => {
                                 />
                             </div>
                         </div>
-                        <ToggleButton
-                            onLabel="Public"
-                            offLabel="Private"
-                            onIcon="pi pi-check"
-                            offIcon="pi pi-times"
-                            checked={formData.isPrivate}
-                            onChange={(e: ToggleButtonChangeEvent) => 
-                                setFormData({ ...formData, isPrivate: e.value })
-                            }
-                            className="w-1/5 py-5"
-                        />
-                        <ToggleButton
-                            onLabel="Visible"
-                            offLabel="Hidden"
-                            onIcon="pi pi-check"
-                            offIcon="pi pi-times"
-                            checked={formData.isHidden}
-                            onChange={(e: ToggleButtonChangeEvent) =>
-                                setFormData({ ...formData, isHidden: e.value})
-                            }
-                            className="w-1/5 py-5"
-                        />
+                        <div className="flex flex-col lg:flex-row lg:w-[24rem] gap-4 justify-between">
+                            <ToggleButton
+                                onLabel="Private"
+                                offLabel="Public"
+                                onIcon="pi pi-lock"
+                                offIcon="pi pi-lock-open"
+                                checked={formData.isPrivate}
+                                onChange={(e: ToggleButtonChangeEvent) => 
+                                    setFormData({ ...formData, isPrivate: e.value })
+                                }
+                                className="w-[8rem] py-2"
+                            />
+                            <ToggleButton
+                                onLabel="Hidden"
+                                offLabel="Visible"
+                                onIcon="pi pi-eye-slash"
+                                offIcon="pi pi-eye"
+                                checked={formData.isHidden}
+                                onChange={(e: ToggleButtonChangeEvent) =>
+                                    setFormData({ ...formData, isHidden: e.value})
+                                }
+                                className="w-[8rem] py-2"
+                            />
+                        </div>
                         <div className="lg:w-[50rem]">
                             <div className="flex justify-between items-center mt-4 mb-8 px-2">
                                 <Button

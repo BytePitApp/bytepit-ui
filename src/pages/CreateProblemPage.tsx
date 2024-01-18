@@ -187,10 +187,10 @@ const CreateProblemPage = () => {
                         </div>
                         <div className="flex flex-col lg:flex-row lg:w-[24rem] gap-4 justify-between">
                             <ToggleButton
-                                onLabel="Public"
-                                offLabel="Private"
-                                onIcon="pi pi-check"
-                                offIcon="pi pi-times"
+                                onLabel="Private"
+                                offLabel="Public"
+                                onIcon="pi pi-lock"
+                                offIcon="pi pi-lock-open"
                                 checked={formData.isPrivate}
                                 onChange={(e: ToggleButtonChangeEvent) => 
                                     setFormData({ ...formData, isPrivate: e.value })
@@ -198,10 +198,10 @@ const CreateProblemPage = () => {
                                 className="w-[8rem] py-2"
                             />
                             <ToggleButton
-                                onLabel="Visible"
-                                offLabel="Hidden"
-                                onIcon="pi pi-check"
-                                offIcon="pi pi-times"
+                                onLabel="Hidden"
+                                offLabel="Visible"
+                                onIcon="pi pi-eye-slash"
+                                offIcon="pi pi-eye"
                                 checked={formData.isHidden}
                                 onChange={(e: ToggleButtonChangeEvent) =>
                                     setFormData({ ...formData, isHidden: e.value})
