@@ -28,4 +28,6 @@ export {
     ContestantViewCompetitionPage,
     ContestantProblemPlaygroundPage,
     ContestantPlaygroundPage,
+    ContestantProfilePage,
+    OrganiserProfilePage,
 }

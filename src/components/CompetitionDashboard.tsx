@@ -183,7 +183,6 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
 
     const renderRowNumberColumn = () => {
         const hasTrophies = competition?.trophies && competition.trophies.length == 3
-        console.log(parsedCompetitionResults)
         return (
             <Column
                 className="bg-graydark w-[8%]"

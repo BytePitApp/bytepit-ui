@@ -5,18 +5,20 @@ import { getAllCompetitionsForOrganiser } from "../services/competition.service"
 import useAuth from "../hooks/useAuth"
 import { Button } from "primereact/button"
 import { ProgressSpinner } from "primereact/progressspinner"
+import { useParams } from "react-router-dom"
 
 const CompetitionsTable = () => {
     const [loading, setLoading] = useState(true)
     const [competitions, setCompetitions] = useState<any>([])
     const [showActive, setShowActive] = useState(false)
+    const { id } = useParams<{ id: string }>()
     const { auth } = useAuth()
 
     useEffect(() => {
         const fetchCompetitions = async () => {
             try {
                 setLoading(true)
-                const response = await getAllCompetitionsForOrganiser(auth?.id)
+                const response = await getAllCompetitionsForOrganiser(id)
                 setCompetitions(response.data)
                 setLoading(false)
             } catch (err: any) {

@@ -16,8 +16,7 @@ const ProblemsTable = () => {
     useEffect(() => {
         const fetchProblems = async () => {
             try {
-                setLoading(true)
-				console.log(id)				
+                setLoading(true)			
                 const response = await getProblemsForOrganiser(id)
                 setProblems(response.data)
                 setLoading(false)
