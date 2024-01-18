@@ -8,17 +8,20 @@ import { StatisticsChart } from "../components"
 import { RankBarChart } from "../components"
 import { UserTrophies } from "../components"
 import { ProgressSpinner } from "primereact/progressspinner"
+import { useParams } from "react-router-dom"
 
 const ContestantProfilePage = () => {
     const { auth } = useAuth()
     const [loading, setLoading] = useState(true)
     const [statistics, setStatistics] = useState<UserStatistics>()
+    const { id } = useParams<{ id: string }>()
+
     const [user, setUser] = useState<User>()
 
     const fetchStatistics = useCallback(async () => {
         try {
             setLoading(true)
-            const response = await getCurrentUsersStatistics(auth?.id)
+            const response = await getCurrentUsersStatistics(id)
             const statistics: UserStatistics = response.data
             setStatistics(statistics)
             setLoading(false)
@@ -34,8 +37,8 @@ const ContestantProfilePage = () => {
     const fetchUser = useCallback(async () => {
         try {
             setLoading(true)
-            const response = await getUserById(auth?.id)
-            console.log(response.data)
+            const response = await getUserById(id)
+
             setUser(response.data)
             setLoading(false)
         } catch (err: any) {

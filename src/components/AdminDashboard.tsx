@@ -49,7 +49,6 @@ const AdminDashboard: React.FC = () => {
     const fetchCompetitions = useCallback(async () => {
         setLoading(true)
         try {
-            console.log(users)
             const response = await getAllCompetitions()
             const competitionsData = response.data.map((item: Competition) => {
                 const organiser = users.find((user) => user.id === item.organiser_id)

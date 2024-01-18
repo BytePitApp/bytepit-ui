@@ -38,6 +38,7 @@ const App = () => {
                     <Route path="admin/home" element={<AdminHomePage></AdminHomePage>} />
                     <Route path="admin/edit-competition/:id" element={<EditCompetitionPage></EditCompetitionPage>} />
                     <Route path="admin/edit-problem/:id" element={<EditProblemPage></EditProblemPage>} />
+                    <Route path="contestant/competition/:id" element={<ContestantViewCompetitionPage></ContestantViewCompetitionPage>} />
                 </Route>
                 <Route element={<ProtectedRoute allowedRoles={[Role.CONTESTANT]}></ProtectedRoute>}>
                     <Route path="contestant/home" element={<ContestantHomePage></ContestantHomePage>} />
@@ -54,11 +55,12 @@ const App = () => {
                     <Route path="organiser/edit-problem/:problem_id" element={<EditProblemPage></EditProblemPage>} />
                     <Route path="organiser/create-competition" element={<CreateCompetitionPage></CreateCompetitionPage>} />
                     <Route path="organiser/edit-competition/:id" element={<EditCompetitionPage></EditCompetitionPage>} />
-                    <Route path="organiser/profile/:id" element={<OrganiserProfilePage></OrganiserProfilePage>} />
                     <Route path="organiser/edit-problem/:id" element={<EditProblemPage></EditProblemPage>} />
                     <Route path="organiser/create-competition" element={<CreateCompetitionPage></CreateCompetitionPage>} />
                     <Route path="organiser/edit-competition/:id" element={<EditCompetitionPage></EditCompetitionPage>} />
                 </Route>
+                <Route path="organiser/profile/:id" element={<OrganiserProfilePage></OrganiserProfilePage>} />
+                <Route path="contestant/profile/:id" element={<ContestantProfilePage></ContestantProfilePage>} />
                 <Route path="login" element={<LoginPage></LoginPage>} />
                 <Route path="register" element={<RegisterPage></RegisterPage>} />
                 <Route path="confirm-email/:id" element={<EmailConfirmPage></EmailConfirmPage>} />

@@ -16,10 +16,10 @@ const UserInfo = ({ auth, user }: UserInfoProps) => {
         <div className="flex justify-center items-center mb-4 gap-3">
             <div className="w-32 h-32 rounded-xl flex justify-center flex-col items-center bg-white border-b-4 border-graydark p-4 gap-2">
                 <div className="flex justify-center items-center w-max h-max">
-                    {auth?.image ? (
+                    {user?.image ? (
                         <Avatar
                             className="w-16 h-16 rounded-full bg-secondary text-white hover:scale-105 transition-color ease-in-out duration-300 cursor-pointer"
-                            image={`data:image/jpeg;base64,${auth?.image}`}
+                            image={`data:image/jpeg;base64,${user?.image}`}
                             size="large"
                             pt={{ image: { className: "rounded-lg object-cover" } }}
                         />
@@ -32,7 +32,7 @@ const UserInfo = ({ auth, user }: UserInfoProps) => {
                     )}
                 </div>
                 <div className="font-bold">
-                    <p>{auth?.username}</p>
+                    <p>{user?.username}</p>
                 </div>
             </div>
             <div className="flex flex-col w-fit h-32 bg-white border-b-4 border-graydark rounded-xl p-4 gap-3">
