@@ -10,6 +10,7 @@ import { Toast } from "primereact/toast"
 import { RadioButton } from "primereact/radiobutton"
 import { InputNumber, InputNumberValueChangeEvent } from "primereact/inputnumber"
 import { useNavigate, useParams } from "react-router-dom"
+import { ToggleButton, ToggleButtonChangeEvent } from "primereact/togglebutton"
 
 const EditProblemPage = () => {
     const [selectedTestFiles, setSelectedTestFiles] = useState(undefined)
@@ -230,15 +231,27 @@ const EditProblemPage = () => {
                                 />
                             </div>
                         </div>
-                        <BoolInput
-                            label="Private"
-                            value={formData.isPrivate || false}
-                            onChange={(value) => setFormData({ ...formData, isPrivate: value })}
+                        <ToggleButton
+                            onLabel="Public"
+                            offLabel="Private"
+                            onIcon="pi pi-check"
+                            offIcon="pi pi-times"
+                            checked={formData.isPrivate}
+                            onChange={(e: ToggleButtonChangeEvent) => 
+                                setFormData({ ...formData, isPrivate: e.value })
+                            }
+                            className="w-1/5 py-5"
                         />
-                        <BoolInput
-                            label="Hidden"
-                            value={formData.isHidden || false}
-                            onChange={(value) => setFormData({ ...formData, isHidden: value })}
+                        <ToggleButton
+                            onLabel="Visible"
+                            offLabel="Hidden"
+                            onIcon="pi pi-check"
+                            offIcon="pi pi-times"
+                            checked={formData.isHidden}
+                            onChange={(e: ToggleButtonChangeEvent) =>
+                                setFormData({ ...formData, isHidden: e.value})
+                            }
+                            className="w-1/5 py-5"
                         />
                         <div className="lg:w-[50rem]">
                             <div className="flex justify-between items-center mt-4 mb-8 px-2">
@@ -271,12 +284,6 @@ type TextInputProps = {
     onUpdate: (value: any) => void
 }
 
-type BoolInputProps = {
-    label: string
-    value: boolean
-    onChange: (value: boolean) => void
-}
-
 type NumberInputProps = {
     value: number
     label: string
@@ -294,40 +301,6 @@ const TextInput = ({ name, value, label, onUpdate }: TextInputProps) => {
             />
             <label htmlFor="in">{label}</label>
         </span>
-    )
-}
-
-const BoolInput = ({ value, label, onChange }: BoolInputProps) => {
-    return (
-        <div>
-            <label className="text-gray-600">{label}</label>
-            <div className="field-radiobutton mt-2 mb-3">
-                <RadioButton
-                    inputId="trueOption"
-                    name="trueFalse"
-                    value={true}
-                    onChange={(e) => onChange(true)}
-                    checked={value === true}
-                    className="mr-2"
-                />
-                <label htmlFor="trueOption" className="text-gray-600">
-                    True
-                </label>
-            </div>
-            <div className="field-radiobutton">
-                <RadioButton
-                    inputId="falseOption"
-                    name="trueFalse"
-                    value={false}
-                    onChange={(e) => onChange(false)}
-                    checked={value === false}
-                    className="mr-2"
-                />
-                <label htmlFor="falseOption" className="text-gray-600">
-                    False
-                </label>
-            </div>
-        </div>
     )
 }
 
