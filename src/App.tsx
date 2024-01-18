@@ -12,7 +12,6 @@ import {
     EditProblemPage,
     ContestantViewCompetitionPage,
     ContestantProblemPlaygroundPage,
-    ContestantVirtualCompetitionPracticePage,
     ContestantPlaygroundPage,
 } from "./pages"
 import ProtectedRoute from "./components/ProtectedRoute"
@@ -51,10 +50,6 @@ const App = () => {
                     <Route
                         path="contestant/playground/problem/:id"
                         element={<ContestantProblemPlaygroundPage></ContestantProblemPlaygroundPage>}
-                    />
-                    <Route
-                        path="contestant/virtual-competition/:id"
-                        element={<ContestantVirtualCompetitionPracticePage></ContestantVirtualCompetitionPracticePage>}
                     />
                 </Route>
                 <Route element={<ProtectedRoute allowedRoles={[Role.ORGANISER]}></ProtectedRoute>}>

@@ -10,7 +10,6 @@ import EmailConfirmPage from "./EmailConfirmPage"
 import CreateCompetitionPage from "./CreateCompetitionPage"
 import ContestantViewCompetitionPage from "./ContestantViewCompetitionPage"
 import ContestantProblemPlaygroundPage from "./ContestantProblemPlaygroundPage"
-import ContestantVirtualCompetitionPracticePage from "./ContestantVirtualCompetitionPracticePage"
 import ContestantPlaygroundPage from "./ContestantPlaygroundPage"
 
 export {
@@ -26,6 +25,5 @@ export {
     CreateCompetitionPage,
     ContestantViewCompetitionPage,
     ContestantProblemPlaygroundPage,
-    ContestantVirtualCompetitionPracticePage,
     ContestantPlaygroundPage,
 }
