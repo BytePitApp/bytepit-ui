@@ -16,6 +16,7 @@ import ProfileLink from "./ProfileLink"
 import AdminDashboard from "./AdminDashboard"
 import PlaygroundProblemList from "./PlaygroundProblemList"
 import ContestantProblemPlayground from "./ContestantProblemPlayground"
+import ContestantHomeCompetitionTable from "./ContestantHomeCompetitionTable"
 
 export {
     Navbar,
@@ -36,4 +37,5 @@ export {
     AdminDashboard,
     PlaygroundProblemList,
     ContestantProblemPlayground,
+    ContestantHomeCompetitionTable,
 }

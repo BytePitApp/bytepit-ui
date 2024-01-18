@@ -9,19 +9,25 @@ import CompetitionDashboard from "../components/CompetitionDashboard"
 const ContestantViewCompetitionPage = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
-    const [competition, setCompetition] = useState<Competition | undefined>(undefined)
-    const [remainingTime, setRemainingTime] = useState<number | undefined>(undefined)
-    const [isCompetitionActive, setIsCompetitionActive] = useState<boolean>(false)
+    const [competition, setCompetition] = useState<Competition>()
     const [submitCode, setSubmitCode] = useState<boolean>(false)
     const { id } = useParams<{ id: string }>()
 
-    const updateRemainingTime = (startTime: string, endTime: string) => {
-        const start = new Date(startTime)
-        const end = new Date(endTime)
+    const isCompetitionActive = () => {
+        const start = new Date(competition?.start_time!!)
+        const end = new Date(competition?.end_time!!)
+        const now = new Date()
+        return start < now && end > now
+    }
+
+    const getRemainingTime = () => {
+        const start = new Date(competition?.start_time!!)
+        const end = new Date(competition?.end_time!!)
         const now = new Date()
         if (start < now && end > now) {
-            setRemainingTime(Math.floor((end.valueOf() - now.valueOf()) / 1000))
+            return Math.floor((end.valueOf() - now.valueOf()) / 1000)
         }
+        return 0
     }
 
     const getCompetitionData = useCallback(async () => {
@@ -29,10 +35,6 @@ const ContestantViewCompetitionPage = () => {
             try {
                 const competition = await getCompetition(id)
                 setCompetition(competition.data)
-                updateRemainingTime(competition.data.start_time, competition.data.end_time)
-                setIsCompetitionActive(
-                    new Date(competition.data.start_time) < new Date() && new Date(competition?.data.end_time) > new Date()
-                )
                 setLoading(false)
             } catch (err: any) {
                 console.log(err)
@@ -75,14 +77,14 @@ const ContestantViewCompetitionPage = () => {
                                     <div className="text-sm">{competition?.description}</div>
                                 </div>
                                 {!loading &&
-                                    (isCompetitionActive ? (
-                                        <Timer seconds={remainingTime} handleTimerEnd={timerEnded} />
+                                    (isCompetitionActive() ? (
+                                        <Timer seconds={getRemainingTime()} handleTimerEnd={timerEnded} />
                                     ) : (
-                                        <span className="text-xl font-semibold text-gray-700">Finished</span>
+                                        <span className="text-xl font-semibold text-white-700">Finished</span>
                                     ))}
                             </div>
                             {competition &&
-                                (isCompetitionActive ? (
+                                (isCompetitionActive() ? (
                                     <ProblemSolver
                                         problems={competition?.problems!!}
                                         competitionId={competition?.id}

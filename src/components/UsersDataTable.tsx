@@ -77,11 +77,11 @@ const UsersDataTable = ({ users, loading, paginatorLeftFunction, changeUserRoleH
         ]
         return (
             <Dropdown
-                className="h-7 w-full"
+                className="h-full w-full"
                 value={rowData.role}
                 options={roles}
                 onChange={(e) => changeUserRoleHandler(rowData.username, e.value)}
-                pt={{ input: { className: "text-xs p-1.5" }, list: { className: "text-xs" } }}
+                pt={{ input: { className: "p-1.5" }, list: { className: "text-xs" } }}
             />
         )
     }
@@ -125,7 +125,7 @@ const UsersDataTable = ({ users, loading, paginatorLeftFunction, changeUserRoleH
 
     return (
         <DataTable
-            className="text-[2vh]"
+            className="text-[1.5vh]"
             value={users}
             paginator
             rows={5}
@@ -143,7 +143,7 @@ const UsersDataTable = ({ users, loading, paginatorLeftFunction, changeUserRoleH
             sortField="name"
             sortOrder={1}
             emptyMessage={renderProgressSpinner()}
-            header={<h2 className="px-2 text-2xl text-center text-primary">Users List</h2>}
+            header={<h2 className="px-2 text-2xl text-primary">Users List</h2>}
             paginatorClassName="rounded-b-[0.6rem] border-graydark"
             pt={{
                 root: { className: "border-graydark border-2 rounded-t-xl rounded-b-xl" },
@@ -152,22 +152,16 @@ const UsersDataTable = ({ users, loading, paginatorLeftFunction, changeUserRoleH
             }}
             cellClassName={() => "p-1"}
         >
-            <Column
-                field="image"
-                headerClassName="centered-column-header text-sm"
-                body={imageBodyTemplate}
-                style={{ maxWidth: "2.5rem" }}
-            />
-            <Column field="username" sortable header="Username" headerClassName="text-sm" />
-            <Column field="name" sortable header="Name" headerClassName="text-sm" />
-            <Column field="surname" sortable header="Surname" headerClassName="text-sm" />
-            <Column field="email" sortable header="Email" headerClassName="text-sm" />
+            <Column field="image" body={imageBodyTemplate} style={{ maxWidth: "2.5rem" }} />
+            <Column field="username" sortable header="Username" />
+            <Column field="name" sortable header="Name" />
+            <Column field="surname" sortable header="Surname" />
+            <Column field="email" sortable header="Email" />
             <Column
                 field="is_verified"
                 header="Verified"
                 body={(rowData: User) => booleanBodyTemplate(rowData.is_verified)}
                 style={{ maxWidth: "4rem", textAlign: "center" }}
-                headerClassName="centered-column-header text-sm"
             />
             <Column
                 field="role"
@@ -180,18 +174,19 @@ const UsersDataTable = ({ users, loading, paginatorLeftFunction, changeUserRoleH
                 field="approved_by_admin"
                 header="Approved"
                 filter
+                pt={{
+                    filterMenuButton: { className: "h-full" },
+                }}
                 body={(rowData: User) => booleanBodyTemplate(rowData.approved_by_admin)}
                 filterElement={approvedFilterTemplate}
                 style={{ maxWidth: "5.5rem", textAlign: "center" }}
                 showFilterMatchModes={false}
-                headerClassName="centered-column-header text-sm"
             />
             <Column
                 field="approve"
                 header="Approve"
                 body={approveButtonBodyTemplate}
                 style={{ textAlign: "center", maxWidth: "5rem" }}
-                headerClassName="centered-column-header text-sm"
             />
         </DataTable>
     )

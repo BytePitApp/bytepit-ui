@@ -50,7 +50,7 @@ const ProblemsDataTable = ({ problems, loading, paginatorLeftFunction }: Props) 
 
     const organiserBodyTemplate = (rowData: Problem): React.ReactNode => {
         return (
-            <div className="flex items-center gap-1 px-2 py-1">
+            <div className="flex items-center gap-1 px-2">
                 {rowData.organiser_image ? (
                     <Avatar
                         className="transition-transform ease-in-out duration-200 cursor-pointer hover:scale-105"
@@ -100,7 +100,7 @@ const ProblemsDataTable = ({ problems, loading, paginatorLeftFunction }: Props) 
         return (
             <Button
                 label="Edit"
-                className="shadow-darkgray drop-shadow-xl hover:scale-105 h-10
+                className="shadow-darkgray drop-shadow-xl hover:scale-105 py-1
                 transition-all ease-in-out duration-300 bg-primary hover:bg-primarylight"
                 onClick={() => navigate(`/admin/edit-problem/${rowData.id}`)}
             />
@@ -135,7 +135,7 @@ const ProblemsDataTable = ({ problems, loading, paginatorLeftFunction }: Props) 
                 {overlayText}
             </OverlayPanel>
             <DataTable
-                className="text-[2vh]"
+                className="text-[1.5vh]"
                 value={problems}
                 paginator
                 rows={5}
@@ -150,7 +150,7 @@ const ProblemsDataTable = ({ problems, loading, paginatorLeftFunction }: Props) 
                 tableStyle={{ minWidth: "50rem" }}
                 stripedRows
                 emptyMessage={renderProgressSpinner()}
-                header={<p className="px-2 text-2xl text-center text-primary">Problems</p>}
+                header={<p className="px-2 text-2xl text-primary">Problems</p>}
                 paginatorClassName="rounded-b-xl"
                 pt={{
                     root: { className: "border-graydark border-2 rounded-xl" },
@@ -164,43 +164,28 @@ const ProblemsDataTable = ({ problems, loading, paginatorLeftFunction }: Props) 
                     field="name"
                     header="Title"
                     body={(rowData: Problem) => textBodyTemplate(rowData.name)}
-                    headerClassName="text-sm"
                 />
                 <Column
                     sortable
                     field="description"
                     header="Description"
                     body={(rowData: Problem) => textBodyTemplate(rowData.description)}
-                    headerClassName="text-sm"
                 />
-                <Column
-                    sortable
-                    field="num_of_points"
-                    header="Num of points"
-                    bodyClassName="text-center"
-                    headerClassName="text-sm"
-                />
+                <Column sortable field="num_of_points" header="Num of points" bodyClassName="text-center" />
                 <Column
                     sortable
                     field="runtime_limit"
                     header="Runtime limit"
                     bodyClassName="text-center whitespace-nowrap"
-                    headerClassName="text-sm"
                     body={runtimeLimitBodyTemplate}
                 />
-                <Column
-                    field="organiser_username"
-                    body={organiserBodyTemplate}
-                    header="Organiser"
-                    headerClassName="text-sm"
-                />
+                <Column field="organiser_username" body={organiserBodyTemplate} header="Organiser" />
                 <Column
                     sortable={true}
                     field="is_hidden"
                     header="Hidden"
                     dataType="boolean"
                     bodyClassName="text-center"
-                    headerClassName="text-sm"
                     body={(rowData: Problem) => booleanBodyTemplate(rowData.is_hidden)}
                 />
                 <Column
@@ -209,23 +194,16 @@ const ProblemsDataTable = ({ problems, loading, paginatorLeftFunction }: Props) 
                     header="Private"
                     dataType="boolean"
                     bodyClassName="text-center"
-                    headerClassName="text-sm"
                     body={(rowData: Problem) => booleanBodyTemplate(rowData.is_private)}
                 />
                 <Column
                     sortable
                     field="created_on"
                     header="Created on"
-                    headerClassName="text-sm"
                     bodyClassName="whitespace-nowrap text-center"
                     body={createdOnBodyTemplate}
                 />
-                <Column
-                    header="Edit"
-                    body={editProblemBodyTemplate}
-                    bodyClassName="px-4"
-                    headerClassName="centered-column-header text-sm"
-                />
+                <Column body={editProblemBodyTemplate} bodyClassName="px-4" />
             </DataTable>
         </>
     )

@@ -2,6 +2,7 @@ import { useState, useRef, FormEvent } from "react"
 import { FormDataRegister, RegisterRole } from "../Models"
 import { Link, useNavigate } from "react-router-dom"
 import { InputText } from "primereact/inputtext"
+import { FileUpload, FileUploadHandlerEvent, FileUploadSelectEvent, FileUploadUploadEvent } from "primereact/fileupload"
 import { Password } from "primereact/password"
 import { Button } from "primereact/button"
 import { ProgressSpinner } from "primereact/progressspinner"
@@ -12,7 +13,7 @@ import { register } from "../services/login.service"
 import { Navbar } from "../components"
 
 const RegisterPage = () => {
-    const [selectedImage, setSelectedImage] = useState(undefined)
+    const [selectedImage, setSelectedImage] = useState<File>()
 
     const navigate = useNavigate()
     const { auth, updateAuth } = useAuth()
@@ -103,7 +104,7 @@ const RegisterPage = () => {
         return (
             <form
                 onSubmit={submitForm}
-                className="mx-[5%] mt-[40vh] mb-[10vh] lg:my-0 gap-[2vh] flex flex-col rounded-xl p-[5%] bg-graymedium drop-shadow-xl rounded-t-xl border-graydark border-b-4"
+                className="lg:w-[60vw] mx-[5%] mt-[40vh] mb-[10vh] lg:my-0 gap-[2vh] flex flex-col rounded-xl p-[5%] bg-graymedium drop-shadow-xl rounded-t-xl border-graydark border-b-4"
             >
                 <div className="m-[5%] flex flex-col gap-2">
                     <span className="text-[4vh] text-center font-semibold text-primary mb-2">Welcome to BytePit</span>
@@ -127,8 +128,8 @@ const RegisterPage = () => {
                         <label htmlFor="in">Role</label>
                     </span>
                 </div>
-                <div className="flex flex-col lg:flex-row gap-6">
-                    <div className="flex flex-col gap-6 w-full">
+                <div className="flex flex-col lg:flex-row gap-[3vh] justify-between">
+                    <div className="flex flex-col gap-[3vh] lg:w-[45%] lg:max-w-[45%]">
                         <TextInput name="email" value={formData.email} label="Email" onUpdate={handleValueChange} />
                         <TextInput
                             name="username"
@@ -136,15 +137,15 @@ const RegisterPage = () => {
                             label="Username"
                             onUpdate={handleValueChange}
                         />
-                        <span className="p-float-label text-2vh">
+                        <span className="p-float-label text-2[vh] w-full">
                             <Password
                                 name="password"
                                 toggleMask
                                 value={formData.password}
                                 onChange={handleValueChange}
                                 feedback
-                                className="text-[2vh] rounded-[1vh]"
-                                inputClassName="text-[2vh] rounded-[1vh]"
+                                className="w-full"
+                                inputClassName="text-[2vh] rounded-[1vh] w-full"
                                 pt={{
                                     showIcon: {
                                         className:
@@ -159,7 +160,7 @@ const RegisterPage = () => {
                             <label htmlFor="in">Password</label>
                         </span>
                     </div>
-                    <div className="flex flex-col gap-6 w-full">
+                    <div className="flex flex-col gap-[3vh] lg:w-[45%] lg:max-w-[45%]">
                         <TextInput name="name" value={formData.name} label="Name" onUpdate={handleValueChange} />
                         <TextInput
                             name="surname"
@@ -167,14 +168,25 @@ const RegisterPage = () => {
                             label="Surname"
                             onUpdate={handleValueChange}
                         />
-                        <div>
-                            <input
-                                id="image"
-                                className="w-full text-[2vh] rounded-[1vh] file:w-1/2 block text-sm file:rounded-[1vh] file:bg-gray-300 file:hover:bg-gray-200 file:transition-all file:ease-in-out file:duration-300 file:border-none select-none file:cursor-pointer cursor-defualt file:text-gray-800 file:p-3 file:pointer-events-auto pointer-events-none bg-gray-50 text-gray-600"
-                                type="file"
-                                onChange={(e: any) => setSelectedImage(e.target.files[0])}
-                            />
-                        </div>
+                        <FileUpload
+                            name="image"
+                            accept="image/*"
+                            maxFileSize={1000000}
+                            pt={{
+                                basicButton: {
+                                    className: "w-full text-[2vh] bg-white text-primary",
+                                },
+                                label: {
+                                    className: "truncate ",
+                                },
+                            }}
+                            chooseLabel="Upload a picture"
+                            mode="basic"
+                            customUpload
+                            onSelect={(e: FileUploadSelectEvent) => {
+                                setSelectedImage(e.files[0])
+                            }}
+                        />
                     </div>
                 </div>
 
