@@ -48,7 +48,7 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ currentLanguage, currentAnswer,
     }, [currentAnswer])
 
     return (
-        <div className="h-[50rem] lg:ml-4 pt-4">
+        <div className="h-full lg:ml-4 pt-4">
             <div className="h-[10%] flex justify-between">
                 <div className="flex w-1/2 lg:w-1/5 flex-col items-start justify-center">
                     <span className="p-float-label w-full text-[1.2rem] flex justify-center items-center">
@@ -89,7 +89,8 @@ const CodeEditor: React.FC<CodeEditorProps> = ({ currentLanguage, currentAnswer,
             <div
                 className={`${
                     theme === CodeEditorTheme.DARK ? "bg-vsdark border-vsdark" : "bg-white border-white"
-                } p-2 rounded-lg border-2 h-[80%]`}>
+                } p-2 rounded-lg border-2 h-[80%]`}
+            >
                 <Editor
                     height="100%"
                     options={{

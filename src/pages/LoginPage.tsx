@@ -78,8 +78,9 @@ const LoginPage = () => {
             <div className="bg-form bg-cover grow flex flex-row justify-center items-center">
                 <form
                     onSubmit={submitForm}
-                    className="m-[5%] w-full lg:w-[60%] h-[60%] flex flex-row justify-center items-center drop-shadow-xl">
-                    <div className="p-[5%] py-[10%] flex flex-col h-full gap-[2vh] w-full bg-graymedium rounded-[3%] lg:rounded-r-none  border-graydark border-b-4">
+                    className="m-[5%] w-full lg:w-[60%] h-[60%] flex flex-row justify-center items-center drop-shadow-xl"
+                >
+                    <div className="p-[5%] py-[10%] flex flex-col h-full gap-[3vh] w-full bg-graymedium rounded-[3%] lg:rounded-r-none  border-graydark border-b-4">
                         <div className="flex flex-col gap-2">
                             <span className="text-[4vh] text-center font-bold text-primary">Login</span>
                             <span className="lg:hidden text-[2vh] text-center text-slate-950">
@@ -91,7 +92,7 @@ const LoginPage = () => {
                                 name="username"
                                 value={formData.username}
                                 onChange={handleValueChange}
-                                className="w-full text-[2vh] rounded-[1vh] h-[6vh]"
+                                className="w-full text-[2vh] rounded-[1vh]"
                             />
                             <label htmlFor="in">Username</label>
                         </span>
@@ -106,10 +107,12 @@ const LoginPage = () => {
                                 inputClassName="w-full text-[2vh] rounded-[1vh]"
                                 pt={{
                                     showIcon: {
-                                        className: "mb-2 hover:cursor-pointer hover:scale-[108%] transition-all ease-in-out duration-300",
+                                        className:
+                                            "mb-2 hover:cursor-pointer hover:scale-[108%] transition-all ease-in-out duration-300",
                                     },
                                     hideIcon: {
-                                        className: "mb-2 hover:cursor-pointer hover:scale-[108%] transition-all ease-in-out duration-300",
+                                        className:
+                                            "mb-2 hover:cursor-pointer hover:scale-[108%] transition-all ease-in-out duration-300",
                                     },
                                 }}
                             />
@@ -132,7 +135,8 @@ const LoginPage = () => {
                             <Button
                                 className="font-semibold text-[2vh] bg-graydark rounded-full text-primary mt-[1%] hover:bg-white hover:scale-[102%] transition-all ease-in-out duration-300"
                                 size="small"
-                                text>
+                                text
+                            >
                                 No account yet? Register now!
                             </Button>
                         </Link>
