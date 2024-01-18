@@ -9,6 +9,7 @@ import { createProblem } from "../services/problem.service"
 import { Toast } from "primereact/toast"
 import { RadioButton } from "primereact/radiobutton"
 import { InputNumber, InputNumberValueChangeEvent } from "primereact/inputnumber"
+import { ToggleButton, ToggleButtonChangeEvent } from 'primereact/togglebutton';
 
 const CreateProblemPage = () => {
     const [selectedTestFiles, setSelectedTestFiles] = useState(undefined)
@@ -184,16 +185,30 @@ const CreateProblemPage = () => {
                                 />
                             </div>
                         </div>
-                        <BoolInput
-                            label="Private"
-                            value={formData.isPrivate}
-                            onChange={(value) => setFormData({ ...formData, isPrivate: value })}
-                        />
-                        <BoolInput
-                            label="Hidden"
-                            value={formData.isHidden}
-                            onChange={(value) => setFormData({ ...formData, isHidden: value })}
-                        />
+                        <div className="flex flex-col lg:flex-row lg:w-[24rem] gap-4 justify-between">
+                            <ToggleButton
+                                onLabel="Private"
+                                offLabel="Public"
+                                onIcon="pi pi-lock"
+                                offIcon="pi pi-lock-open"
+                                checked={formData.isPrivate}
+                                onChange={(e: ToggleButtonChangeEvent) => 
+                                    setFormData({ ...formData, isPrivate: e.value })
+                                }
+                                className="w-[8rem] py-2"
+                            />
+                            <ToggleButton
+                                onLabel="Hidden"
+                                offLabel="Visible"
+                                onIcon="pi pi-eye-slash"
+                                offIcon="pi pi-eye"
+                                checked={formData.isHidden}
+                                onChange={(e: ToggleButtonChangeEvent) =>
+                                    setFormData({ ...formData, isHidden: e.value})
+                                }
+                                className="w-[8rem] py-2"
+                            />
+                        </div>
                         <div className="lg:w-[50rem]">
                             <div className="flex justify-between items-center mt-4 mb-8 px-2">
                                 <Button
@@ -225,12 +240,6 @@ type TextInputProps = {
     onUpdate: (value: any) => void
 }
 
-type BoolInputProps = {
-    label: string
-    value: boolean
-    onChange: (value: boolean) => void
-}
-
 type NumberInputProps = {
     value: number
     label: string
@@ -248,40 +257,6 @@ const TextInput = ({ name, value, label, onUpdate }: TextInputProps) => {
             />
             <label htmlFor="in">{label}</label>
         </span>
-    )
-}
-
-const BoolInput = ({ value, label, onChange }: BoolInputProps) => {
-    return (
-        <div>
-            <label className="text-gray-600">{label}</label>
-            <div className="field-radiobutton mt-2 mb-3">
-                <RadioButton
-                    inputId="trueOption"
-                    name="trueFalse"
-                    value={true}
-                    onChange={(e) => onChange(true)}
-                    checked={value === true}
-                    className="mr-2"
-                />
-                <label htmlFor="trueOption" className="text-gray-600">
-                    True
-                </label>
-            </div>
-            <div className="field-radiobutton">
-                <RadioButton
-                    inputId="falseOption"
-                    name="trueFalse"
-                    value={false}
-                    onChange={(e) => onChange(false)}
-                    checked={value === false}
-                    className="mr-2"
-                />
-                <label htmlFor="falseOption" className="text-gray-600">
-                    False
-                </label>
-            </div>
-        </div>
     )
 }
 

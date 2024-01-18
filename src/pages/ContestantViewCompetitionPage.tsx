@@ -1,7 +1,8 @@
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import { Navbar, ProblemSolver, Timer } from "../components"
 import { useState, useEffect, useCallback } from "react"
 import { getCompetition } from "../services/competition.service"
+import { getUser } from "../services/users.service"
 import { Competition } from "../Models"
 import { ProgressSpinner } from "primereact/progressspinner"
 import CompetitionDashboard from "../components/CompetitionDashboard"
@@ -12,6 +13,7 @@ const ContestantViewCompetitionPage = () => {
     const [competition, setCompetition] = useState<Competition>()
     const [submitCode, setSubmitCode] = useState<boolean>(false)
     const { id } = useParams<{ id: string }>()
+    const navigate = useNavigate()
 
     const isCompetitionActive = () => {
         const start = new Date(competition?.start_time!!)
@@ -34,6 +36,10 @@ const ContestantViewCompetitionPage = () => {
         if (id) {
             try {
                 const competition = await getCompetition(id)
+                if (competition.data.parent_id === null) {
+                    const organiser = await getUser(competition.data.organiser_id)
+                    competition.data.organiser_username = organiser.data.username
+                }
                 setCompetition(competition.data)
                 setLoading(false)
             } catch (err: any) {
@@ -51,6 +57,10 @@ const ContestantViewCompetitionPage = () => {
         setSubmitCode(true)
     }
 
+    const handleOrganiserUsernameClick = () => {
+        navigate(`/profiles/organiser/${competition?.organiser_id}`)
+    }
+
     return (
         <div className="flex flex-col h-screen justify-center">
             {loading ? (
@@ -65,8 +75,8 @@ const ContestantViewCompetitionPage = () => {
                     <div className="mx-[2%] rounded-xl px-[2%] bg-graymedium drop-shadow-xl rounded-t-xl border-graydark border-b-4">
                         <div className="flex flex-col gap-[3vh] py-4 h-[85vh] w-[90vw] overflow-auto scrollbar-hide items-center">
                             <div className="w-full flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 lg:justify-between">
-                                <div className="text-left w-full flex flex-col gap-2 text-gray-700">
-                                    <div className="text-[3vh] font-semibold flex gap-3 items-center">
+                                <div className="w-full flex flex-col gap-2 text-gray-700">
+                                    <div className="text-left text-[3vh] font-semibold flex gap-3 items-center">
                                         {competition?.name}
                                         {competition?.parent_id && (
                                             <div className="bg-primary w-[8vh] h-[4vh] rounded-3xl text-center text-white text-sm font-semibold flex justify-center items-center select-none">
@@ -74,11 +84,24 @@ const ContestantViewCompetitionPage = () => {
                                             </div>
                                         )}
                                     </div>
-                                    <div className="text-sm">{competition?.description}</div>
+                                    <div className="text-left text-sm">{competition?.description}</div>
+                                    {competition?.parent_id === null ? (
+                                        <div className="lg:text-right text-[1.2rem] mt-2 mr-4">
+                                            <span className="font-semibold">Created by: </span>
+                                            <span
+                                                className="text-primarylight cursor-pointer"
+                                                onClick={handleOrganiserUsernameClick}
+                                            >
+                                                {competition?.organiser_username}
+                                            </span>
+                                        </div>
+                                    ) : null}
                                 </div>
                                 {!loading &&
                                     (isCompetitionActive() ? (
-                                        <Timer seconds={getRemainingTime()} handleTimerEnd={timerEnded} />
+                                        <div className="flex items-end">
+                                            <Timer seconds={getRemainingTime()} handleTimerEnd={timerEnded} />
+                                        </div>
                                     ) : (
                                         <span className="text-xl font-semibold text-white-700">Finished</span>
                                     ))}
