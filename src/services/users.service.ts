@@ -4,4 +4,8 @@ const getCurrentUser = async () => {
     return await requests.get("/auth/current")
 }
 
-export { getCurrentUser }
+const getUser = async (id: string) => {
+    return await requests.get(`/auth/${id}`)
+}
+
+export { getCurrentUser, getUser }
