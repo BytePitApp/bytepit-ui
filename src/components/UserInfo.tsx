@@ -14,7 +14,7 @@ interface Auth {
 const UserInfo = ({ auth, user }: UserInfoProps) => {
     return (
         <div className="flex justify-center items-center mb-4 gap-3">
-            <div className="w-32 h-32 rounded-xl flex justify-center flex-col items-center bg-white border-b-4 border-graydark p-4 gap-2">
+            <div className="h-32 rounded-xl flex justify-center flex-col items-center bg-white border-b-4 border-graydark p-4 gap-2">
                 <div className="flex justify-center items-center w-max h-max">
                     {user?.image ? (
                         <Avatar
