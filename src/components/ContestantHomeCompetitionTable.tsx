@@ -172,7 +172,7 @@ const ContestantHomeCompetitionTable: React.FC = () => {
                 <ProgressSpinner style={{ width: "50px", height: "50px" }} fill="#dee2e6" strokeWidth="7" />
             </div>
         ) : (
-            <p>No competitions found for this organiser.</p>
+            <p>No competitions found.</p>
         )
     }
 
