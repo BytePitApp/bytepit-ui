@@ -76,23 +76,13 @@ const modifyCompetition = async (id: string, competition: ModifyCompetition, old
     return response
 }
 
-const getAllCompetitionsForOrganiser = async (organiserId: string | undefined) => {
-    const response = await requests.get(`/competitions/competitions-by-organiser/${organiserId}`)
+const getAllCompetitionsForOrganiser = async (organiserId?: string, trophies: boolean = false) => {
+    const response = await requests.get(`/competitions/competitions-by-organiser/${organiserId}?trophies=${trophies}`)
     return response
 }
 
 const getCompetition = async (competitionId: string) => {
     const response = await requests.get(`/competitions/${competitionId}`)
-    return response
-}
-
-const getVirtualCompetition = async (competitionId: string) => {
-    const response = await requests.get(`/competitions/virtual/${competitionId}`)
-    return response
-}
-
-const getAllVirtualCompetitions = async () => {
-    const response = await requests.get("/competitions/virtual")
     return response
 }
 
@@ -108,13 +98,8 @@ const getRandomCompetition = async () => {
     return response
 }
 
-const getActiveCompetitions = async () => {
-    const response = await requests.get("/competitions/active")
-    return response
-}
-
-const getAllCompetitions = async () => {
-    const response = await requests.get("/competitions")
+const getAllCompetitions = async (trophies: boolean = false) => {
+    const response = await requests.get(`/competitions?trophies=${trophies}`)
     return response
 }
 
@@ -133,12 +118,9 @@ export {
     getAllCompetitionsForOrganiser,
     modifyCompetition,
     getCompetition,
-    getVirtualCompetition,
-    getActiveCompetitions,
     getAllCompetitions,
     createVirtualCompetition,
     getRandomCompetition,
-    getAllVirtualCompetitions,
     getCompetitionResults,
     getVirtualCompetitionResults,
 }

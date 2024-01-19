@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom"
+import { Routes, Route, Navigate } from "react-router-dom"
 import {
     AdminHomePage,
     ContestantHomePage,
@@ -81,6 +81,7 @@ const App = () => {
                 </Route>
                 <Route path="organiser/profile/:id" element={<OrganiserProfilePage></OrganiserProfilePage>} />
                 <Route path="contestant/profile/:id" element={<ContestantProfilePage></ContestantProfilePage>} />
+                <Route path="admin/profile/:id" element={<OrganiserProfilePage></OrganiserProfilePage>} />
                 <Route path="login" element={<LoginPage></LoginPage>} />
                 <Route path="register" element={<RegisterPage></RegisterPage>} />
                 <Route path="confirm-email/:id" element={<EmailConfirmPage></EmailConfirmPage>} />

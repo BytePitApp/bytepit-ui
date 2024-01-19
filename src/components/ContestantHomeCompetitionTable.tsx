@@ -87,7 +87,7 @@ const ContestantHomeCompetitionTable: React.FC = () => {
     const handleCreateVirtualCompetition = async (parentCompetitionId: string) => {
         setLoading(true)
         try {
-            const organiserCompetitions = await getAllCompetitionsForOrganiser(auth?.id)
+            const organiserCompetitions = await getAllCompetitionsForOrganiser(auth!.id)
             const alreadyRunning = organiserCompetitions.data.find(
                 (item: Competition) =>
                     item.parent_id === parentCompetitionId && isCompetitionActive(item.start_time, item.end_time)
@@ -108,7 +108,7 @@ const ContestantHomeCompetitionTable: React.FC = () => {
         setLoading(true)
         try {
             const randomCompetitionResponse = await getRandomCompetition()
-            const organiserCompetitions = await getAllCompetitionsForOrganiser(auth?.id)
+            const organiserCompetitions = await getAllCompetitionsForOrganiser(auth!.id)
             const alreadyRunning = organiserCompetitions.data.find(
                 (item: Competition) =>
                     item.parent_id === randomCompetitionResponse.data.id &&
@@ -172,7 +172,7 @@ const ContestantHomeCompetitionTable: React.FC = () => {
                 <ProgressSpinner style={{ width: "50px", height: "50px" }} fill="#dee2e6" strokeWidth="7" />
             </div>
         ) : (
-            "No competitions found."
+            <p>No competitions found for this organiser.</p>
         )
     }
 
@@ -261,7 +261,7 @@ const ContestantHomeCompetitionTable: React.FC = () => {
                 paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
                 currentPageReportTemplate="{first} to {last} of {totalRecords}"
                 size={"small"}
-                emptyMessage={renderProgressSpinner}
+                emptyMessage={renderProgressSpinner()}
                 stripedRows
                 showGridlines={true}
                 sortField="endTime"
