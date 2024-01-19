@@ -1,8 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom"
-import { Navbar, ProblemSolver, Timer } from "../components"
+import { Navbar, ProblemSolver, ProfileLink, Timer } from "../components"
 import { useState, useEffect, useCallback } from "react"
 import { getCompetition } from "../services/competition.service"
-import { getUser } from "../services/users.service"
 import { Competition } from "../Models"
 import { ProgressSpinner } from "primereact/progressspinner"
 import CompetitionDashboard from "../components/CompetitionDashboard"
@@ -36,10 +35,6 @@ const ContestantViewCompetitionPage = () => {
         if (id) {
             try {
                 const competition = await getCompetition(id)
-                if (competition.data.parent_id === null) {
-                    const organiser = await getUser(competition.data.organiser_id)
-                    competition.data.organiser_username = organiser.data.username
-                }
                 setCompetition(competition.data)
                 setLoading(false)
             } catch (err: any) {
@@ -57,10 +52,6 @@ const ContestantViewCompetitionPage = () => {
         setSubmitCode(true)
     }
 
-    const handleOrganiserUsernameClick = () => {
-        navigate(`/profiles/organiser/${competition?.organiser_id}`)
-    }
-
     return (
         <div className="flex flex-col h-screen justify-center">
             {loading ? (
@@ -76,26 +67,26 @@ const ContestantViewCompetitionPage = () => {
                         <div className="flex flex-col gap-[3vh] py-4 h-[85vh] w-[90vw] overflow-auto scrollbar-hide items-center">
                             <div className="w-full flex flex-col lg:flex-row gap-y-4 lg:gap-y-0 lg:justify-between">
                                 <div className="w-full flex flex-col gap-2 text-gray-700">
-                                    <div className="text-left text-[3vh] font-semibold flex gap-3 items-center">
-                                        {competition?.name}
-                                        {competition?.parent_id && (
-                                            <div className="bg-primary w-[8vh] h-[4vh] rounded-3xl text-center text-white text-sm font-semibold flex justify-center items-center select-none">
-                                                Virtual
+                                    <div className="text-left text-[3vh] font-semibold flex flex-col justify-center">
+                                        <div className="flex gap-4">
+                                            {competition?.name}
+                                            {competition?.parent_id && (
+                                                <div className="bg-primary w-[8vh] h-[4vh] rounded-3xl text-center text-white text-sm font-semibold flex justify-center items-center select-none">
+                                                    Virtual
+                                                </div>
+                                            )}
+                                        </div>
+                                        {competition?.parent_id === null && (
+                                            <div className="text-[2vh]">
+                                                Created by:{" "}
+                                                <ProfileLink
+                                                    profileUrl={`/profiles/organiser/${competition?.organiser_id}`}
+                                                    username={competition?.organiser_username as string}
+                                                />
                                             </div>
                                         )}
                                     </div>
                                     <div className="text-left text-sm">{competition?.description}</div>
-                                    {competition?.parent_id === null ? (
-                                        <div className="lg:text-right text-[1.2rem] mt-2 mr-4">
-                                            <span className="font-semibold">Created by: </span>
-                                            <span
-                                                className="text-primarylight cursor-pointer"
-                                                onClick={handleOrganiserUsernameClick}
-                                            >
-                                                {competition?.organiser_username}
-                                            </span>
-                                        </div>
-                                    ) : null}
                                 </div>
                                 {!loading &&
                                     (isCompetitionActive() ? (

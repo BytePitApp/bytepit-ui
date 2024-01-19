@@ -93,10 +93,10 @@ const ContestantHomeCompetitionTable: React.FC = () => {
                     item.parent_id === parentCompetitionId && isCompetitionActive(item.start_time, item.end_time)
             )
             if (alreadyRunning) {
-                navigate(`/contestant/virtual-competition/${alreadyRunning.id}`)
+                navigate(`/contestant/competition/${alreadyRunning.id}`)
             } else {
                 const response = await createVirtualCompetition(parentCompetitionId)
-                navigate(`/contestant/virtual-competition/${response.data}`)
+                navigate(`/contestant/competition/${response.data}`)
             }
         } catch (err: any) {
             console.log(err.response?.data?.detail ?? "Something went wrong")
@@ -115,10 +115,10 @@ const ContestantHomeCompetitionTable: React.FC = () => {
                     isCompetitionActive(item.start_time, item.end_time)
             )
             if (alreadyRunning) {
-                navigate(`/contestant/virtual-competition/${alreadyRunning.id}`)
+                navigate(`/contestant/competition/${alreadyRunning.id}`)
             } else {
                 const response = await createVirtualCompetition(randomCompetitionResponse.data.id)
-                navigate(`/contestant/virtual-competition/${response.data}`)
+                navigate(`/contestant/competition/${response.data}`)
             }
         } catch (err: any) {
             console.log(err.response?.data?.detail ?? "Something went wrong")
