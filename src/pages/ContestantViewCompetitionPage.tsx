@@ -80,7 +80,7 @@ const ContestantViewCompetitionPage = () => {
                                             <div className="text-[2vh]">
                                                 Created by:{" "}
                                                 <ProfileLink
-                                                    profileUrl={`/profiles/organiser/${competition?.organiser_id}`}
+                                                    profileUrl={`/organiser/profile/${competition?.organiser_id}`}
                                                     username={competition?.organiser_username as string}
                                                 />
                                             </div>

@@ -9,7 +9,7 @@ import { createProblem } from "../services/problem.service"
 import { Toast } from "primereact/toast"
 import { RadioButton } from "primereact/radiobutton"
 import { InputNumber, InputNumberValueChangeEvent } from "primereact/inputnumber"
-import { ToggleButton, ToggleButtonChangeEvent } from 'primereact/togglebutton';
+import { ToggleButton, ToggleButtonChangeEvent } from "primereact/togglebutton"
 
 const CreateProblemPage = () => {
     const [selectedTestFiles, setSelectedTestFiles] = useState(undefined)
@@ -169,6 +169,13 @@ const CreateProblemPage = () => {
                             <label htmlFor="description">Example Output</label>
                         </span>
                         <div className="flex justify-center items-center flex-col space-y-4">
+                            <div className="flex flex-col">
+                                <span>Test files should have the following format:</span>
+                                <code>{"{test_no}_in.txt, {test_no}_out.txt"}</code>
+                                <span className="mt-4">Example:</span>
+                                <code>{"1_in.txt, 1_out.txt"}</code>
+                                <code>{"2_in.txt, 2_out.txt"}</code>
+                            </div>
                             <div className="relative pointer-events-none">
                                 <label
                                     htmlFor="testFiles"
@@ -192,7 +199,7 @@ const CreateProblemPage = () => {
                                 onIcon="pi pi-lock"
                                 offIcon="pi pi-lock-open"
                                 checked={formData.isPrivate}
-                                onChange={(e: ToggleButtonChangeEvent) => 
+                                onChange={(e: ToggleButtonChangeEvent) =>
                                     setFormData({ ...formData, isPrivate: e.value })
                                 }
                                 className="w-[8rem] py-2"
@@ -204,7 +211,7 @@ const CreateProblemPage = () => {
                                 offIcon="pi pi-eye"
                                 checked={formData.isHidden}
                                 onChange={(e: ToggleButtonChangeEvent) =>
-                                    setFormData({ ...formData, isHidden: e.value})
+                                    setFormData({ ...formData, isHidden: e.value })
                                 }
                                 className="w-[8rem] py-2"
                             />
