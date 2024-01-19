@@ -12,8 +12,6 @@ import {
     EditProblemPage,
     ContestantViewCompetitionPage,
     ContestantProblemPlaygroundPage,
-    ContestantProfilePage,
-    OrganiserProfilePage,
     ContestantPlaygroundPage,
 } from "./pages"
 import ProtectedRoute from "./components/ProtectedRoute"
