@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom"
 import { Navbar, ProblemSolver, Timer } from "../components"
 import { useState, useEffect, useCallback } from "react"
 import { getCompetition } from "../services/competition.service"
-import { getUser } from "../services/users.service"
+import { getUserById } from "../services/users.service"
 import { Competition } from "../Models"
 import { ProgressSpinner } from "primereact/progressspinner"
 import CompetitionDashboard from "../components/CompetitionDashboard"
@@ -37,7 +37,7 @@ const ContestantViewCompetitionPage = () => {
             try {
                 const competition = await getCompetition(id)
                 if (competition.data.parent_id === null) {
-                    const organiser = await getUser(competition.data.organiser_id)
+                    const organiser = await getUserById(competition.data.organiser_id)
                     competition.data.organiser_username = organiser.data.username
                 }
                 setCompetition(competition.data)
