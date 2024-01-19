@@ -28,6 +28,7 @@ import "./App.css"
 import { Role } from "./Models"
 import { AuthProvider } from "./context/AuthContext"
 import EditCompetitionPage from "./pages/EditCompetitionPage"
+import ProfilePage from "./pages/ProfilePage"
 
 const App = () => {
     return (
@@ -84,9 +85,7 @@ const App = () => {
                         <ProtectedRoute allowedRoles={[Role.ADMIN, Role.CONTESTANT, Role.ORGANISER]}></ProtectedRoute>
                     }
                 >
-                    <Route path="organiser/profile/:id" element={<OrganiserProfilePage></OrganiserProfilePage>} />
-                    <Route path="contestant/profile/:id" element={<ContestantProfilePage></ContestantProfilePage>} />
-                    <Route path="admin/profile/:id" element={<OrganiserProfilePage></OrganiserProfilePage>} />
+                    <Route path="profile/:username" element={<ProfilePage></ProfilePage>} />
                 </Route>
                 <Route path="login" element={<LoginPage></LoginPage>} />
                 <Route path="register" element={<RegisterPage></RegisterPage>} />

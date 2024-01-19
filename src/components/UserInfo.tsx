@@ -1,32 +1,13 @@
 import { Avatar } from "primereact/avatar"
 import { User } from "../Models"
-import { useCallback, useEffect, useState } from "react"
-import { getUserById } from "../services/users.service"
 import { ProgressSpinner } from "primereact/progressspinner"
 
 interface UserInfoProps {
-    userId?: string
+    user?: User
+    loading: boolean
 }
 
-const UserInfo = ({ userId }: UserInfoProps) => {
-    const [loading, setLoading] = useState(true)
-
-    const [user, setUser] = useState<User>()
-    const fetchUser = useCallback(async () => {
-        try {
-            setLoading(true)
-            const response = await getUserById(userId)
-            setUser(response.data)
-            setLoading(false)
-        } catch (err: any) {
-            console.log(err.response?.data?.detail ?? "Something went wrong")
-        }
-    }, [])
-
-    useEffect(() => {
-        fetchUser()
-    }, [fetchUser])
-
+const UserInfo = ({ user, loading }: UserInfoProps) => {
     return (
         <div className="flex justify-center items-center mb-4 gap-3">
             <div className="h-32 rounded-xl flex justify-center flex-col items-center bg-white border-b-4 border-graydark p-4 gap-2">

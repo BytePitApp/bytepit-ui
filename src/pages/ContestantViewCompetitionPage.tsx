@@ -78,11 +78,7 @@ const ContestantViewCompetitionPage = () => {
                                         </div>
                                         {competition?.parent_id === null && (
                                             <div className="text-[2vh]">
-                                                Created by:{" "}
-                                                <ProfileLink
-                                                    profileUrl={`/organiser/profile/${competition?.organiser_id}`}
-                                                    username={competition?.organiser_username as string}
-                                                />
+                                                Created by: <ProfileLink username={competition?.organiser_username!} />
                                             </div>
                                         )}
                                     </div>

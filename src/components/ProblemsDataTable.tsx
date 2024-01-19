@@ -64,10 +64,7 @@ const ProblemsDataTable = ({ problems, loading, paginatorLeftFunction }: Props) 
                         size="normal"
                     />
                 )}
-                <ProfileLink
-                    profileUrl={`/organiser/profile/${rowData.organiser_id}`}
-                    username={rowData.organiser_username as string}
-                />
+                <ProfileLink username={rowData.organiser_username!} />
             </div>
         )
     }
