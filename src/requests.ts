@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const url = process.env.NODE_ENV === "production" ? "https://bytepit.cloud/api" : "http://localhost:8000"
+let url = import.meta.env.VITE_API_URL ?? "http://localhost:8000/api"
 
 const instance = axios.create({
     baseURL: url,
