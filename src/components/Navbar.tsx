@@ -22,11 +22,7 @@ const Navbar = () => {
     }
 
     const handleAvatarClick = () => {
-        if (auth?.role === "contestant") {
-            navigate(`/profile/${auth?.id}`)
-        } else if (auth?.role === "organiser") {
-            navigate(`/profile/${auth?.id}`)
-        }
+        navigate(`/profile/${auth?.id}`)
     }
 
     return (
