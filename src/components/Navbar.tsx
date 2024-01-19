@@ -22,7 +22,7 @@ const Navbar = () => {
     }
 
     const handleAvatarClick = () => {
-        navigate(`/profile/${auth?.id}`)
+        navigate(`/profile/${auth?.username}`)
     }
 
     return (
