@@ -14,7 +14,7 @@ const RankBarChart: React.FC<RankBarChartProps> = ({ data }) => {
         <div className="bg-white p-4 flex flex-col justify-center items-center text-center gap-2 border-4 rounded-2xl">
             <div className="text-xl font-bold h-[20%]">Competition placements</div>
             <div style={{ height: "100%", width: "25rem" }}>
-                {!data[0].count && !data[1].count && !data[0].count ? (
+                {!data[0].count && !data[1].count && !data[2].count ? (
                     <div className="w-full h-full flex text-center items-center justify-center">
                         No available competition placements for this contestant.
                     </div>
