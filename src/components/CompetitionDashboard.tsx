@@ -331,11 +331,15 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
                         </div>
                         <div className="flex flex-col gap-3 w-[50%]">
                             <p className="font-semibold">Source code: </p>
-                            <textarea
-                                className="resize-none h-full w-[90%] rounded-md border-graydark border-2 p-2"
-                                readOnly
-                                value={selectedProblemResult.source_code}
-                            ></textarea>
+                            {!selectedProblemResult.source_code ? (
+                                <span className="font-semibold text-red-500">Source code is not available</span>
+                            ) : (
+                                <textarea
+                                    className="resize-none h-full w-[90%] rounded-md border-graydark border-2 p-2"
+                                    readOnly
+                                    value={selectedProblemResult.source_code}
+                                ></textarea>
+                            )}
                         </div>
                     </div>
                 )}
