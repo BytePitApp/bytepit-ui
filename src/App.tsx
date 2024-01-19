@@ -79,9 +79,15 @@ const App = () => {
                         element={<EditCompetitionPage></EditCompetitionPage>}
                     />
                 </Route>
-                <Route path="organiser/profile/:id" element={<OrganiserProfilePage></OrganiserProfilePage>} />
-                <Route path="contestant/profile/:id" element={<ContestantProfilePage></ContestantProfilePage>} />
-                <Route path="admin/profile/:id" element={<OrganiserProfilePage></OrganiserProfilePage>} />
+                <Route
+                    element={
+                        <ProtectedRoute allowedRoles={[Role.ADMIN, Role.CONTESTANT, Role.ORGANISER]}></ProtectedRoute>
+                    }
+                >
+                    <Route path="organiser/profile/:id" element={<OrganiserProfilePage></OrganiserProfilePage>} />
+                    <Route path="contestant/profile/:id" element={<ContestantProfilePage></ContestantProfilePage>} />
+                    <Route path="admin/profile/:id" element={<OrganiserProfilePage></OrganiserProfilePage>} />
+                </Route>
                 <Route path="login" element={<LoginPage></LoginPage>} />
                 <Route path="register" element={<RegisterPage></RegisterPage>} />
                 <Route path="confirm-email/:id" element={<EmailConfirmPage></EmailConfirmPage>} />
