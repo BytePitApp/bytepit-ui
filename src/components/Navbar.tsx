@@ -23,9 +23,9 @@ const Navbar = () => {
 
     const handleAvatarClick = () => {
         if (auth?.role === "contestant") {
-            navigate(`/contestant/profile/${auth?.id}`)
+            navigate(`/profile/${auth?.id}`)
         } else if (auth?.role === "organiser") {
-            navigate(`/organiser/profile/${auth?.id}`)
+            navigate(`/profile/${auth?.id}`)
         }
     }
 
@@ -66,7 +66,7 @@ const Navbar = () => {
 
                         {/* <img src={`data:image/jpeg;base64,${auth?.image}`}></img> */}
                         <li className="flex flex-col">
-                            <ProfileLink profileUrl={`/${auth.role}/profile/${auth.id}`} username={auth.username} />
+                            <ProfileLink username={auth.username} />
                         </li>
 
                         <VerticalLine />
