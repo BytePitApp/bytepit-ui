@@ -2,23 +2,21 @@ import { DataTable } from "primereact/datatable"
 import { Column } from "primereact/column"
 import { useEffect, useState } from "react"
 import { getAllCompetitionsForOrganiser } from "../services/competition.service"
-import useAuth from "../hooks/useAuth"
 import { Button } from "primereact/button"
 import { ProgressSpinner } from "primereact/progressspinner"
-import { useParams } from "react-router-dom"
 
-const CompetitionsTable = () => {
+interface CompetitionsTableProps {
+    userId?: string
+}
+
+const CompetitionsTable = ({ userId }: CompetitionsTableProps) => {
     const [loading, setLoading] = useState(true)
     const [competitions, setCompetitions] = useState<any>([])
-    const [showActive, setShowActive] = useState(false)
-    const { id } = useParams<{ id: string }>()
-    const { auth } = useAuth()
-
     useEffect(() => {
         const fetchCompetitions = async () => {
             try {
                 setLoading(true)
-                const response = await getAllCompetitionsForOrganiser(id)
+                const response = await getAllCompetitionsForOrganiser(userId)
                 setCompetitions(response.data)
                 setLoading(false)
             } catch (err: any) {
@@ -44,14 +42,6 @@ const CompetitionsTable = () => {
         )
     }
 
-    const activeCompetitions = competitions.filter((competition: any) => {
-        const currentDate = new Date()
-        const startDate = new Date(competition.start_time)
-        const endDate = new Date(competition.end_time)
-        return startDate <= currentDate && currentDate <= endDate
-    })
-    const progressSpinner = renderProgressSpinner()
-
     const paginatorLeft = () => {
         return <Button icon="pi pi-refresh" text={true} />
     }
@@ -70,9 +60,9 @@ const CompetitionsTable = () => {
 
     return (
         <DataTable
-            className="text-[2vh]"
+            className="text-[1.5vh]"
             style={{ borderRadius: "20px", backgroundColor: "white" }}
-            value={showActive ? activeCompetitions : competitions}
+            value={competitions}
             paginator
             removableSort
             rows={5}
@@ -86,7 +76,6 @@ const CompetitionsTable = () => {
             filterDisplay="menu"
             showGridlines={true}
             stripedRows
-            rowClassName={() => "h-16"}
             emptyMessage={renderProgressSpinner()}
             header={<h2 className="px-2 text-2xl text-primary">Competition List</h2>}
             paginatorClassName="border-graydark rounded-b-[1.1rem]"
@@ -95,21 +84,29 @@ const CompetitionsTable = () => {
                 header: { className: "rounded-t-[1.1rem]" },
                 rowGroupHeader: { className: "text-xs" },
             }}
-            cellClassName={() => "p-1"}>
+            cellClassName={() => "p-1"}
+        >
             <Column field="name" header="Name" sortable></Column>
-            <Column field="description" header="Description" className="min-w-[10rem]" body={descriptionBodyTemplate}></Column>
+            <Column
+                field="description"
+                header="Description"
+                className="min-w-[10rem]"
+                body={descriptionBodyTemplate}
+            ></Column>
             <Column
                 field="start_time"
                 header="Start Time"
                 sortable
                 className="text-center w-36 max-w-[9rem]"
-                body={(rowData) => formatDateWithLeadingZeros(new Date(rowData.start_time))}></Column>
+                body={(rowData) => formatDateWithLeadingZeros(new Date(rowData.start_time))}
+            ></Column>
             <Column
                 field="end_time"
                 header="End Time"
                 sortable
                 className="text-center w-36 max-w-[9rem]"
-                body={(rowData) => formatDateWithLeadingZeros(new Date(rowData.end_time))}></Column>
+                body={(rowData) => formatDateWithLeadingZeros(new Date(rowData.end_time))}
+            ></Column>
         </DataTable>
     )
 }
