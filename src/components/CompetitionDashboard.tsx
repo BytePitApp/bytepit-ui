@@ -181,15 +181,18 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
         return columns
     }
 
+    const hasTrophies = (n: number) => {
+        return competition?.trophies && competition.trophies.length > 0 && competition.trophies.length >= n
+    }
+
     const renderRowNumberColumn = () => {
-        const hasTrophies = competition?.trophies && competition.trophies.length == 3
         return (
             <Column
                 className="bg-graydark w-[8%]"
                 field="rank_in_competition"
                 header="#"
                 body={(rowData) =>
-                    hasTrophies && rowData.rank_in_competition <= 3 ? (
+                    hasTrophies(rowData.rank_in_competition) && rowData.rank_in_competition <= 3 ? (
                         <img
                             src={`data:image/png;base64,${(competition?.trophies as any[])[
                                 rowData.rank_in_competition - 1
