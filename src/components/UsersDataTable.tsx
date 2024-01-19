@@ -8,6 +8,7 @@ import { Avatar } from "primereact/avatar"
 import { Dropdown } from "primereact/dropdown"
 import { TriStateCheckbox } from "primereact/tristatecheckbox"
 import "../pages/AdminHomePage.css"
+import ProfileLink from "./ProfileLink"
 
 interface Props {
     users: User[]
@@ -59,6 +60,10 @@ const UsersDataTable = ({ users, loading, paginatorLeftFunction, changeUserRoleH
         }
     }
 
+    const usernameBodyTemplate = (rowData: User): React.ReactNode => {
+        return <ProfileLink profileUrl={`/${rowData.role}/profile/${rowData.id}`} username={rowData.username} />
+    }
+
     const booleanBodyTemplate = (value: boolean) => {
         return (
             <i
@@ -81,7 +86,7 @@ const UsersDataTable = ({ users, loading, paginatorLeftFunction, changeUserRoleH
                 value={rowData.role}
                 options={roles}
                 onChange={(e) => changeUserRoleHandler(rowData.username, e.value)}
-                pt={{ input: { className: "p-1.5" }, list: { className: "text-xs" } }}
+                pt={{ input: { className: "p-1" }, list: { className: "text-xs" } }}
             />
         )
     }
@@ -153,7 +158,7 @@ const UsersDataTable = ({ users, loading, paginatorLeftFunction, changeUserRoleH
             cellClassName={() => "p-1"}
         >
             <Column field="image" body={imageBodyTemplate} style={{ maxWidth: "2.5rem" }} />
-            <Column field="username" sortable header="Username" />
+            <Column field="username" sortable header="Username" body={usernameBodyTemplate} />
             <Column field="name" sortable header="Name" />
             <Column field="surname" sortable header="Surname" />
             <Column field="email" sortable header="Email" />

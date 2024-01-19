@@ -85,7 +85,7 @@ const CompetitionDataTable = ({ competitions, loading, paginatorLeftFunction }: 
                     />
                 )}
                 <ProfileLink
-                    profileUrl={`/profiles/organiser/${rowData.organiser_username}`}
+                    profileUrl={`/organiser/profile/${rowData.organiser_id}`}
                     username={rowData.organiser_username as string}
                 />
             </div>
