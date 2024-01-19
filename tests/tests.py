@@ -15,10 +15,6 @@ URLS = {
     "logout": "https://dev.bytepit.cloud/api/auth/logout",
     "register_page": "https://dev.bytepit.cloud/register",
     "register": "https://dev.bytepit.cloud/api/auth/register",
-    "login_page_dev": "https://dev.bytepit.cloud/login",
-    "login_dev": "https://dev.bytepit.cloud/api/auth/login",
-    "create_problem": "https://dev.bytepit.cloud/api/organiser/create-problem",
-    "problems": "https://dev.bytepit.cloud/api/problems",
 }
 
 
@@ -54,21 +50,6 @@ def define_driver():
 
 
 def login(driver, username="sipa", password="blablabla", url=URLS["login_page"]):
-    driver.get(url)
-
-    username_input_field = driver.find_element("name", "username")
-    password_input_field = driver.find_element("name", "password")
-    submit_button = driver.find_element("xpath", '//span[text()="Submit"]')
-
-    username_input_field.send_keys(username)
-    password_input_field.send_keys(password)
-
-    submit_button.click()
-
-
-def login_dev(
-    driver, username="sipa", password="blablabla", url=URLS["login_page_dev"]
-):
     driver.get(url)
 
     username_input_field = driver.find_element("name", "username")
