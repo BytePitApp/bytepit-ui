@@ -1,18 +1,14 @@
-import { Navbar, UserInfo } from "../components"
+import { useCallback, useEffect, useState } from "react"
+import RankBarChart from "./BarChart"
+import StatisticsChart from "./StatisticsChart"
+import UserTrophies from "./UserTrophies"
 import { getCurrentUsersStatistics } from "../services/users.service"
-import { useEffect, useState } from "react"
 import { UserStatistics } from "../Models"
-import { useCallback } from "react"
-import { StatisticsChart } from "../components"
-import { RankBarChart } from "../components"
-import { UserTrophies } from "../components"
 import { ProgressSpinner } from "primereact/progressspinner"
-import { useParams } from "react-router-dom"
 
-const ContestantProfilePage = () => {
+const ContestantProfile: React.FC<{ id: string }> = ({ id }) => {
     const [loading, setLoading] = useState(true)
     const [statistics, setStatistics] = useState<UserStatistics>()
-    const { id } = useParams<{ id: string }>()
 
     const fetchStatistics = useCallback(async () => {
         try {
@@ -50,23 +46,15 @@ const ContestantProfilePage = () => {
     ]
 
     return (
-        <div className="bg-form bg-cover min-h-screen pb-4">
-            <Navbar />
-            {loading && (
-                <div className="z-50 absolute top-1.5 left-[50%]">
-                    <ProgressSpinner style={{ width: "50px", height: "50px" }} fill="#dee2e6" strokeWidth="7" />
-                </div>
-            )}
-            <div className="m-10 bg-graymedium px-[5%] rounded-xl flex flex-col py-8 border-b-4 border-graydark">
-                <UserInfo userId={id} />
-                <div className="flex justify-center gap-10">
-                    <StatisticsChart statistics={statistics} />
-                    <RankBarChart data={rankCounts} />
-                    <UserTrophies trophies={statistics?.trophies ?? []} />
-                </div>
-            </div>
+        <div className="flex justify-center gap-10">
+            {loading ? (
+                <ProgressSpinner style={{ width: "50px", height: "50px" }} fill="#dee2e6" strokeWidth="7" />
+            ) : null}
+            <StatisticsChart statistics={statistics} />
+            <RankBarChart data={rankCounts} />
+            <UserTrophies trophies={statistics?.trophies ?? []} />
         </div>
     )
 }
 
-export default ContestantProfilePage
+export default ContestantProfile

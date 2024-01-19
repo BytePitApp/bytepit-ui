@@ -61,7 +61,7 @@ const UsersDataTable = ({ users, loading, paginatorLeftFunction, changeUserRoleH
     }
 
     const usernameBodyTemplate = (rowData: User): React.ReactNode => {
-        return <ProfileLink profileUrl={`/${rowData.role}/profile/${rowData.id}`} username={rowData.username} />
+        return <ProfileLink username={rowData.username} />
     }
 
     const booleanBodyTemplate = (value: boolean) => {

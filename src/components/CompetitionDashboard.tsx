@@ -14,6 +14,7 @@ import { Dialog } from "primereact/dialog"
 import React from "react"
 import useAuth from "../hooks/useAuth"
 import { Competition } from "../Models"
+import ProfileLink from "./ProfileLink"
 
 const parseCompetitionResults = (
     competition: Competition,
@@ -214,7 +215,7 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
         return rowData.user_id === auth?.id ? (
             <div className="font-medium text-blue-900 w-full flex gap-2">
                 <div className="w-fit hover:scale-[102%] hover:text-blue-800 transition-all ease-in-out duration-150">
-                    <a href={`/contestant/profile/${rowData.user_id}`}>{rowData.username}</a>
+                    <ProfileLink username={rowData.username} />
                 </div>
                 <div className="bg-primary w-9 rounded-2xl text-center text-white text-sm font-normal flex justify-center items-center select-none">
                     You
@@ -222,7 +223,7 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
             </div>
         ) : (
             <div className="font-medium text-blue-900 hover:scale-[102%] hover:text-blue-800 transition-all ease-in-out duration-150 max-w-fit">
-                <a href={`/contestant/profile/${rowData.user_id}`}>{rowData.username}</a>
+                <ProfileLink username={rowData.username} />
             </div>
         )
     }
