@@ -21,6 +21,14 @@ const Navbar = () => {
         return <div className="border-[0.1rem] border-graydark h-10 rounded-lg mx-1"></div>
     }
 
+    const handleAvatarClick = () => {
+        if (auth?.role === "contestant") {
+            navigate(`/contestant/profile/${auth?.id}`)
+        } else if (auth?.role === "organiser") {
+            navigate(`/organiser/profile/${auth?.id}`)
+        }
+    }
+
     return (
         <nav
             className="bg-graymedium border-b-4 border-graydark w-full flex md:flex-row
@@ -45,12 +53,14 @@ const Navbar = () => {
                                 image={`data:image/jpeg;base64,${auth?.image}`}
                                 size="large"
                                 pt={{ image: { className: "rounded-lg object-cover" } }}
+                                onClick={handleAvatarClick}
                             />
                         ) : (
                             <Avatar
                                 className="bg-secondary text-white hover:scale-105 transition-color ease-in-out duration-300 cursor-pointer"
                                 icon="pi pi-user"
                                 size="large"
+                                onClick={handleAvatarClick}
                             />
                         )}
 
