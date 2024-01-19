@@ -66,7 +66,7 @@ const Navbar = () => {
 
                         {/* <img src={`data:image/jpeg;base64,${auth?.image}`}></img> */}
                         <li className="flex flex-col">
-                            <ProfileLink profileUrl={`/${auth.role}/home`} username={auth.username} />
+                            <ProfileLink profileUrl={`/${auth.role}/profile/${auth.id}`} username={auth.username} />
                         </li>
 
                         <VerticalLine />
