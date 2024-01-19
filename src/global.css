@@ -34,3 +34,41 @@ body {
 .transition-bg {
     transition: background-color 1s ease;
 }
+
+.table-container {
+    width: auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.problems-table .p-datatable-thead>tr>th {
+    background-color: #f2f2f2;
+    color: #333;
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.problems-table .p-datatable-tbody>tr>td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.button-active {
+    background-color: primary;
+    /* Green */
+    color: white;
+}
+
+.button-inactive {
+    background-color: #f3f3f3;
+    /* Light grey */
+    color: black;
+}
+
+.header-cell {
+    background-color: #f5f5f5;
+    color: #333;
+    font-weight: bold;
+}
