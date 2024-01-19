@@ -4,11 +4,11 @@ const getCurrentUser = async () => {
     return await requests.get("/auth/current")
 }
 
-const getUserById = async (id: string | undefined) => {
+const getUserById = async (id?: string) => {
     return await requests.get(`/auth/${id}`)
 }
 
-const getCurrentUsersStatistics = async (id: string | undefined) => {
+const getCurrentUsersStatistics = async (id?: string) => {
     return await requests.get(`/problems/user-statistics/${id}`)
 }
 
