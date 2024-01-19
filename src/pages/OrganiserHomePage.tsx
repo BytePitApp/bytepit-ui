@@ -80,7 +80,7 @@ const OrganiserHomePage = () => {
     }
 
     return (
-        <div className="bg-form bg-cover min-h-screen pb-4">
+        <div className="bg-form bg-cover min-h-screen">
             {loading && (
                 <div className="z-50 absolute top-1.5 left-[50%]">
                     <ProgressSpinner style={{ width: "50px", height: "50px" }} fill="#dee2e6" strokeWidth="7" />

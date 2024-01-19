@@ -6,7 +6,7 @@ interface ProblemListProps {
 
 const ProblemList: React.FC<ProblemListProps> = ({ problems }) => {
     return problems.map((problem, index) => {
-        return <ProblemBox key={index} problem={problem} />
+        return <ProblemBox problem={problem} />
     })
 }
 
