@@ -332,7 +332,10 @@ const CompetitionDashboard: React.FC<CompetitionDashboardProps> = ({ competition
                         <div className="flex flex-col gap-3 w-[50%]">
                             <p className="font-semibold">Source code: </p>
                             {!selectedProblemResult.source_code ? (
-                                <span className="font-semibold text-red-500">Source code is not available</span>
+                                <span className="font-semibold text-red-500">
+                                    Source code is not available. <br />
+                                    Solve the problem correctly and you will be able to see other people's code.
+                                </span>
                             ) : (
                                 <textarea
                                     className="resize-none h-full w-[90%] rounded-md border-graydark border-2 p-2"
