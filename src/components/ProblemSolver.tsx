@@ -285,7 +285,7 @@ const ProblemSolver: React.FC<ProblemSolverProps> = ({ problems, competitionId, 
                         </div>
                         <div className="text-[1rem]">
                             <span className="font-semibold mr-2">Example Input:</span>
-                            <span className="text-[0.9rem]">{selectedProblem?.example_input}</span>
+                            <span className="text-[0.9rem] whitespace-pre-line">{selectedProblem?.example_input}</span>
                         </div>
                         <div className="text-[1rem]">
                             <span className="font-semibold mr-2">Example Output:</span>
@@ -418,7 +418,7 @@ const ProblemSolver: React.FC<ProblemSolverProps> = ({ problems, competitionId, 
                                                             <div className="font-semibold leading-4 text-[0.7rem] lg:text-[1rem]">
                                                                 Expected output
                                                             </div>
-                                                            <div className="mx-1 h-full leading-4 text-[0.8rem] lg:text-[1rem] flex justify-start items-center overflow-x-auto">
+                                                            <div className="mx-1 h-full leading-4 text-[0.8rem] lg:text-[1rem] flex justify-start items-center overflow-x-auto whitespace-pre-line">
                                                                 {output.expectedOutput}
                                                             </div>
                                                         </div>
@@ -427,7 +427,7 @@ const ProblemSolver: React.FC<ProblemSolverProps> = ({ problems, competitionId, 
                                                             <div className="font-semibold leading-4 text-[0.7rem] lg:text-[1rem]">
                                                                 Your output
                                                             </div>
-                                                            <div className="mx-1 h-full leading-4 text-[0.8rem] lg:text-[1rem] flex justify-start items-center overflow-x-auto">
+                                                            <div className="mx-1 h-full leading-4 text-[0.8rem] lg:text-[1rem] flex justify-start items-center overflow-x-auto whitespace-pre-line">
                                                                 {output.output}
                                                             </div>
                                                         </div>
