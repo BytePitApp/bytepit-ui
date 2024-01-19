@@ -283,11 +283,11 @@ const ProblemSolver: React.FC<ProblemSolverProps> = ({ problems, competitionId, 
                             <div className="text-[3vh] font-semibold">{selectedProblem?.name}</div>
                             <div className="text-sm">{selectedProblem?.description}</div>
                         </div>
-                        <div className="text-[1rem]">
+                        <div className="text-[1rem] flex flex-col">
                             <span className="font-semibold mr-2">Example Input:</span>
                             <span className="text-[0.9rem] whitespace-pre-line">{selectedProblem?.example_input}</span>
                         </div>
-                        <div className="text-[1rem]">
+                        <div className="text-[1rem] flex flex-col">
                             <span className="font-semibold mr-2">Example Output:</span>
                             <span className="text-[0.9rem]">{selectedProblem?.example_output}</span>
                         </div>
