@@ -18,7 +18,7 @@ const ProfilePage = () => {
         } catch (err: any) {
             console.log(err.response?.data?.detail ?? "Something went wrong")
         }
-    }, [])
+    }, [username])
 
     useEffect(() => {
         fetchUser()
