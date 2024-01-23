@@ -53,7 +53,7 @@ const App = () => {
                 <Route element={<ProtectedRoute allowedRoles={[Role.ORGANISER]}></ProtectedRoute>}>
                     <Route path="organiser/home" element={<OrganiserHomePage></OrganiserHomePage>} />
                     <Route path="organiser/create-problem" element={<CreateProblemPage></CreateProblemPage>} />
-                    <Route path="organiser/edit-problem/:problem_id" element={<EditProblemPage></EditProblemPage>} />
+                    <Route path="organiser/edit-problem/:id" element={<EditProblemPage></EditProblemPage>} />
                     <Route path="organiser/create-competition" element={<CreateCompetitionPage></CreateCompetitionPage>} />
                     <Route path="organiser/edit-competition/:id" element={<EditCompetitionPage></EditCompetitionPage>} />
                     <Route path="organiser/edit-problem/:id" element={<EditProblemPage></EditProblemPage>} />
